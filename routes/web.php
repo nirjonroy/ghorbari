@@ -82,7 +82,7 @@ Route::resource('/admin/blog/posts', BlogPostController::class)
     ->parameters(['posts' => 'blogPost'])
     ->names('admin.blog-posts');
 Route::resource('/admin/blog/comments', BlogCommentController::class)
-    ->except('show')
+    ->only(['index', 'update', 'destroy'])
     ->middleware('auth:admin')
     ->parameters(['comments' => 'blogComment'])
     ->names('admin.blog-comments');

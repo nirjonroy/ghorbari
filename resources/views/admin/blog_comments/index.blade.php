@@ -21,11 +21,8 @@
         <div class="app-content">
           <div class="container-fluid">
             <div class="card">
-              <div class="card-header d-flex align-items-center">
+              <div class="card-header">
                 <h3 class="card-title">Comment List</h3>
-                <a href="{{ route('admin.blog-comments.create') }}" class="btn btn-primary btn-sm ms-auto">
-                  <i class="bi bi-plus-lg me-1"></i> Add Comment
-                </a>
               </div>
               <div class="card-body">
                 @if (session('status'))
@@ -57,7 +54,13 @@
                           <td>{{ optional($comment->created_at)->format('d M Y') }}</td>
                           <td>
                             <div class="d-flex gap-1">
-                              <a href="{{ route('admin.blog-comments.edit', $comment) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
+                              <form method="POST" action="{{ route('admin.blog-comments.update', $comment) }}">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-sm {{ $comment->is_approved ? 'btn-secondary' : 'btn-success' }}">
+                                  <i class="bi {{ $comment->is_approved ? 'bi-x-circle' : 'bi-check-circle' }}"></i>
+                                </button>
+                              </form>
                               <form method="POST" action="{{ route('admin.blog-comments.destroy', $comment) }}" onsubmit="return confirm('Delete this comment?')">
                                 @csrf
                                 @method('DELETE')
