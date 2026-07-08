@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SiteInfo;
 use App\Models\Slider;
+use App\Services\ImageUploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -81,7 +83,7 @@ class SliderController extends Controller
         return $request->validate([
             'title_one' => ['nullable', 'string', 'max:255'],
             'title_two' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg', 'max:4096'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'link' => ['nullable', 'url', 'max:255'],
             'serial' => ['required', 'integer', 'min:0'],
             'slider_location' => ['nullable', 'string', 'max:255'],
@@ -91,21 +93,15 @@ class SliderController extends Controller
 
     private function storeImage(Request $request, ?string $oldPath = null): string
     {
-        $directory = public_path('uploads/sliders');
+        $siteInfo = SiteInfo::query()->first();
 
-        if (! File::isDirectory($directory)) {
-            File::makeDirectory($directory, 0755, true);
-        }
-
-        if ($oldPath && File::exists(public_path($oldPath))) {
-            File::delete(public_path($oldPath));
-        }
-
-        $file = $request->file('image');
-        $filename = 'slider-'.time().'-'.uniqid().'.'.$file->getClientOriginalExtension();
-
-        $file->move($directory, $filename);
-
-        return 'uploads/sliders/'.$filename;
+        return (new ImageUploadService())->storeConverted(
+            $request->file('image'),
+            'uploads/sliders',
+            $siteInfo?->slider_width,
+            $siteInfo?->slider_height,
+            $oldPath,
+            $siteInfo?->image_output_format ?? 'webp'
+        );
     }
 }

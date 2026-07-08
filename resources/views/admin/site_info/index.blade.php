@@ -42,6 +42,7 @@
                     <dd class="col-sm-9">
                       @if ($siteInfo->logo)
                         <img src="{{ asset($siteInfo->logo) }}" alt="Logo" class="img-thumbnail" style="max-height: 70px">
+                        <div class="text-secondary small mt-1">{{ $siteInfo->logo }} | {{ $siteInfo->logo_width ?: 'auto' }} x {{ $siteInfo->logo_height ?: 'auto' }}</div>
                       @else
                         Not set
                       @endif
@@ -51,10 +52,14 @@
                     <dd class="col-sm-9">
                       @if ($siteInfo->favicon)
                         <img src="{{ asset($siteInfo->favicon) }}" alt="Favicon" class="img-thumbnail" style="max-height: 48px">
+                        <div class="text-secondary small mt-1">{{ $siteInfo->favicon }} | {{ $siteInfo->favicon_width ?: 'auto' }} x {{ $siteInfo->favicon_height ?: 'auto' }}</div>
                       @else
                         Not set
                       @endif
                     </dd>
+
+                    <dt class="col-sm-3">Converted Image Format</dt>
+                    <dd class="col-sm-9">{{ strtoupper($siteInfo->image_output_format ?? 'webp') }}</dd>
 
                     <dt class="col-sm-3">Contact Email</dt>
                     <dd class="col-sm-9">{{ $siteInfo->contact_email ?? 'Not set' }}</dd>
@@ -76,6 +81,9 @@
 
                     <dt class="col-sm-3">Homepage Section Title</dt>
                     <dd class="col-sm-9">{{ $siteInfo->homepage_section_title ?? 'Not set' }}</dd>
+
+                    <dt class="col-sm-3">Slider Image Size</dt>
+                    <dd class="col-sm-9">{{ $siteInfo->slider_width ?: 'auto' }} x {{ $siteInfo->slider_height ?: 'auto' }}</dd>
                   </dl>
                 @else
                   <p class="mb-0 text-secondary">No site info has been saved yet. Use the edit button to create it.</p>

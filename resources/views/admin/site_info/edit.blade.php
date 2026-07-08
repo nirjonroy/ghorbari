@@ -63,6 +63,7 @@
                       <label for="logo" class="form-label">Logo</label>
                       <input id="logo" type="file" name="logo" class="form-control @error('logo') is-invalid @enderror" accept="image/*" data-preview="logo-preview">
                       @error('logo')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                      <div class="form-text">Accepted: JPG, PNG, WEBP. Saved using the image settings at the bottom of this page.</div>
                       <div class="mt-2">
                         <img
                           id="logo-preview"
@@ -76,8 +77,9 @@
 
                     <div class="col-md-6">
                       <label for="favicon" class="form-label">Favicon</label>
-                      <input id="favicon" type="file" name="favicon" class="form-control @error('favicon') is-invalid @enderror" accept="image/*,.ico" data-preview="favicon-preview">
+                      <input id="favicon" type="file" name="favicon" class="form-control @error('favicon') is-invalid @enderror" accept="image/*" data-preview="favicon-preview">
                       @error('favicon')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                      <div class="form-text">Accepted: JPG, PNG, WEBP. Saved using the image settings at the bottom of this page.</div>
                       <div class="mt-2">
                         <img
                           id="favicon-preview"
@@ -88,6 +90,7 @@
                         >
                       </div>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -144,6 +147,7 @@
                       <label for="homepage_section_title" class="form-label">Homepage Section Title</label>
                       <input id="homepage_section_title" type="text" name="homepage_section_title" class="form-control" value="{{ old('homepage_section_title', $siteInfo->homepage_section_title ?? '') }}">
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -189,6 +193,78 @@
                       <label class="form-check-label" for="{{ $field }}">{{ $label }}</label>
                     </div>
                   @endforeach
+                </div>
+              </div>
+
+              <div class="card mt-3">
+                <div class="card-header">
+                  <h3 class="card-title">Image Settings</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label for="image_output_format" class="form-label">Converted Image Format</label>
+                      <select id="image_output_format" name="image_output_format" class="form-select @error('image_output_format') is-invalid @enderror" required>
+                        @foreach (['webp' => 'WebP', 'jpg' => 'JPG', 'png' => 'PNG'] as $format => $label)
+                          <option value="{{ $format }}" @selected(old('image_output_format', $siteInfo->image_output_format ?? 'webp') === $format)>{{ $label }}</option>
+                        @endforeach
+                      </select>
+                      @error('image_output_format')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                      <div class="form-text">This format will be used when new logo, favicon, slider, or other feature images are uploaded.</div>
+                    </div>
+
+                    <div class="col-12">
+                      <hr class="my-2">
+                    </div>
+
+                    <div class="col-md-4">
+                      <h6 class="mb-2">Logo Image</h6>
+                      <div class="row g-2">
+                        <div class="col-md-6">
+                          <label for="logo_width" class="form-label">Width</label>
+                          <input id="logo_width" type="number" min="1" max="5000" name="logo_width" class="form-control @error('logo_width') is-invalid @enderror" value="{{ old('logo_width', $siteInfo->logo_width ?? '') }}" placeholder="Auto">
+                          @error('logo_width')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                          <label for="logo_height" class="form-label">Height</label>
+                          <input id="logo_height" type="number" min="1" max="5000" name="logo_height" class="form-control @error('logo_height') is-invalid @enderror" value="{{ old('logo_height', $siteInfo->logo_height ?? '') }}" placeholder="Auto">
+                          @error('logo_height')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <h6 class="mb-2">Favicon Image</h6>
+                      <div class="row g-2">
+                        <div class="col-md-6">
+                          <label for="favicon_width" class="form-label">Width</label>
+                          <input id="favicon_width" type="number" min="1" max="512" name="favicon_width" class="form-control @error('favicon_width') is-invalid @enderror" value="{{ old('favicon_width', $siteInfo->favicon_width ?? '') }}" placeholder="Auto">
+                          @error('favicon_width')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                          <label for="favicon_height" class="form-label">Height</label>
+                          <input id="favicon_height" type="number" min="1" max="512" name="favicon_height" class="form-control @error('favicon_height') is-invalid @enderror" value="{{ old('favicon_height', $siteInfo->favicon_height ?? '') }}" placeholder="Auto">
+                          @error('favicon_height')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <h6 class="mb-2">Slider Image</h6>
+                      <div class="row g-2">
+                        <div class="col-md-6">
+                          <label for="slider_width" class="form-label">Width</label>
+                          <input id="slider_width" type="number" min="1" max="5000" name="slider_width" class="form-control @error('slider_width') is-invalid @enderror" value="{{ old('slider_width', $siteInfo->slider_width ?? '') }}" placeholder="Auto">
+                          @error('slider_width')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <div class="col-md-6">
+                          <label for="slider_height" class="form-label">Height</label>
+                          <input id="slider_height" type="number" min="1" max="5000" name="slider_height" class="form-control @error('slider_height') is-invalid @enderror" value="{{ old('slider_height', $siteInfo->slider_height ?? '') }}" placeholder="Auto">
+                          @error('slider_height')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 

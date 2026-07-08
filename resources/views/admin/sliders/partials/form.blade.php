@@ -52,6 +52,7 @@
         <label for="image" class="form-label">Image</label>
         <input id="image" type="file" name="image" class="form-control @error('image') is-invalid @enderror" accept="image/*" data-preview="slider-image-preview">
         @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    <div class="form-text">Accepted: JPG, PNG, WEBP. Saved using the image format and slider size from Site Info.</div>
         <div class="mt-2">
           <img
             id="slider-image-preview"

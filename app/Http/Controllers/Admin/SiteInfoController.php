@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SiteInfo;
+use App\Services\ImageUploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 
 class SiteInfoController extends Controller
@@ -33,8 +33,13 @@ class SiteInfoController extends Controller
             'google_location' => ['nullable', 'string'],
             'footer_google_location' => ['nullable', 'string'],
             'footer_contact_note' => ['nullable', 'string'],
-            'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,svg', 'max:2048'],
-            'favicon' => ['nullable', 'file', 'mimes:ico,jpg,jpeg,png,webp,svg', 'max:1024'],
+            'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'favicon' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:1024'],
+            'logo_width' => ['nullable', 'integer', 'min:1', 'max:5000'],
+            'logo_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
+            'favicon_width' => ['nullable', 'integer', 'min:1', 'max:512'],
+            'favicon_height' => ['nullable', 'integer', 'min:1', 'max:512'],
+            'image_output_format' => ['required', 'in:jpg,png,webp'],
             'contact_email' => ['nullable', 'email', 'max:255'],
             'text_direction' => ['required', 'in:ltr,rtl'],
             'timezone' => ['required', 'string', 'max:255'],
@@ -48,6 +53,8 @@ class SiteInfoController extends Controller
             'default_phone_code' => ['nullable', 'string', 'max:255'],
             'frontend_url' => ['nullable', 'url', 'max:255'],
             'homepage_section_title' => ['nullable', 'string', 'max:255'],
+            'slider_width' => ['nullable', 'integer', 'min:1', 'max:5000'],
+            'slider_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
         ]);
 
         foreach ([
@@ -62,9 +69,18 @@ class SiteInfoController extends Controller
 
         unset($data['logo'], $data['favicon']);
 
+        $imageUploadService = new ImageUploadService();
+
         foreach (['logo', 'favicon'] as $field) {
             if ($request->hasFile($field)) {
-                $data[$field] = $this->storeImage($request, $field, $siteInfo?->{$field});
+                $data[$field] = $imageUploadService->storeConverted(
+                    $request->file($field),
+                    'uploads/siteinfo',
+                    $data[$field.'_width'] ?? null,
+                    $data[$field.'_height'] ?? null,
+                    $siteInfo?->{$field},
+                    $data['image_output_format']
+                );
             }
         }
 
@@ -76,25 +92,5 @@ class SiteInfoController extends Controller
         return redirect()
             ->route('admin.site-info.index')
             ->with('status', 'Site info updated successfully.');
-    }
-
-    private function storeImage(Request $request, string $field, ?string $oldPath): string
-    {
-        $directory = public_path('uploads/siteinfo');
-
-        if (! File::isDirectory($directory)) {
-            File::makeDirectory($directory, 0755, true);
-        }
-
-        if ($oldPath && File::exists(public_path($oldPath))) {
-            File::delete(public_path($oldPath));
-        }
-
-        $file = $request->file($field);
-        $filename = $field.'-'.time().'-'.uniqid().'.'.$file->getClientOriginalExtension();
-
-        $file->move($directory, $filename);
-
-        return 'uploads/siteinfo/'.$filename;
     }
 }
