@@ -106,6 +106,41 @@
                   </li>
                 </ul>
               </li>
+              <li class="nav-item {{ request()->routeIs('admin.blog-categories.*') || request()->routeIs('admin.blog-posts.*') || request()->routeIs('admin.blog-comments.*') || request()->routeIs('admin.blog-pages.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('admin.blog-categories.*') || request()->routeIs('admin.blog-posts.*') || request()->routeIs('admin.blog-comments.*') || request()->routeIs('admin.blog-pages.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-journal-text"></i>
+                  <p>
+                    Blog
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('admin.blog-categories.index') }}" class="nav-link {{ request()->routeIs('admin.blog-categories.*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Categories</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('admin.blog-posts.index') }}" class="nav-link {{ request()->routeIs('admin.blog-posts.*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Posts</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('admin.blog-comments.index') }}" class="nav-link {{ request()->routeIs('admin.blog-comments.*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Comments</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('admin.blog-pages.index') }}" class="nav-link {{ request()->routeIs('admin.blog-pages.*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Page Settings</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
               <li class="nav-item">
                 <a href="./generate/theme.html" class="nav-link">
                   <i class="nav-icon bi bi-palette"></i>
