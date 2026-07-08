@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\AreaController;
+use App\Http\Controllers\Admin\DistrictController;
+use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\UserController;
@@ -50,6 +53,19 @@ Route::get('/admin/users', [UserController::class, 'index'])
 Route::get('/admin/users/{user}', [UserController::class, 'show'])
     ->middleware('auth:admin')
     ->name('admin.users.show');
+
+Route::resource('/admin/divisions', DivisionController::class)
+    ->except('show')
+    ->middleware('auth:admin')
+    ->names('admin.divisions');
+Route::resource('/admin/districts', DistrictController::class)
+    ->except('show')
+    ->middleware('auth:admin')
+    ->names('admin.districts');
+Route::resource('/admin/areas', AreaController::class)
+    ->except('show')
+    ->middleware('auth:admin')
+    ->names('admin.areas');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
