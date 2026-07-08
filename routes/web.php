@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,13 @@ Route::resource('/admin/sliders', SliderController::class)
     ->except('show')
     ->middleware('auth:admin')
     ->names('admin.sliders');
+
+Route::get('/admin/users', [UserController::class, 'index'])
+    ->middleware('auth:admin')
+    ->name('admin.users.index');
+Route::get('/admin/users/{user}', [UserController::class, 'show'])
+    ->middleware('auth:admin')
+    ->name('admin.users.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
