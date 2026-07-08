@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\SiteInfoController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,11 @@ Route::get('/admin/site-info/edit', [SiteInfoController::class, 'edit'])
 Route::put('/admin/site-info', [SiteInfoController::class, 'update'])
     ->middleware('auth:admin')
     ->name('admin.site-info.update');
+
+Route::resource('/admin/sliders', SliderController::class)
+    ->except('show')
+    ->middleware('auth:admin')
+    ->names('admin.sliders');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

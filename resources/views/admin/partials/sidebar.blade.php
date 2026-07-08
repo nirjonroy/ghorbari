@@ -66,6 +66,12 @@
                 </a>
               </li>
               <li class="nav-item">
+                <a href="{{ route('admin.sliders.index') }}" class="nav-link {{ request()->routeIs('admin.sliders.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-images"></i>
+                  <p>Sliders</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="./generate/theme.html" class="nav-link">
                   <i class="nav-icon bi bi-palette"></i>
                   <p>Theme Generate</p>
