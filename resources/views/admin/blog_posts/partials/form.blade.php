@@ -35,6 +35,12 @@
       </div>
 
       <div class="col-md-4">
+        <label for="slug" class="form-label">Slug</label>
+        <input id="slug" type="text" name="slug" class="form-control @error('slug') is-invalid @enderror" value="{{ old('slug', $post->slug) }}" placeholder="auto-generated-from-title">
+        @error('slug')<div class="invalid-feedback">{{ $message }}</div>@enderror
+      </div>
+
+      <div class="col-md-4">
         <label for="blog_category_id" class="form-label">Category</label>
         <select id="blog_category_id" name="blog_category_id" class="form-select @error('blog_category_id') is-invalid @enderror">
           <option value="">No category</option>
@@ -122,6 +128,34 @@
         ['view', ['fullscreen', 'codeview', 'help']]
       ]
     });
+
+    const titleInput = document.getElementById('title');
+    const slugInput = document.getElementById('slug');
+    let slugEdited = Boolean(slugInput && slugInput.value);
+
+    const makeSlug = (value) => value
+      .toString()
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    if (slugInput) {
+      slugInput.addEventListener('input', () => {
+        slugEdited = true;
+        slugInput.value = makeSlug(slugInput.value);
+      });
+    }
+
+    if (titleInput && slugInput) {
+      titleInput.addEventListener('input', () => {
+        if (!slugEdited) {
+          slugInput.value = makeSlug(titleInput.value);
+        }
+      });
+    }
   });
 
   document.querySelectorAll('input[type="file"][data-preview]').forEach((input) => {

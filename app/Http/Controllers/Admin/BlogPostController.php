@@ -90,6 +90,7 @@ class BlogPostController extends Controller
         $data = $request->validate([
             'blog_category_id' => ['nullable', 'exists:blog_categories,id'],
             'title' => ['required', 'string', 'max:255', Rule::unique('blog_posts', 'title')->ignore($post)],
+            'slug' => ['nullable', 'string', 'max:255', Rule::unique('blog_posts', 'slug')->ignore($post)],
             'author_name' => ['required', 'string', 'max:255'],
             'excerpt' => ['required', 'string'],
             'content' => ['required', 'string'],
@@ -101,7 +102,7 @@ class BlogPostController extends Controller
             'published_at' => ['nullable', 'date'],
         ]);
 
-        $data['slug'] = Str::slug($data['title']);
+        $data['slug'] = Str::slug($data['slug'] ?: $data['title']);
         $data['tags'] = $this->commaSeparatedValues($data['tags_input'] ?? null);
         $data['is_published'] = $request->boolean('is_published');
         $data['show_on_home'] = $request->boolean('show_on_home');
