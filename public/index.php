@@ -48,6 +48,12 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $kernel = $app->make(Kernel::class);
 
+if (isset($_SERVER['REQUEST_URI']) && str_starts_with($_SERVER['REQUEST_URI'], '/admin/')) {
+    $_SERVER['SCRIPT_NAME'] = '/index.php';
+    $_SERVER['PHP_SELF'] = '/index.php';
+    $_SERVER['SCRIPT_FILENAME'] = __FILE__;
+}
+
 $response = $kernel->handle(
     $request = Request::capture()
 )->send();

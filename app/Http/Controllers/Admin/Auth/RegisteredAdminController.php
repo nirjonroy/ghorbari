@@ -16,7 +16,7 @@ class RegisteredAdminController extends Controller
 {
     public function create(): View
     {
-        return view('admin.auth.register');
+        return view('Admin.auth.register');
     }
 
     public function store(Request $request): RedirectResponse

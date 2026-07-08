@@ -14,7 +14,7 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('admin.layouts.navigation')
+            @include('Admin.layouts.navigation')
 
             @if (isset($header))
                 <header class="bg-white shadow">
