@@ -60,6 +60,12 @@
                 </ul>
               </li>
               <li class="nav-item">
+                <a href="{{ route('admin.site-info.index') }}" class="nav-link {{ request()->routeIs('admin.site-info.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-gear-fill"></i>
+                  <p>Site Info</p>
+                </a>
+              </li>
+              <li class="nav-item">
                 <a href="./generate/theme.html" class="nav-link">
                   <i class="nav-icon bi bi-palette"></i>
                   <p>Theme Generate</p>

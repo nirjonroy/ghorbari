@@ -1,0 +1,90 @@
+@extends('Admin.layouts.master')
+
+@section('title', 'Site Info')
+
+@section('content')
+      <!--begin::App Main-->
+      <main class="app-main">
+        <!--begin::App Content Header-->
+        <div class="app-content-header">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-6"><h3 class="mb-0">Site Info</h3></div>
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-end">
+                  <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Site Info</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--end::App Content Header-->
+
+        <!--begin::App Content-->
+        <div class="app-content">
+          <div class="container-fluid">
+            <div class="card">
+              <div class="card-header d-flex align-items-center">
+                <h3 class="card-title">Site Information</h3>
+                <a href="{{ route('admin.site-info.edit') }}" class="btn btn-primary btn-sm ms-auto">
+                  <i class="bi bi-pencil-square me-1"></i> Edit Site Info
+                </a>
+              </div>
+              <div class="card-body">
+                @if (session('status'))
+                  <div class="alert alert-success" role="alert">{{ session('status') }}</div>
+                @endif
+
+                @if ($siteInfo)
+                  <dl class="row mb-0">
+                    <dt class="col-sm-3">Logo</dt>
+                    <dd class="col-sm-9">
+                      @if ($siteInfo->logo)
+                        <img src="{{ asset($siteInfo->logo) }}" alt="Logo" class="img-thumbnail" style="max-height: 70px">
+                      @else
+                        Not set
+                      @endif
+                    </dd>
+
+                    <dt class="col-sm-3">Favicon</dt>
+                    <dd class="col-sm-9">
+                      @if ($siteInfo->favicon)
+                        <img src="{{ asset($siteInfo->favicon) }}" alt="Favicon" class="img-thumbnail" style="max-height: 48px">
+                      @else
+                        Not set
+                      @endif
+                    </dd>
+
+                    <dt class="col-sm-3">Contact Email</dt>
+                    <dd class="col-sm-9">{{ $siteInfo->contact_email ?? 'Not set' }}</dd>
+
+                    <dt class="col-sm-3">Timezone</dt>
+                    <dd class="col-sm-9">{{ $siteInfo->timezone }}</dd>
+
+                    <dt class="col-sm-3">Currency</dt>
+                    <dd class="col-sm-9">{{ $siteInfo->currency_name ?? 'Not set' }} {{ $siteInfo->currency_icon }}</dd>
+
+                    <dt class="col-sm-3">Maintenance Mode</dt>
+                    <dd class="col-sm-9">{{ $siteInfo->maintenance_mode ? 'Enabled' : 'Disabled' }}</dd>
+
+                    <dt class="col-sm-3">User Registration</dt>
+                    <dd class="col-sm-9">{{ $siteInfo->enable_user_register ? 'Enabled' : 'Disabled' }}</dd>
+
+                    <dt class="col-sm-3">Frontend URL</dt>
+                    <dd class="col-sm-9">{{ $siteInfo->frontend_url ?? 'Not set' }}</dd>
+
+                    <dt class="col-sm-3">Homepage Section Title</dt>
+                    <dd class="col-sm-9">{{ $siteInfo->homepage_section_title ?? 'Not set' }}</dd>
+                  </dl>
+                @else
+                  <p class="mb-0 text-secondary">No site info has been saved yet. Use the edit button to create it.</p>
+                @endif
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--end::App Content-->
+      </main>
+      <!--end::App Main-->
+@endsection

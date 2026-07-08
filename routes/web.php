@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,16 @@ Route::get('/dashboard', function () {
 Route::get('/admin/dashboard', function () {
     return view('Admin.dashboard');
 })->middleware('auth:admin')->name('admin.dashboard');
+
+Route::get('/admin/site-info', [SiteInfoController::class, 'index'])
+    ->middleware('auth:admin')
+    ->name('admin.site-info.index');
+Route::get('/admin/site-info/edit', [SiteInfoController::class, 'edit'])
+    ->middleware('auth:admin')
+    ->name('admin.site-info.edit');
+Route::put('/admin/site-info', [SiteInfoController::class, 'update'])
+    ->middleware('auth:admin')
+    ->name('admin.site-info.update');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

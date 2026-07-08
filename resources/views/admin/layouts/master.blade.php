@@ -121,6 +121,7 @@
       });
     </script>
     <!--end::OverlayScrollbars Configure-->
+    @stack('scripts')
     <!-- OPTIONAL SCRIPTS -->
     <!-- sortablejs -->
     <script
