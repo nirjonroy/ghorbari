@@ -49,6 +49,36 @@
                 </a>
               </li>
 
+              <li class="nav-item {{ request()->routeIs('admin.property-types.*') || request()->routeIs('admin.amenities.*') || request()->routeIs('admin.properties.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('admin.property-types.*') || request()->routeIs('admin.amenities.*') || request()->routeIs('admin.properties.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-house-door-fill"></i>
+                  <p>
+                    Properties
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('admin.properties.index') }}" class="nav-link {{ request()->routeIs('admin.properties.*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Properties</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('admin.property-types.index') }}" class="nav-link {{ request()->routeIs('admin.property-types.*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Types</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('admin.amenities.index') }}" class="nav-link {{ request()->routeIs('admin.amenities.*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Amenities</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
               <li class="nav-item {{ request()->routeIs('admin.roles.*') || request()->routeIs('admin.permissions.*') || request()->routeIs('admin.admin-roles.*') ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ request()->routeIs('admin.roles.*') || request()->routeIs('admin.permissions.*') || request()->routeIs('admin.admin-roles.*') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-shield-lock-fill"></i>

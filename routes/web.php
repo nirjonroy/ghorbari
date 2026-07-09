@@ -9,6 +9,9 @@ use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\AmenityController;
+use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\Admin\PropertyTypeController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\SliderController;
@@ -60,6 +63,21 @@ Route::get('/admin/users', [UserController::class, 'index'])
 Route::get('/admin/users/{user}', [UserController::class, 'show'])
     ->middleware(['auth:admin', 'permission:manage users,admin'])
     ->name('admin.users.show');
+
+Route::resource('/admin/property-types', PropertyTypeController::class)
+    ->except('show')
+    ->middleware(['auth:admin', 'permission:manage properties,admin'])
+    ->names('admin.property-types');
+Route::resource('/admin/amenities', AmenityController::class)
+    ->except('show')
+    ->middleware(['auth:admin', 'permission:manage properties,admin'])
+    ->names('admin.amenities');
+Route::resource('/admin/properties', PropertyController::class)
+    ->middleware(['auth:admin', 'permission:manage properties,admin'])
+    ->names('admin.properties');
+Route::delete('/admin/property-media/{media}', [PropertyController::class, 'destroyMedia'])
+    ->middleware(['auth:admin', 'permission:manage properties,admin'])
+    ->name('admin.property-media.destroy');
 
 Route::resource('/admin/roles', RoleController::class)
     ->except('show')
