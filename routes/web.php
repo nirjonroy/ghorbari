@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\Admin\AreaController;
+use App\Http\Controllers\Admin\AdminRoleController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogCommentController;
 use App\Http\Controllers\Admin\BlogPageController;
 use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\DivisionController;
+use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\UserController;
@@ -34,66 +37,90 @@ Route::get('/dashboard', function () {
 
 Route::get('/admin/dashboard', function () {
     return view('Admin.dashboard');
-})->middleware('auth:admin')->name('admin.dashboard');
+})->middleware(['auth:admin', 'permission:manage dashboard,admin'])->name('admin.dashboard');
 
 Route::get('/admin/site-info', [SiteInfoController::class, 'index'])
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage site info,admin'])
     ->name('admin.site-info.index');
 Route::get('/admin/site-info/edit', [SiteInfoController::class, 'edit'])
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage site info,admin'])
     ->name('admin.site-info.edit');
 Route::put('/admin/site-info', [SiteInfoController::class, 'update'])
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage site info,admin'])
     ->name('admin.site-info.update');
 
 Route::resource('/admin/sliders', SliderController::class)
     ->except('show')
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage sliders,admin'])
     ->names('admin.sliders');
 
 Route::get('/admin/users', [UserController::class, 'index'])
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage users,admin'])
     ->name('admin.users.index');
 Route::get('/admin/users/{user}', [UserController::class, 'show'])
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage users,admin'])
     ->name('admin.users.show');
+
+Route::resource('/admin/roles', RoleController::class)
+    ->except('show')
+    ->middleware(['auth:admin', 'permission:manage roles,admin'])
+    ->names('admin.roles');
+Route::resource('/admin/permissions', PermissionController::class)
+    ->except('show')
+    ->middleware(['auth:admin', 'permission:manage permissions,admin'])
+    ->names('admin.permissions');
+Route::get('/admin/admin-roles', [AdminRoleController::class, 'index'])
+    ->middleware(['auth:admin', 'permission:assign admin roles,admin'])
+    ->name('admin.admin-roles.index');
+Route::get('/admin/admin-roles/create', [AdminRoleController::class, 'create'])
+    ->middleware(['auth:admin', 'permission:assign admin roles,admin'])
+    ->name('admin.admin-roles.create');
+Route::post('/admin/admin-roles', [AdminRoleController::class, 'store'])
+    ->middleware(['auth:admin', 'permission:assign admin roles,admin'])
+    ->name('admin.admin-roles.store');
+Route::get('/admin/admin-roles/{admin}/edit', [AdminRoleController::class, 'edit'])
+    ->middleware(['auth:admin', 'permission:assign admin roles,admin'])
+    ->name('admin.admin-roles.edit');
+Route::put('/admin/admin-roles/{admin}', [AdminRoleController::class, 'update'])
+    ->middleware(['auth:admin', 'permission:assign admin roles,admin'])
+    ->name('admin.admin-roles.update');
 
 Route::resource('/admin/divisions', DivisionController::class)
     ->except('show')
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage locations,admin'])
     ->names('admin.divisions');
 Route::resource('/admin/districts', DistrictController::class)
     ->except('show')
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage locations,admin'])
     ->names('admin.districts');
 Route::resource('/admin/areas', AreaController::class)
     ->except('show')
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage locations,admin'])
     ->names('admin.areas');
 
 Route::resource('/admin/blog/categories', BlogCategoryController::class)
     ->except('show')
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage blog,admin'])
     ->parameters(['categories' => 'blogCategory'])
     ->names('admin.blog-categories');
 Route::resource('/admin/blog/posts', BlogPostController::class)
     ->except('show')
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage blog,admin'])
     ->parameters(['posts' => 'blogPost'])
     ->names('admin.blog-posts');
 Route::resource('/admin/blog/comments', BlogCommentController::class)
     ->only(['index', 'update', 'destroy'])
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage blog,admin'])
     ->parameters(['comments' => 'blogComment'])
     ->names('admin.blog-comments');
 Route::get('/admin/blog/page-settings', [BlogPageController::class, 'index'])
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage blog,admin'])
     ->name('admin.blog-pages.index');
 Route::get('/admin/blog/page-settings/edit', [BlogPageController::class, 'edit'])
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage blog,admin'])
     ->name('admin.blog-pages.edit');
 Route::put('/admin/blog/page-settings', [BlogPageController::class, 'update'])
-    ->middleware('auth:admin')
+    ->middleware(['auth:admin', 'permission:manage blog,admin'])
     ->name('admin.blog-pages.update');
 
 Route::middleware('auth')->group(function () {

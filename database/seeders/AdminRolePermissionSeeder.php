@@ -1,0 +1,42 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Admin;
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
+
+class AdminRolePermissionSeeder extends Seeder
+{
+    public function run(): void
+    {
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+        $permissions = [
+            'manage dashboard',
+            'manage site info',
+            'manage sliders',
+            'manage users',
+            'manage locations',
+            'manage blog',
+            'manage roles',
+            'manage permissions',
+            'assign admin roles',
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::findOrCreate($permission, 'admin');
+        }
+
+        $role = Role::findOrCreate('Super Admin', 'admin');
+        $role->syncPermissions(Permission::where('guard_name', 'admin')->pluck('name')->all());
+
+        Admin::query()->each(function (Admin $admin) use ($role) {
+            if (! $admin->hasRole($role)) {
+                $admin->assignRole($role);
+            }
+        });
+    }
+}
