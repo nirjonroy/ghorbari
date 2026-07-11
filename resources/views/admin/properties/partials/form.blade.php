@@ -147,14 +147,65 @@
         @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
-      <div class="col-md-6">
-        <label for="media" class="form-label">Media</label>
-        <input id="media" type="file" name="media[]" class="form-control @error('media') is-invalid @enderror" multiple accept=".jpg,.jpeg,.png,.webp,.mp4,.mov,.pdf">
-        <div class="form-text">Accepted: JPG, PNG, WEBP, MP4, MOV, PDF.</div>
-        @error('media')<div class="invalid-feedback">{{ $message }}</div>@enderror
-        @error('media.*')<div class="text-danger small">{{ $message }}</div>@enderror
+      @if ($property->exists && $property->media->isNotEmpty())
+        <div class="col-12">
+          <label class="form-label">Current Media Spaces</label>
+          <div class="row g-3">
+            @foreach ($property->media as $media)
+              <div class="col-md-3">
+                <div class="border rounded p-2 h-100">
+                  @if ($media->media_type === 'image')
+                    <img src="{{ asset($media->file_path) }}" alt="{{ $media->alt_text }}" class="img-fluid rounded mb-2">
+                  @else
+                    <div class="text-secondary small mb-2">{{ strtoupper($media->media_type) }}: {{ basename($media->file_path) }}</div>
+                  @endif
+                  <label class="form-label" for="existing_media_space_{{ $media->id }}">Room or Space Name</label>
+                  <input id="existing_media_space_{{ $media->id }}" type="text" name="existing_media_space_names[{{ $media->id }}]" class="form-control @error('existing_media_space_names.'.$media->id) is-invalid @enderror" value="{{ old('existing_media_space_names.'.$media->id, $media->space_name) }}">
+                  @error('existing_media_space_names.'.$media->id)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                </div>
+              </div>
+            @endforeach
+          </div>
+        </div>
+      @endif
+
+      <div class="col-12">
+        <div class="d-flex align-items-center mb-2">
+          <label class="form-label mb-0">Room and Space Media</label>
+          <button type="button" class="btn btn-sm btn-outline-primary ms-auto" id="add-media-row">
+            <i class="bi bi-plus-lg"></i> Add Media
+          </button>
+        </div>
+        <div id="media-rows" class="d-grid gap-2">
+          @php
+            $oldSpaceNames = old('media_space_names', ['']);
+          @endphp
+          @foreach ($oldSpaceNames as $index => $spaceName)
+            <div class="row g-2 align-items-end media-row">
+              <div class="col-md-5">
+                <label class="form-label" for="media_space_names_{{ $index }}">Room or Space Name</label>
+                <input id="media_space_names_{{ $index }}" type="text" name="media_space_names[]" class="form-control @error('media_space_names.'.$index) is-invalid @enderror" value="{{ $spaceName }}" placeholder="Bedroom, Kitchen, Drawing Room">
+                @error('media_space_names.'.$index)<div class="invalid-feedback">{{ $message }}</div>@enderror
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="media_files_{{ $index }}">Files</label>
+                <input id="media_files_{{ $index }}" type="file" name="media_files[{{ $index }}][]" class="form-control @error('media_files.'.$index) is-invalid @enderror @error('media_files.'.$index.'.*') is-invalid @enderror" multiple accept=".jpg,.jpeg,.png,.webp,.mp4,.mov,.pdf">
+                @error('media_files.'.$index)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                @error('media_files.'.$index.'.*')<div class="invalid-feedback">{{ $message }}</div>@enderror
+              </div>
+              <div class="col-md-1">
+                <button type="button" class="btn btn-outline-danger w-100 remove-media-row" aria-label="Remove media row">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          @endforeach
+        </div>
+        <div class="form-text">Accepted: JPG, PNG, WEBP, MP4, MOV, PDF. You can select multiple files for the same room or space.</div>
+        @error('media_files')<div class="text-danger small">{{ $message }}</div>@enderror
+        @error('media_space_names')<div class="text-danger small">{{ $message }}</div>@enderror
       </div>
-      <div class="col-md-6 d-flex align-items-end gap-4">
+      <div class="col-12 d-flex align-items-end gap-4">
         <div class="form-check form-switch">
           <input type="checkbox" class="form-check-input" id="is_featured" name="is_featured" value="1" @checked(old('is_featured', $property->is_featured))>
           <label class="form-check-label" for="is_featured">Featured</label>
@@ -171,3 +222,62 @@
     <button type="submit" class="btn btn-primary">Save Property</button>
   </div>
 </div>
+
+@push('scripts')
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const rows = document.getElementById('media-rows');
+      const addButton = document.getElementById('add-media-row');
+
+      function reindexRows() {
+        rows.querySelectorAll('.media-row').forEach(function (row, index) {
+          const spaceInput = row.querySelector('input[name="media_space_names[]"]');
+          const fileInput = row.querySelector('input[type="file"]');
+          const spaceLabel = row.querySelector('label[for^="media_space_names_"]');
+          const fileLabel = row.querySelector('label[for^="media_files_"]');
+
+          spaceInput.id = 'media_space_names_' + index;
+          fileInput.id = 'media_files_' + index;
+          fileInput.name = 'media_files[' + index + '][]';
+          spaceLabel.setAttribute('for', spaceInput.id);
+          fileLabel.setAttribute('for', fileInput.id);
+        });
+      }
+
+      addButton.addEventListener('click', function () {
+        const firstRow = rows.querySelector('.media-row');
+        const nextRow = firstRow.cloneNode(true);
+
+        nextRow.querySelector('input[name="media_space_names[]"]').value = '';
+        nextRow.querySelector('input[type="file"]').value = '';
+        nextRow.querySelectorAll('.is-invalid').forEach(function (input) {
+          input.classList.remove('is-invalid');
+        });
+        nextRow.querySelectorAll('.invalid-feedback').forEach(function (feedback) {
+          feedback.remove();
+        });
+
+        rows.appendChild(nextRow);
+        reindexRows();
+      });
+
+      rows.addEventListener('click', function (event) {
+        const removeButton = event.target.closest('.remove-media-row');
+
+        if (! removeButton) {
+          return;
+        }
+
+        if (rows.querySelectorAll('.media-row').length === 1) {
+          const row = removeButton.closest('.media-row');
+          row.querySelector('input[name="media_space_names[]"]').value = '';
+          row.querySelector('input[type="file"]').value = '';
+          return;
+        }
+
+        removeButton.closest('.media-row').remove();
+        reindexRows();
+      });
+    });
+  </script>
+@endpush

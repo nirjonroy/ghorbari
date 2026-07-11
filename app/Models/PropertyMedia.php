@@ -12,6 +12,7 @@ class PropertyMedia extends Model
     protected $fillable = [
         'property_id',
         'media_type',
+        'space_name',
         'file_path',
         'alt_text',
         'is_primary',

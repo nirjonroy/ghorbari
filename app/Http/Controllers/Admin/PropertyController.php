@@ -40,7 +40,7 @@ class PropertyController extends Controller
     {
         $data = $this->validatedData($request);
         $amenityIds = $data['amenities'] ?? [];
-        unset($data['amenities'], $data['media']);
+        unset($data['amenities'], $data['media_files'], $data['media_space_names'], $data['existing_media_space_names']);
 
         $property = Property::create($data);
         $property->amenities()->sync($amenityIds);
@@ -71,10 +71,12 @@ class PropertyController extends Controller
         $oldPrice = $property->price;
         $data = $this->validatedData($request, $property);
         $amenityIds = $data['amenities'] ?? [];
-        unset($data['amenities'], $data['media']);
+        $existingMediaSpaceNames = $data['existing_media_space_names'] ?? [];
+        unset($data['amenities'], $data['media_files'], $data['media_space_names'], $data['existing_media_space_names']);
 
         $property->update($data);
         $property->amenities()->sync($amenityIds);
+        $this->updateMediaLabels($property, $existingMediaSpaceNames);
         $this->storeMedia($request, $property);
 
         if ((string) $oldPrice !== (string) $property->price) {
@@ -151,8 +153,13 @@ class PropertyController extends Controller
             'published_at' => ['nullable', 'date'],
             'amenities' => ['nullable', 'array'],
             'amenities.*' => ['integer', 'exists:amenities,id'],
-            'media' => ['nullable', 'array'],
-            'media.*' => ['file', 'mimes:jpg,jpeg,png,webp,mp4,mov,pdf', 'max:10240'],
+            'media_files' => ['nullable', 'array'],
+            'media_files.*' => ['nullable', 'array'],
+            'media_files.*.*' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,mp4,mov,pdf', 'max:10240'],
+            'media_space_names' => ['nullable', 'array'],
+            'media_space_names.*' => ['nullable', 'string', 'max:255'],
+            'existing_media_space_names' => ['nullable', 'array'],
+            'existing_media_space_names.*' => ['nullable', 'string', 'max:255'],
         ]);
 
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: $data['title'], $property);
@@ -181,43 +188,81 @@ class PropertyController extends Controller
 
     private function storeMedia(Request $request, Property $property): void
     {
-        if (! $request->hasFile('media')) {
+        if (! $request->hasFile('media_files')) {
             return;
         }
 
         $siteInfo = SiteInfo::query()->first();
         $uploader = new ImageUploadService();
+        $spaceNames = $request->input('media_space_names', []);
 
-        foreach ($request->file('media') as $index => $file) {
-            $mediaType = str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'image';
+        foreach ($request->file('media_files', []) as $index => $files) {
+            $files = is_array($files) ? $files : [$files];
+            $spaceName = trim($spaceNames[$index] ?? '');
 
-            if ($mediaType === 'image') {
-                $path = $uploader->storeConverted(
-                    $file,
-                    'uploads/properties',
-                    null,
-                    null,
-                    null,
-                    $siteInfo?->image_output_format ?? 'webp'
-                );
-            } else {
-                $directory = public_path('uploads/properties');
-                if (! File::isDirectory($directory)) {
-                    File::makeDirectory($directory, 0755, true);
+            foreach ($files as $file) {
+                if (! $file) {
+                    continue;
                 }
 
-                $fileName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-                $fileName = ($fileName ?: 'media').'-'.uniqid().'.'.$file->getClientOriginalExtension();
-                $file->move($directory, $fileName);
-                $path = 'uploads/properties/'.$fileName;
+                $this->storeMediaFile($property, $file, $spaceName, $siteInfo, $uploader);
+            }
+        }
+    }
+
+    private function storeMediaFile(
+        Property $property,
+        $file,
+        string $spaceName,
+        ?SiteInfo $siteInfo,
+        ImageUploadService $uploader
+    ): void {
+        $mediaType = str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'image';
+
+        if ($mediaType === 'image') {
+            $path = $uploader->storeConverted(
+                $file,
+                'uploads/properties',
+                null,
+                null,
+                null,
+                $siteInfo?->image_output_format ?? 'webp'
+            );
+        } else {
+            $directory = public_path('uploads/properties');
+            if (! File::isDirectory($directory)) {
+                File::makeDirectory($directory, 0755, true);
             }
 
-            $property->media()->create([
-                'media_type' => $mediaType,
-                'file_path' => $path,
-                'alt_text' => $property->title,
-                'is_primary' => ! $property->media()->exists() && $index === 0,
-                'sort_order' => $property->media()->count() + $index,
+            $fileName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+            $fileName = ($fileName ?: 'media').'-'.uniqid().'.'.$file->getClientOriginalExtension();
+            $file->move($directory, $fileName);
+            $path = 'uploads/properties/'.$fileName;
+        }
+
+        $property->media()->create([
+            'media_type' => $mediaType,
+            'space_name' => $spaceName !== '' ? $spaceName : null,
+            'file_path' => $path,
+            'alt_text' => $spaceName !== '' ? $property->title.' - '.$spaceName : $property->title,
+            'is_primary' => ! $property->media()->exists(),
+            'sort_order' => $property->media()->count(),
+        ]);
+    }
+
+    private function updateMediaLabels(Property $property, array $spaceNames): void
+    {
+        foreach ($spaceNames as $mediaId => $spaceName) {
+            $spaceName = trim($spaceName ?? '');
+            $media = $property->media()->whereKey($mediaId)->first();
+
+            if (! $media) {
+                continue;
+            }
+
+            $media->update([
+                'space_name' => $spaceName !== '' ? $spaceName : null,
+                'alt_text' => $spaceName !== '' ? $property->title.' - '.$spaceName : $property->title,
             ]);
         }
     }

@@ -38,6 +38,7 @@
                           @else
                             <div class="text-secondary mb-2">{{ strtoupper($media->media_type) }}: {{ basename($media->file_path) }}</div>
                           @endif
+                          <div class="fw-semibold mb-2">{{ $media->space_name ?? 'No room or space name' }}</div>
                           <form method="POST" action="{{ route('admin.property-media.destroy', $media) }}" onsubmit="return confirm('Delete this media?')">
                             @csrf
                             @method('DELETE')

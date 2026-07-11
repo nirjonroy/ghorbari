@@ -50,6 +50,7 @@
                       @else
                         <a href="{{ asset($media->file_path) }}" target="_blank">{{ strtoupper($media->media_type) }}: {{ basename($media->file_path) }}</a>
                       @endif
+                      <div class="fw-semibold mt-2">{{ $media->space_name ?? 'No room or space name' }}</div>
                     </div>
                   @empty
                     <div class="col-12 text-secondary">No media uploaded.</div>

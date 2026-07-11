@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('property_id')->constrained('properties')->cascadeOnDelete();
             $table->string('media_type', 50);
+            $table->string('space_name')->nullable();
             $table->string('file_path');
             $table->string('alt_text')->nullable();
             $table->boolean('is_primary')->default(false);
