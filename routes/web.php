@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AreaController;
+use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\AdminRoleController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogCommentController;
@@ -51,6 +52,10 @@ Route::get('/admin/site-info/edit', [SiteInfoController::class, 'edit'])
 Route::put('/admin/site-info', [SiteInfoController::class, 'update'])
     ->middleware(['auth:admin', 'permission:manage site info,admin'])
     ->name('admin.site-info.update');
+
+Route::resource('/admin/abouts', AboutController::class)
+    ->middleware(['auth:admin', 'permission:manage about,admin'])
+    ->names('admin.abouts');
 
 Route::resource('/admin/sliders', SliderController::class)
     ->except('show')

@@ -17,6 +17,7 @@ class AdminRolePermissionSeeder extends Seeder
         $permissions = [
             'manage dashboard',
             'manage site info',
+            'manage about',
             'manage sliders',
             'manage users',
             'manage properties',

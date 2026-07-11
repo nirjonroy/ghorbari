@@ -36,6 +36,13 @@
               </li>
 
               <li class="nav-item">
+                <a href="{{ route('admin.abouts.index') }}" class="nav-link {{ request()->routeIs('admin.abouts.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-info-circle-fill"></i>
+                  <p>About Us</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
                 <a href="{{ route('admin.sliders.index') }}" class="nav-link {{ request()->routeIs('admin.sliders.*') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-images"></i>
                   <p>Sliders</p>
