@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\AdminRoleController;
+use App\Http\Controllers\Admin\ApiTesterController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogCommentController;
 use App\Http\Controllers\Admin\BlogPageController;
@@ -43,6 +44,10 @@ Route::get('/dashboard', function () {
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth:admin', 'permission:manage dashboard,admin'])
     ->name('admin.dashboard');
+
+Route::get('/admin/api-tester', [ApiTesterController::class, 'index'])
+    ->middleware(['auth:admin', 'permission:manage permissions,admin'])
+    ->name('admin.api-tester.index');
 
 Route::get('/admin/site-info', [SiteInfoController::class, 'index'])
     ->middleware(['auth:admin', 'permission:manage site info,admin'])

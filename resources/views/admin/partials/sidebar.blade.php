@@ -56,6 +56,13 @@
                 </a>
               </li>
 
+              <li class="nav-item">
+                <a href="{{ route('admin.api-tester.index') }}" class="nav-link {{ request()->routeIs('admin.api-tester.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-terminal-fill"></i>
+                  <p>API Tester</p>
+                </a>
+              </li>
+
               <li class="nav-item {{ request()->routeIs('admin.property-types.*') || request()->routeIs('admin.amenities.*') || request()->routeIs('admin.properties.*') ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ request()->routeIs('admin.property-types.*') || request()->routeIs('admin.amenities.*') || request()->routeIs('admin.properties.*') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-house-door-fill"></i>
