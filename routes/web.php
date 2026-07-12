@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogCommentController;
 use App\Http\Controllers\Admin\BlogPageController;
 use App\Http\Controllers\Admin\BlogPostController;
+use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\DivisionController;
@@ -67,6 +68,12 @@ Route::resource('/admin/sliders', SliderController::class)
     ->except('show')
     ->middleware(['auth:admin', 'permission:manage sliders,admin'])
     ->names('admin.sliders');
+
+Route::resource('/admin/contacts', ContactMessageController::class)
+    ->only(['index', 'edit', 'update', 'destroy'])
+    ->middleware(['auth:admin', 'permission:manage contacts,admin'])
+    ->parameters(['contacts' => 'contact'])
+    ->names('admin.contacts');
 
 Route::get('/admin/users', [UserController::class, 'index'])
     ->middleware(['auth:admin', 'permission:manage users,admin'])

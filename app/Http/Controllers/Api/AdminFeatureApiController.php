@@ -11,6 +11,7 @@ use App\Models\BlogCategory;
 use App\Models\BlogComment;
 use App\Models\BlogPage;
 use App\Models\BlogPost;
+use App\Models\ContactMessage;
 use App\Models\District;
 use App\Models\Division;
 use App\Models\Property;
@@ -268,6 +269,7 @@ class AdminFeatureApiController extends Controller
             'blog-posts' => $this->blogPostRules($model),
             'blog-comments' => $this->blogCommentRules(),
             'blog-pages' => $this->blogPageRules(),
+            'contact-messages' => $this->contactMessageRules(),
             'roles' => $this->roleRules($model),
             'permissions' => $this->permissionRules($model),
             'admins' => $this->adminRules($model),
@@ -342,6 +344,7 @@ class AdminFeatureApiController extends Controller
             'blog-posts' => ['model' => BlogPost::class, 'with' => ['category', 'comments']],
             'blog-comments' => ['model' => BlogComment::class, 'with' => ['post', 'user']],
             'blog-pages' => ['model' => BlogPage::class],
+            'contact-messages' => ['model' => ContactMessage::class, 'with' => ['user']],
             'roles' => ['model' => Role::class, 'with' => ['permissions'], 'order' => [['name', 'asc']]],
             'permissions' => ['model' => Permission::class, 'order' => [['name', 'asc']]],
             'admins' => ['model' => Admin::class, 'with' => ['roles', 'permissions']],
@@ -598,6 +601,26 @@ class AdminFeatureApiController extends Controller
             'read_button_text' => ['nullable', 'string', 'max:255'],
             'article_tags_title' => ['nullable', 'string', 'max:255'],
             'comments_section_title' => ['nullable', 'string', 'max:255'],
+        ];
+    }
+
+    private function contactMessageRules(): array
+    {
+        return [
+            'user_id' => ['nullable', 'exists:users,id'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
+            'subject' => ['nullable', 'string', 'max:255'],
+            'message_type' => ['nullable', 'string', 'max:100'],
+            'message' => ['required', 'string'],
+            'source_page' => ['nullable', 'string', 'max:255'],
+            'ip_address' => ['nullable', 'string', 'max:100'],
+            'user_agent' => ['nullable', 'string', 'max:255'],
+            'status' => ['nullable', Rule::in(['new', 'read', 'replied', 'closed', 'spam'])],
+            'admin_note' => ['nullable', 'string'],
+            'read_at' => ['nullable', 'date'],
+            'replied_at' => ['nullable', 'date'],
         ];
     }
 
