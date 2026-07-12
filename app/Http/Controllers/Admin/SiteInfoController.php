@@ -63,6 +63,8 @@ class SiteInfoController extends Controller
             'blog_post_image_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
             'blog_page_image_width' => ['nullable', 'integer', 'min:1', 'max:5000'],
             'blog_page_image_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
+            'agency_logo_width' => ['nullable', 'integer', 'min:1', 'max:5000'],
+            'agency_logo_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
         ]);
 
         foreach ([

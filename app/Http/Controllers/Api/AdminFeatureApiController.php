@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\About;
 use App\Models\Admin;
+use App\Models\Agency;
+use App\Models\AgentProfile;
 use App\Models\Amenity;
 use App\Models\Area;
 use App\Models\BlogCategory;
@@ -260,6 +262,8 @@ class AdminFeatureApiController extends Controller
             'abouts' => $this->aboutRules($model),
             'sliders' => $this->sliderRules(),
             'users' => $this->userRules($model),
+            'agencies' => $this->agencyRules($model),
+            'agent-profiles' => $this->agentProfileRules($model),
             'property-types', 'amenities' => $this->nameSlugRules($resource === 'property-types' ? 'property_types' : 'amenities', $model, true),
             'properties' => $this->propertyRules($model),
             'divisions' => $this->locationRules('divisions', $model),
@@ -299,7 +303,7 @@ class AdminFeatureApiController extends Controller
             unset($data['tags_input']);
         }
 
-        if (isset($data['slug']) || in_array($resource, ['abouts', 'property-types', 'amenities', 'divisions', 'districts', 'areas', 'blog-categories', 'blog-posts', 'properties'], true)) {
+        if (isset($data['slug']) || in_array($resource, ['abouts', 'agencies', 'property-types', 'amenities', 'divisions', 'districts', 'areas', 'blog-categories', 'blog-posts', 'properties'], true)) {
             $data['slug'] = $this->uniqueSlug($resource, $data['slug'] ?? ($data['title'] ?? $data['name'] ?? 'item'), $model);
         }
 
@@ -334,6 +338,8 @@ class AdminFeatureApiController extends Controller
             'abouts' => ['model' => About::class, 'order' => [['display_order', 'asc'], ['id', 'desc']]],
             'sliders' => ['model' => Slider::class, 'order' => [['serial', 'asc'], ['id', 'desc']]],
             'users' => ['model' => User::class],
+            'agencies' => ['model' => Agency::class, 'with' => ['agents'], 'order' => [['name', 'asc']]],
+            'agent-profiles' => ['model' => AgentProfile::class, 'with' => ['user', 'agency']],
             'property-types' => ['model' => PropertyType::class, 'order' => [['name', 'asc']]],
             'amenities' => ['model' => Amenity::class, 'order' => [['name', 'asc']]],
             'properties' => ['model' => Property::class, 'with' => ['owner', 'type', 'amenities', 'media']],
@@ -391,6 +397,8 @@ class AdminFeatureApiController extends Controller
             'blog_post_image_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
             'blog_page_image_width' => ['nullable', 'integer', 'min:1', 'max:5000'],
             'blog_page_image_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
+            'agency_logo_width' => ['nullable', 'integer', 'min:1', 'max:5000'],
+            'agency_logo_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
             'maintenance_mode' => ['nullable', 'boolean'],
             'enable_user_register' => ['nullable', 'boolean'],
             'phone_number_required' => ['nullable', 'boolean'],
@@ -467,6 +475,35 @@ class AdminFeatureApiController extends Controller
             'emergency_contact_name' => ['nullable', 'string', 'max:255'],
             'emergency_contact_phone' => ['nullable', 'string', 'max:255'],
             'password' => [$model ? 'nullable' : 'required', 'string', 'min:8'],
+        ];
+    }
+
+    private function agencyRules(?Model $model): array
+    {
+        return [
+            'name' => [$model ? 'sometimes' : 'required', 'string', 'max:150'],
+            'slug' => ['nullable', 'string', 'max:180', Rule::unique('agencies', 'slug')->ignore($model)],
+            'email' => ['nullable', 'email', 'max:150'],
+            'phone' => ['nullable', 'string', 'max:30'],
+            'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'website' => ['nullable', 'url', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'status' => ['nullable', 'string', 'max:50'],
+        ];
+    }
+
+    private function agentProfileRules(?Model $model): array
+    {
+        return [
+            'user_id' => [$model ? 'sometimes' : 'required', 'exists:users,id', Rule::unique('agent_profiles', 'user_id')->ignore($model)],
+            'agency_id' => ['nullable', 'exists:agencies,id'],
+            'designation' => ['nullable', 'string', 'max:150'],
+            'license_no' => ['nullable', 'string', 'max:100'],
+            'bio' => ['nullable', 'string'],
+            'experience_years' => ['nullable', 'integer', 'min:0', 'max:100'],
+            'service_area' => ['nullable', 'string', 'max:255'],
+            'rating' => ['nullable', 'numeric', 'min:0', 'max:5'],
+            'status' => ['nullable', 'string', 'max:50'],
         ];
     }
 
@@ -663,6 +700,9 @@ class AdminFeatureApiController extends Controller
             'sliders' => [
                 'image' => ['directory' => 'uploads/sliders', 'width' => $siteInfo?->slider_width, 'height' => $siteInfo?->slider_height],
             ],
+            'agencies' => [
+                'logo' => ['directory' => 'uploads/agencies', 'width' => $siteInfo?->agency_logo_width, 'height' => $siteInfo?->agency_logo_height],
+            ],
             'blog-posts' => [
                 'featured_image_path' => ['directory' => 'uploads/blog/posts', 'width' => $siteInfo?->blog_post_image_width, 'height' => $siteInfo?->blog_post_image_height],
             ],
@@ -775,6 +815,7 @@ class AdminFeatureApiController extends Controller
             'abouts', 'sliders' => ['image'],
             'blog-posts' => ['featured_image_path'],
             'blog-pages' => ['hero_background_path'],
+            'agencies' => ['logo'],
             default => [],
         };
 

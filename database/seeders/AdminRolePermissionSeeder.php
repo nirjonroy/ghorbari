@@ -21,6 +21,8 @@ class AdminRolePermissionSeeder extends Seeder
             'manage sliders',
             'manage contacts',
             'manage users',
+            'manage agencies',
+            'manage agents',
             'manage properties',
             'manage property types',
             'manage amenities',

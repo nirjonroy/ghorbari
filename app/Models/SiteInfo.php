@@ -50,6 +50,8 @@ class SiteInfo extends Model
         'blog_post_image_height',
         'blog_page_image_width',
         'blog_page_image_height',
+        'agency_logo_width',
+        'agency_logo_height',
     ];
 
     protected $casts = [
@@ -73,5 +75,7 @@ class SiteInfo extends Model
         'blog_post_image_height' => 'integer',
         'blog_page_image_width' => 'integer',
         'blog_page_image_height' => 'integer',
+        'agency_logo_width' => 'integer',
+        'agency_logo_height' => 'integer',
     ];
 }

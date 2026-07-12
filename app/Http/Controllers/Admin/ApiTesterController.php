@@ -26,6 +26,8 @@ class ApiTesterController extends Controller
                 'blog-comments',
                 'blog-pages',
                 'contact-messages',
+                'agencies',
+                'agent-profiles',
                 'roles',
                 'permissions',
                 'admins',

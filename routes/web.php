@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\AdminRoleController;
+use App\Http\Controllers\Admin\AgencyController;
+use App\Http\Controllers\Admin\AgentProfileController;
 use App\Http\Controllers\Admin\ApiTesterController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogCommentController;
@@ -74,6 +76,15 @@ Route::resource('/admin/contacts', ContactMessageController::class)
     ->middleware(['auth:admin', 'permission:manage contacts,admin'])
     ->parameters(['contacts' => 'contact'])
     ->names('admin.contacts');
+
+Route::resource('/admin/agencies', AgencyController::class)
+    ->except('show')
+    ->middleware(['auth:admin', 'permission:manage agencies,admin'])
+    ->names('admin.agencies');
+Route::resource('/admin/agent-profiles', AgentProfileController::class)
+    ->except('show')
+    ->middleware(['auth:admin', 'permission:manage agents,admin'])
+    ->names('admin.agent-profiles');
 
 Route::get('/admin/users', [UserController::class, 'index'])
     ->middleware(['auth:admin', 'permission:manage users,admin'])

@@ -70,6 +70,30 @@
                 </a>
               </li>
 
+              <li class="nav-item {{ request()->routeIs('admin.agencies.*') || request()->routeIs('admin.agent-profiles.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('admin.agencies.*') || request()->routeIs('admin.agent-profiles.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-building-fill"></i>
+                  <p>
+                    Agency & Agents
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('admin.agencies.index') }}" class="nav-link {{ request()->routeIs('admin.agencies.*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Agencies</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('admin.agent-profiles.index') }}" class="nav-link {{ request()->routeIs('admin.agent-profiles.*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Agent Profiles</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
               <li class="nav-item {{ request()->routeIs('admin.property-types.*') || request()->routeIs('admin.amenities.*') || request()->routeIs('admin.properties.*') ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ request()->routeIs('admin.property-types.*') || request()->routeIs('admin.amenities.*') || request()->routeIs('admin.properties.*') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-house-door-fill"></i>

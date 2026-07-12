@@ -225,6 +225,7 @@
                       ['title' => 'Property Image', 'width' => 'property_image_width', 'height' => 'property_image_height', 'max' => 5000],
                       ['title' => 'Blog Post Image', 'width' => 'blog_post_image_width', 'height' => 'blog_post_image_height', 'max' => 5000],
                       ['title' => 'Blog Page Hero Image', 'width' => 'blog_page_image_width', 'height' => 'blog_page_image_height', 'max' => 5000],
+                      ['title' => 'Agency Logo', 'width' => 'agency_logo_width', 'height' => 'agency_logo_height', 'max' => 5000],
                     ] as $imageSetting)
                       <div class="col-md-4">
                         <h6 class="mb-2">{{ $imageSetting['title'] }}</h6>

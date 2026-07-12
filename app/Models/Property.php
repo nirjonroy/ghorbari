@@ -56,6 +56,16 @@ class Property extends Model
         return $this->belongsTo(PropertyType::class, 'property_type_id');
     }
 
+    public function agent()
+    {
+        return $this->belongsTo(AgentProfile::class, 'agent_profile_id');
+    }
+
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class);
+    }
+
     public function media()
     {
         return $this->hasMany(PropertyMedia::class)->orderBy('sort_order');
