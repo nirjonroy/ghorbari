@@ -217,53 +217,31 @@
                       <hr class="my-2">
                     </div>
 
-                    <div class="col-md-4">
-                      <h6 class="mb-2">Logo Image</h6>
-                      <div class="row g-2">
-                        <div class="col-md-6">
-                          <label for="logo_width" class="form-label">Width</label>
-                          <input id="logo_width" type="number" min="1" max="5000" name="logo_width" class="form-control @error('logo_width') is-invalid @enderror" value="{{ old('logo_width', $siteInfo->logo_width ?? '') }}" placeholder="Auto">
-                          @error('logo_width')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-                        <div class="col-md-6">
-                          <label for="logo_height" class="form-label">Height</label>
-                          <input id="logo_height" type="number" min="1" max="5000" name="logo_height" class="form-control @error('logo_height') is-invalid @enderror" value="{{ old('logo_height', $siteInfo->logo_height ?? '') }}" placeholder="Auto">
-                          @error('logo_height')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-4">
-                      <h6 class="mb-2">Favicon Image</h6>
-                      <div class="row g-2">
-                        <div class="col-md-6">
-                          <label for="favicon_width" class="form-label">Width</label>
-                          <input id="favicon_width" type="number" min="1" max="512" name="favicon_width" class="form-control @error('favicon_width') is-invalid @enderror" value="{{ old('favicon_width', $siteInfo->favicon_width ?? '') }}" placeholder="Auto">
-                          @error('favicon_width')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-                        <div class="col-md-6">
-                          <label for="favicon_height" class="form-label">Height</label>
-                          <input id="favicon_height" type="number" min="1" max="512" name="favicon_height" class="form-control @error('favicon_height') is-invalid @enderror" value="{{ old('favicon_height', $siteInfo->favicon_height ?? '') }}" placeholder="Auto">
-                          @error('favicon_height')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    @foreach ([
+                      ['title' => 'Logo Image', 'width' => 'logo_width', 'height' => 'logo_height', 'max' => 5000],
+                      ['title' => 'Favicon Image', 'width' => 'favicon_width', 'height' => 'favicon_height', 'max' => 512],
+                      ['title' => 'Slider Image', 'width' => 'slider_width', 'height' => 'slider_height', 'max' => 5000],
+                      ['title' => 'About Image', 'width' => 'about_image_width', 'height' => 'about_image_height', 'max' => 5000],
+                      ['title' => 'Property Image', 'width' => 'property_image_width', 'height' => 'property_image_height', 'max' => 5000],
+                      ['title' => 'Blog Post Image', 'width' => 'blog_post_image_width', 'height' => 'blog_post_image_height', 'max' => 5000],
+                      ['title' => 'Blog Page Hero Image', 'width' => 'blog_page_image_width', 'height' => 'blog_page_image_height', 'max' => 5000],
+                    ] as $imageSetting)
+                      <div class="col-md-4">
+                        <h6 class="mb-2">{{ $imageSetting['title'] }}</h6>
+                        <div class="row g-2">
+                          <div class="col-md-6">
+                            <label for="{{ $imageSetting['width'] }}" class="form-label">Width</label>
+                            <input id="{{ $imageSetting['width'] }}" type="number" min="1" max="{{ $imageSetting['max'] }}" name="{{ $imageSetting['width'] }}" class="form-control @error($imageSetting['width']) is-invalid @enderror" value="{{ old($imageSetting['width'], $siteInfo->{$imageSetting['width']} ?? '') }}" placeholder="Auto">
+                            @error($imageSetting['width'])<div class="invalid-feedback">{{ $message }}</div>@enderror
+                          </div>
+                          <div class="col-md-6">
+                            <label for="{{ $imageSetting['height'] }}" class="form-label">Height</label>
+                            <input id="{{ $imageSetting['height'] }}" type="number" min="1" max="{{ $imageSetting['max'] }}" name="{{ $imageSetting['height'] }}" class="form-control @error($imageSetting['height']) is-invalid @enderror" value="{{ old($imageSetting['height'], $siteInfo->{$imageSetting['height']} ?? '') }}" placeholder="Auto">
+                            @error($imageSetting['height'])<div class="invalid-feedback">{{ $message }}</div>@enderror
+                          </div>
                         </div>
                       </div>
-                    </div>
-
-                    <div class="col-md-4">
-                      <h6 class="mb-2">Slider Image</h6>
-                      <div class="row g-2">
-                        <div class="col-md-6">
-                          <label for="slider_width" class="form-label">Width</label>
-                          <input id="slider_width" type="number" min="1" max="5000" name="slider_width" class="form-control @error('slider_width') is-invalid @enderror" value="{{ old('slider_width', $siteInfo->slider_width ?? '') }}" placeholder="Auto">
-                          @error('slider_width')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-                        <div class="col-md-6">
-                          <label for="slider_height" class="form-label">Height</label>
-                          <input id="slider_height" type="number" min="1" max="5000" name="slider_height" class="form-control @error('slider_height') is-invalid @enderror" value="{{ old('slider_height', $siteInfo->slider_height ?? '') }}" placeholder="Auto">
-                          @error('slider_height')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-                      </div>
-                    </div>
+                    @endforeach
                   </div>
                 </div>
               </div>

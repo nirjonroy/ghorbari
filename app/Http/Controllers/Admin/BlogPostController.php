@@ -119,8 +119,8 @@ class BlogPostController extends Controller
         return (new ImageUploadService())->storeConverted(
             $request->file('featured_image_path'),
             'uploads/blog/posts',
-            null,
-            null,
+            $siteInfo?->blog_post_image_width,
+            $siteInfo?->blog_post_image_height,
             $oldPath,
             $siteInfo?->image_output_format ?? 'webp'
         );

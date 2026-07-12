@@ -131,8 +131,8 @@ class AboutController extends Controller
         return (new ImageUploadService())->storeConverted(
             $request->file('image'),
             'uploads/abouts',
-            null,
-            null,
+            $siteInfo?->about_image_width,
+            $siteInfo?->about_image_height,
             $oldPath,
             $siteInfo?->image_output_format ?? 'webp'
         );

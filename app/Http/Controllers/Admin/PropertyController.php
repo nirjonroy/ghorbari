@@ -223,8 +223,8 @@ class PropertyController extends Controller
             $path = $uploader->storeConverted(
                 $file,
                 'uploads/properties',
-                null,
-                null,
+                $siteInfo?->property_image_width,
+                $siteInfo?->property_image_height,
                 null,
                 $siteInfo?->image_output_format ?? 'webp'
             );

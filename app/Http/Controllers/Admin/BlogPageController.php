@@ -52,8 +52,8 @@ class BlogPageController extends Controller
             $data['hero_background_path'] = (new ImageUploadService())->storeConverted(
                 $request->file('hero_background_path'),
                 'uploads/blog/page',
-                null,
-                null,
+                $siteInfo?->blog_page_image_width,
+                $siteInfo?->blog_page_image_height,
                 $blogPage?->hero_background_path,
                 $siteInfo?->image_output_format ?? 'webp'
             );

@@ -42,6 +42,14 @@ class SiteInfo extends Model
         'homepage_section_title',
         'slider_width',
         'slider_height',
+        'about_image_width',
+        'about_image_height',
+        'property_image_width',
+        'property_image_height',
+        'blog_post_image_width',
+        'blog_post_image_height',
+        'blog_page_image_width',
+        'blog_page_image_height',
     ];
 
     protected $casts = [
@@ -57,5 +65,13 @@ class SiteInfo extends Model
         'favicon_height' => 'integer',
         'slider_width' => 'integer',
         'slider_height' => 'integer',
+        'about_image_width' => 'integer',
+        'about_image_height' => 'integer',
+        'property_image_width' => 'integer',
+        'property_image_height' => 'integer',
+        'blog_post_image_width' => 'integer',
+        'blog_post_image_height' => 'integer',
+        'blog_page_image_width' => 'integer',
+        'blog_page_image_height' => 'integer',
     ];
 }
