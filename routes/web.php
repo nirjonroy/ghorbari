@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogCommentController;
 use App\Http\Controllers\Admin\BlogPageController;
 use App\Http\Controllers\Admin\BlogPostController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -39,9 +40,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/admin/dashboard', function () {
-    return view('Admin.dashboard');
-})->middleware(['auth:admin', 'permission:manage dashboard,admin'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth:admin', 'permission:manage dashboard,admin'])
+    ->name('admin.dashboard');
 
 Route::get('/admin/site-info', [SiteInfoController::class, 'index'])
     ->middleware(['auth:admin', 'permission:manage site info,admin'])
