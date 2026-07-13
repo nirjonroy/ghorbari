@@ -211,6 +211,10 @@
           <label class="form-check-label" for="is_featured">Featured</label>
         </div>
         <div class="form-check form-switch">
+          <input type="checkbox" class="form-check-input" id="is_early_access" name="is_early_access" value="1" @checked(old('is_early_access', $property->is_early_access))>
+          <label class="form-check-label" for="is_early_access">Early Access</label>
+        </div>
+        <div class="form-check form-switch">
           <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="1" @checked(old('is_published', $property->is_published))>
           <label class="form-check-label" for="is_published">Published</label>
         </div>

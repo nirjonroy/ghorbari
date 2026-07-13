@@ -17,5 +17,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call(BangladeshLocationSeeder::class);
         $this->call(AdminRolePermissionSeeder::class);
+        $this->call(EarlyAccessPropertySeeder::class);
+        $this->call(PropertySampleDataSeeder::class);
     }
 }

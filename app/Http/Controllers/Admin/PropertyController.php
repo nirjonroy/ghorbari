@@ -164,6 +164,7 @@ class PropertyController extends Controller
 
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: $data['title'], $property);
         $data['is_featured'] = $request->boolean('is_featured');
+        $data['is_early_access'] = $request->boolean('is_early_access');
         $data['is_published'] = $request->boolean('is_published');
 
         return $data;

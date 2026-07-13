@@ -1,12 +1,12 @@
       <!--begin::Footer-->
       <footer class="app-footer">
         <!--begin::To the end-->
-        <div class="float-end d-none d-sm-inline">Anything you want</div>
+        <div class="float-end d-none d-sm-inline">Developed by BlackTech Corp.</div>
         <!--end::To the end-->
         <!--begin::Copyright-->
         <strong>
-          Copyright &copy; 2014-2025&nbsp;
-          <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
+          Copyright &copy; {{ date('Y') }}&nbsp;
+          <a href="https://blacktechcorp.com/" target="_blank" rel="noopener" class="text-decoration-none">BlackTech Corp.</a>.
         </strong>
         All rights reserved.
         <!--end::Copyright-->

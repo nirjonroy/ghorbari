@@ -50,6 +50,10 @@ class HomeController extends Controller
                 ->where('is_featured', true)
                 ->take(8)
                 ->get() : collect(),
+            'early_access_properties' => $this->modelTableExists(Property::class) ? $this->publishedProperties()
+                ->where('is_early_access', true)
+                ->take(8)
+                ->get() : collect(),
             'latest_properties' => $this->modelTableExists(Property::class) ? $this->publishedProperties()
                 ->latest()
                 ->take(8)
@@ -109,6 +113,7 @@ class HomeController extends Controller
                 'balconies',
                 'description',
                 'is_featured',
+                'is_early_access',
                 'is_published',
                 'published_at',
                 'created_at',

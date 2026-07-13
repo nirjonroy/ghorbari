@@ -13,6 +13,7 @@
     $fallbackSlideClasses = ['hero-slide-one', 'hero-slide-two', 'hero-slide-three'];
     $activeHero = $heroSlides->first();
     $heroTitle = $activeHero->title_one ?: 'Find More Homes In Bangladesh';
+    $earlyAccessProperties = collect($homeData['early_access_properties'] ?? []);
 @endphp
 <main>
     <section id="heroCarousel" class="hero-section carousel slide carousel-fade" data-bs-ride="carousel">
@@ -146,6 +147,64 @@
         </div>
 
         <div class="owl-carousel owl-theme early-carousel">
+          @if($earlyAccessProperties->isNotEmpty())
+            @foreach($earlyAccessProperties as $property)
+              @php
+                  $galleryId = 'earlyAccessGallery'.$property->id;
+                  $mediaItems = $property->media->where('media_type', 'image')->take(3)->values();
+                  $fallbackImages = collect([
+                      asset('frontend/assets/images/card_img_1.jpg'),
+                      asset('frontend/assets/images/card_img_2.jpg'),
+                      asset('frontend/assets/images/card_img_3.jpg'),
+                  ]);
+                  $images = $mediaItems->isNotEmpty()
+                      ? $mediaItems->map(fn ($media) => asset($media->file_path))
+                      : $fallbackImages;
+                  $price = 'BDT '.number_format((float) $property->price);
+                  $price .= $property->rent_period ? ' / '.$property->rent_period : '';
+                  $size = $property->area_size ?: $property->land_size;
+                  $meta = collect([
+                      $property->bedrooms !== null ? $property->bedrooms.' beds' : null,
+                      $property->bathrooms !== null ? $property->bathrooms.' baths' : null,
+                      $size ? number_format((float) $size).' sqft' : null,
+                  ])->filter()->join(' | ');
+              @endphp
+              <div class="property-card" role="link" tabindex="0" aria-label="View {{ $property->title }} details">
+                <a href="#" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
+                <div class="property-media">
+                  <div id="{{ $galleryId }}" class="carousel slide listing-gallery" data-bs-touch="false">
+                    <div class="carousel-inner">
+                      @foreach($images as $imageIndex => $image)
+                        <div class="carousel-item {{ $imageIndex === 0 ? 'active' : '' }}">
+                          <img src="{{ $image }}" alt="{{ $property->title }} photo {{ $imageIndex + 1 }}">
+                        </div>
+                      @endforeach
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#{{ $galleryId }}" data-bs-slide="prev" aria-label="Previous photo">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#{{ $galleryId }}" data-bs-slide="next" aria-label="Next photo">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                    <span class="badge bg-dark">Early access</span>
+                    <span class="photo-count">1/{{ $images->count() }}</span>
+                    <button class="favorite-btn" aria-label="Save listing"><i class="bi bi-heart"></i></button>
+                  </div>
+                </div>
+                <div class="property-body">
+                  <div class="d-flex justify-content-between align-items-start gap-3">
+                    <span class="property-price">{{ $price }}</span>
+                    <div class="property-actions">
+                      <button aria-label="Share listing"><i class="bi bi-share"></i></button>
+                      <button aria-label="Save listing"><i class="bi bi-heart"></i></button>
+                    </div>
+                  </div>
+                  <p class="property-meta">{{ $meta ?: optional($property->type)->name ?? ucfirst($property->listing_type) }}</p>
+                  <p class="mb-0 text-secondary">{{ $property->description ? str($property->description)->limit(55) : optional($property->type)->name ?? 'Bangladesh property' }}</p>
+                </div>
+              </div>
+            @endforeach
+          @else
           <div class="property-card" role="link" tabindex="0" aria-label="View Banani Modern Residence details">
             <a href="property-details.html" class="card-link-fill" aria-label="View Banani Modern Residence details"></a>
             <div class="property-media">
@@ -301,6 +360,7 @@
               <p class="mb-0 text-secondary">Shahjalal Uposhohor, Sylhet</p>
             </div>
           </div>
+          @endif
         </div>
       </div>
     </section>
