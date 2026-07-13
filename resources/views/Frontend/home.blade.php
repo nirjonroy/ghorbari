@@ -484,7 +484,7 @@
                       <div class="listing-card-body">
                         <h3>{{ $property->title }}</h3>
                         <p class="listing-price">{{ $propertyPrice($property) }}</p>
-                        <p class="listing-meta">{{ $propertyMeta($property) ?: optional($property->type)->name ?? 'Property' }}</p>
+                        <p class="listing-meta">{{ $propertyMeta($property) ?: (optional($property->type)->name ?? 'Property') }}</p>
                         <p class="listing-location"><i class="bi bi-geo-alt"></i> {{ $propertyLocation($property) }}</p>
                       </div>
                     </div>
@@ -542,7 +542,7 @@
                       <div class="listing-card-body">
                         <h3>{{ $property->title }}</h3>
                         <p class="listing-price">{{ $propertyPrice($property) }}</p>
-                        <p class="listing-meta">{{ $propertyMeta($property) ?: optional($property->type)->name ?? 'Property' }}</p>
+                        <p class="listing-meta">{{ $propertyMeta($property) ?: (optional($property->type)->name ?? 'Property') }}</p>
                         <p class="listing-location"><i class="bi bi-geo-alt"></i> {{ $propertyLocation($property) }}</p>
                       </div>
                     </div>
@@ -612,6 +612,23 @@
         </div>
 
         <div class="owl-carousel owl-theme featured-carousel">
+          @if($featuredProperties->isNotEmpty())
+            @foreach($featuredProperties as $property)
+              <div class="featured-card">
+                <a href="#" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
+                <div class="featured-media">
+                  <img src="{{ $propertyImage($property, 'card_img_23.jpg') }}" alt="{{ $property->title }}">
+                  <span class="featured-badge">Featured</span>
+                </div>
+                <div class="featured-body">
+                  <h3>{{ $property->title }}</h3>
+                  <p class="listing-price">{{ $propertyPrice($property) }}</p>
+                  <p class="listing-meta">{{ $propertyMeta($property) ?: (optional($property->type)->name ?? 'Property') }}</p>
+                  <p class="listing-location"><i class="bi bi-geo-alt"></i> {{ $propertyLocation($property) }}</p>
+                </div>
+              </div>
+            @endforeach
+          @else
           <div class="featured-card">
             <a href="property-details.html" class="card-link-fill" aria-label="View Luxury Apartment in Gulshan details"></a>
             <div class="featured-media">
@@ -681,6 +698,7 @@
               <p class="listing-location"><i class="bi bi-geo-alt"></i> Purbachal, Dhaka</p>
             </div>
           </div>
+          @endif
         </div>
       </div>
     </section>
