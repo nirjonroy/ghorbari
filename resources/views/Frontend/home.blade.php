@@ -1,5 +1,6 @@
 ﻿@extends('Frontend.layouts.master')
 @section('title', 'Land Site | Home')
+@section('body_class', 'frontend-page frontend-home-page')
 @section('content')
 <main>
     <section id="heroCarousel" class="hero-section carousel slide carousel-fade" data-bs-ride="carousel">
@@ -842,4 +843,5 @@
     </section>
   </main>
 @endsection
+
 

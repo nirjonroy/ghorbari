@@ -7,7 +7,7 @@
   @include('Frontend.partials.styles')
   @stack('styles')
 </head>
-<body>
+<body class="@yield('body_class', 'frontend-page')">
   @include('Frontend.partials.header')
   @yield('content')
   @include('Frontend.partials.footer')
@@ -16,4 +16,5 @@
   @stack('scripts')
 </body>
 </html>
+
 
