@@ -81,7 +81,7 @@ class PropertySampleDataSeeder extends Seeder
                 'description' => 'Road 7A, Dhanmondi, Dhaka',
                 'is_featured' => true,
                 'is_early_access' => false,
-                'images' => ['property_img_1.jpg', 'card_img_13.jpg', 'card_img_14.jpg'],
+                'images' => ['property_img_1.jpg', 'property_img_2.jpg', 'property_img_3.jpg'],
                 'amenities' => ['Lift', 'Generator Backup', 'Parking', 'Security Guard', 'Gas Connection'],
             ],
             [
@@ -97,7 +97,7 @@ class PropertySampleDataSeeder extends Seeder
                 'description' => 'Gulshan 2, Dhaka',
                 'is_featured' => true,
                 'is_early_access' => true,
-                'images' => ['card_img_15.jpg', 'card_img_16.jpg', 'card_img_17.jpg'],
+                'images' => ['card_img_21.jpg', 'card_img_22.jpg', 'card_img_23.jpg'],
                 'amenities' => ['Parking', 'Security Guard', 'CCTV Surveillance', 'Rooftop Garden', 'Servant Room'],
             ],
             [
@@ -113,7 +113,7 @@ class PropertySampleDataSeeder extends Seeder
                 'description' => 'Commercial area, Motijheel, Dhaka',
                 'is_featured' => false,
                 'is_early_access' => false,
-                'images' => ['card_img_18.jpg', 'card_img_19.jpg', 'card_img_20.jpg'],
+                'images' => ['single_property_1.jpg', 'property_img_2.jpg', 'property_img_3.jpg'],
                 'amenities' => ['Lift', 'Generator Backup', 'Parking', 'CCTV Surveillance'],
             ],
             [
@@ -147,7 +147,7 @@ class PropertySampleDataSeeder extends Seeder
                 'description' => 'Sector 10, Purbachal New Town, Dhaka',
                 'is_featured' => true,
                 'is_early_access' => false,
-                'images' => ['card_img_24.jpg', 'card_img_25.jpg', 'card_img_26.jpg'],
+                'images' => ['single_property_1.jpg', 'property_img_1.jpg', 'property_img_2.jpg'],
                 'amenities' => ['Security Guard'],
             ],
             [
@@ -163,7 +163,7 @@ class PropertySampleDataSeeder extends Seeder
                 'description' => 'Sector 11, Uttara, Dhaka',
                 'is_featured' => false,
                 'is_early_access' => true,
-                'images' => ['card_img_27.jpg', 'card_img_28.jpg', 'card_img_29.jpg'],
+                'images' => ['card_img_23.jpg', 'card_img_22.jpg', 'card_img_21.jpg'],
                 'amenities' => ['Lift', 'Generator Backup', 'Parking', 'Balcony'],
             ],
         ];
@@ -203,6 +203,8 @@ class PropertySampleDataSeeder extends Seeder
                     ->map(fn (string $name) => $amenities[$name]->id)
                     ->all()
             );
+
+            $property->media()->delete();
 
             foreach ($data['images'] as $sortOrder => $image) {
                 $property->media()->updateOrCreate(

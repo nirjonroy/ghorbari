@@ -14,6 +14,34 @@
     $activeHero = $heroSlides->first();
     $heroTitle = $activeHero->title_one ?: 'Find More Homes In Bangladesh';
     $earlyAccessProperties = collect($homeData['early_access_properties'] ?? []);
+    $featuredProperties = collect($homeData['featured_properties'] ?? []);
+    $rentProperties = collect($homeData['rent_properties'] ?? []);
+    $saleProperties = collect($homeData['sale_properties'] ?? []);
+    $propertyImage = function ($property, $fallback = 'property_img_1.jpg') {
+        $media = $property->media->firstWhere('is_primary', true) ?: $property->media->first();
+
+        return $media ? asset($media->file_path) : asset('frontend/assets/images/'.$fallback);
+    };
+    $propertyPrice = function ($property) {
+        if ($property->listing_type === 'rent') {
+            return 'BDT '.number_format((float) $property->price).' / '.($property->rent_period ?: 'month');
+        }
+
+        if ((float) $property->price >= 10000000) {
+            return 'BDT '.rtrim(rtrim(number_format((float) $property->price / 10000000, 2), '0'), '.').' Cr';
+        }
+
+        return 'BDT '.number_format((float) $property->price);
+    };
+    $propertyMeta = function ($property) {
+        return collect([
+            $property->bedrooms !== null ? $property->bedrooms.' beds' : null,
+            $property->bathrooms !== null ? $property->bathrooms.' baths' : null,
+            $property->area_size ? number_format((float) $property->area_size).' sqft' : null,
+            ! $property->area_size && $property->land_size ? rtrim(rtrim(number_format((float) $property->land_size, 2), '0'), '.').' katha' : null,
+        ])->filter()->join(' | ');
+    };
+    $propertyLocation = fn ($property) => $property->description ?: (optional($property->type)->name ?? 'Bangladesh property');
 @endphp
 <main>
     <section id="heroCarousel" class="hero-section carousel slide carousel-fade" data-bs-ride="carousel">
@@ -447,6 +475,22 @@
         <div class="tab-content listings-content">
           <div class="tab-pane fade show active" id="rentListings" role="tabpanel" aria-labelledby="rent-listings-tab" tabindex="0">
             <div class="row g-4">
+              @if($rentProperties->isNotEmpty())
+                @foreach($rentProperties as $property)
+                  <div class="col-md-6 col-xl-4">
+                    <div class="listing-card">
+                      <a href="#" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
+                      <img src="{{ $propertyImage($property, 'property_img_1.jpg') }}" alt="{{ $property->title }}">
+                      <div class="listing-card-body">
+                        <h3>{{ $property->title }}</h3>
+                        <p class="listing-price">{{ $propertyPrice($property) }}</p>
+                        <p class="listing-meta">{{ $propertyMeta($property) ?: optional($property->type)->name ?? 'Property' }}</p>
+                        <p class="listing-location"><i class="bi bi-geo-alt"></i> {{ $propertyLocation($property) }}</p>
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
+              @else
               <div class="col-md-6 col-xl-4">
                 <div class="listing-card">
                   <a href="property-details.html" class="card-link-fill" aria-label="View Gulshan Lake View Apartment details"></a>
@@ -483,11 +527,28 @@
                   </div>
                 </div>
               </div>
+              @endif
             </div>
           </div>
 
           <div class="tab-pane fade" id="saleListings" role="tabpanel" aria-labelledby="sale-listings-tab" tabindex="0">
             <div class="row g-4">
+              @if($saleProperties->isNotEmpty())
+                @foreach($saleProperties as $property)
+                  <div class="col-md-6 col-xl-4">
+                    <div class="listing-card">
+                      <a href="#" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
+                      <img src="{{ $propertyImage($property, 'single_property_1.jpg') }}" alt="{{ $property->title }}">
+                      <div class="listing-card-body">
+                        <h3>{{ $property->title }}</h3>
+                        <p class="listing-price">{{ $propertyPrice($property) }}</p>
+                        <p class="listing-meta">{{ $propertyMeta($property) ?: optional($property->type)->name ?? 'Property' }}</p>
+                        <p class="listing-location"><i class="bi bi-geo-alt"></i> {{ $propertyLocation($property) }}</p>
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
+              @else
               <div class="col-md-6 col-xl-4">
                 <div class="listing-card">
                   <a href="property-details.html" class="card-link-fill" aria-label="View Purbachal Residential Plot details"></a>
@@ -524,6 +585,7 @@
                   </div>
                 </div>
               </div>
+              @endif
             </div>
           </div>
         </div>

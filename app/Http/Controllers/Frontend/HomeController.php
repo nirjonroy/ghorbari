@@ -58,6 +58,16 @@ class HomeController extends Controller
                 ->latest()
                 ->take(8)
                 ->get() : collect(),
+            'rent_properties' => $this->modelTableExists(Property::class) ? $this->publishedProperties()
+                ->where('listing_type', 'rent')
+                ->latest()
+                ->take(6)
+                ->get() : collect(),
+            'sale_properties' => $this->modelTableExists(Property::class) ? $this->publishedProperties()
+                ->whereIn('listing_type', ['buy', 'sell'])
+                ->latest()
+                ->take(6)
+                ->get() : collect(),
             'about' => $this->modelTableExists(About::class) ? About::query()
                 ->select('id', 'title', 'slug', 'subtitle', 'short_description', 'long_description', 'image', 'image_alt_text', 'status', 'display_order')
                 ->where('status', 'active')
