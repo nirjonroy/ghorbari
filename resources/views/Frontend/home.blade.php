@@ -2,23 +2,39 @@
 @section('title', 'Land Site | Home')
 @section('body_class', 'frontend-page frontend-home-page')
 @section('content')
+@php
+    $sliders = collect($homeData['sliders'] ?? []);
+    $fallbackSlides = collect([
+        (object) ['title_one' => 'Find More Homes In Bangladesh', 'title_two' => null, 'image' => null, 'class' => 'hero-slide-one'],
+        (object) ['title_one' => 'Find Trusted Properties In Bangladesh', 'title_two' => null, 'image' => null, 'class' => 'hero-slide-two'],
+        (object) ['title_one' => 'Buy, Sell And Rent With Confidence', 'title_two' => null, 'image' => null, 'class' => 'hero-slide-three'],
+    ]);
+    $heroSlides = $sliders->isNotEmpty() ? $sliders->values() : $fallbackSlides;
+    $fallbackSlideClasses = ['hero-slide-one', 'hero-slide-two', 'hero-slide-three'];
+    $activeHero = $heroSlides->first();
+    $heroTitle = $activeHero->title_one ?: 'Find More Homes In Bangladesh';
+@endphp
 <main>
     <section id="heroCarousel" class="hero-section carousel slide carousel-fade" data-bs-ride="carousel">
       <div class="carousel-indicators">
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        @foreach($heroSlides as $index => $slide)
+          <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}" @if($index === 0) aria-current="true" @endif aria-label="Slide {{ $index + 1 }}"></button>
+        @endforeach
       </div>
       <div class="carousel-inner">
-        <div class="carousel-item active hero-slide hero-slide-one"></div>
-        <div class="carousel-item hero-slide hero-slide-two"></div>
-        <div class="carousel-item hero-slide hero-slide-three"></div>
+        @foreach($heroSlides as $index => $slide)
+          @php
+              $fallbackClass = $slide->class ?? $fallbackSlideClasses[$index % count($fallbackSlideClasses)];
+              $slideImage = $slide->image ?? null;
+          @endphp
+          <div class="carousel-item {{ $index === 0 ? 'active' : '' }} hero-slide {{ $slideImage ? '' : $fallbackClass }}" @if($slideImage) style="background-image: url('{{ asset($slideImage) }}')" @endif></div>
+        @endforeach
       </div>
       <div class="hero-overlay"></div>
       <div class="container hero-content">
         <div class="row">
           <div class="col-lg-11 col-xl-10 col-xxl-9">
-            <h1 class="display-5 fw-bold text-white mb-4">Find More Homes In Bangladesh</h1>
+            <h1 class="display-5 fw-bold text-white mb-4">{{ $heroTitle }}</h1>
             <div class="search-panel">
               <ul class="nav nav-tabs border-0" id="searchTabs" role="tablist">
                 <li class="nav-item" role="presentation">
