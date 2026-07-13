@@ -1,0 +1,38 @@
+<aside class="dashboard-sidebar">
+  <div class="dashboard-user">
+    <img src="{{ $avatar }}" alt="{{ $user->name }}">
+    <div>
+      <h1>{{ $user->name }}</h1>
+      <p>{{ $dashboardData['account_type'] }}</p>
+    </div>
+  </div>
+
+  <div class="dashboard-sidebar-actions">
+    <a href="#add-property"><i class="bi bi-plus-circle"></i> Add Property</a>
+    <form class="m-0" method="POST" action="{{ route('logout') }}">
+      @csrf
+      <button class="w-100" type="submit"><i class="bi bi-box-arrow-right"></i> Logout</button>
+    </form>
+  </div>
+
+  <nav class="dashboard-menu" aria-label="Dashboard navigation">
+    <span class="dashboard-menu-label">Workspace</span>
+    <a class="active" href="#dashboard"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+    <a href="#subscription"><i class="bi bi-credit-card-2-front"></i> Subscription</a>
+    <a href="#my-property"><i class="bi bi-houses"></i> My Property</a>
+    <a href="#add-property"><i class="bi bi-plus-circle"></i> Add New Property</a>
+    <span class="dashboard-menu-label">Account</span>
+    <a href="#profile-details"><i class="bi bi-person-lines-fill"></i> Profile Details</a>
+    <a href="#verification"><i class="bi bi-patch-check"></i> Verification</a>
+    <a href="#home-info"><i class="bi bi-house-gear"></i> Home Info</a>
+    <span class="dashboard-menu-label">Security</span>
+    <a href="#change-password"><i class="bi bi-key"></i> Change Password</a>
+    <a href="#account-security"><i class="bi bi-shield-lock"></i> Account Security</a>
+  </nav>
+
+  <a class="dashboard-sidebar-progress" href="#profile-details">
+    <span>Profile Completion</span>
+    <strong>{{ $profileCompletion }}%</strong>
+    <em><i style="width: {{ $profileCompletion }}%"></i></em>
+  </a>
+</aside>

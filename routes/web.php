@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\UserController as FrontendUserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,9 +40,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('frontend.home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [FrontendUserController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+Route::get('/user/dashboard', [FrontendUserController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.dashboard');
 
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth:admin', 'permission:manage dashboard,admin'])
