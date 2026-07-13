@@ -2,8 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var root = document.documentElement;
   var themeToggle = document.querySelector(".theme-toggle");
   var savedTheme = localStorage.getItem("landsite-theme");
-  var preferredTheme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  var currentTheme = savedTheme || preferredTheme;
+  var defaultTheme = root.getAttribute("data-default-theme") || "light";
+  var currentTheme = savedTheme || defaultTheme;
 
   var setTheme = function (theme) {
     root.setAttribute("data-theme", theme);

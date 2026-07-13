@@ -67,6 +67,9 @@
                     <dt class="col-sm-3">Timezone</dt>
                     <dd class="col-sm-9">{{ $siteInfo->timezone }}</dd>
 
+                    <dt class="col-sm-3">Default Mode</dt>
+                    <dd class="col-sm-9">{{ ucfirst($siteInfo->default_theme ?? 'light') }}</dd>
+
                     <dt class="col-sm-3">Currency</dt>
                     <dd class="col-sm-9">{{ $siteInfo->currency_name ?? 'Not set' }} {{ $siteInfo->currency_icon }}</dd>
 

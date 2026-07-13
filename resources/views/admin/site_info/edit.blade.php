@@ -54,6 +54,15 @@
                     </div>
 
                     <div class="col-md-6">
+                      <label for="default_theme" class="form-label">Default Mode</label>
+                      <select id="default_theme" name="default_theme" class="form-select @error('default_theme') is-invalid @enderror" required>
+                        <option value="light" @selected(old('default_theme', $siteInfo->default_theme ?? 'light') === 'light')>Light</option>
+                        <option value="dark" @selected(old('default_theme', $siteInfo->default_theme ?? 'light') === 'dark')>Dark</option>
+                      </select>
+                      @error('default_theme')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    <div class="col-md-6">
                       <label for="frontend_url" class="form-label">Frontend URL</label>
                       <input id="frontend_url" type="url" name="frontend_url" class="form-control @error('frontend_url') is-invalid @enderror" value="{{ old('frontend_url', $siteInfo->frontend_url ?? '') }}">
                       @error('frontend_url')<div class="invalid-feedback">{{ $message }}</div>@enderror

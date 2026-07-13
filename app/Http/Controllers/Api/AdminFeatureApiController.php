@@ -376,6 +376,7 @@ class AdminFeatureApiController extends Controller
             'image_output_format' => ['nullable', 'in:jpg,png,webp'],
             'contact_email' => ['nullable', 'email', 'max:255'],
             'text_direction' => ['nullable', 'in:ltr,rtl'],
+            'default_theme' => ['nullable', 'in:light,dark'],
             'timezone' => ['nullable', 'string', 'max:255'],
             'sidebar_lg_header' => ['nullable', 'string', 'max:255'],
             'sidebar_sm_header' => ['nullable', 'string', 'max:255'],
@@ -734,6 +735,7 @@ class AdminFeatureApiController extends Controller
     {
         $data['image_output_format'] = $data['image_output_format'] ?? $siteInfo?->image_output_format ?? 'webp';
         $data['text_direction'] = $data['text_direction'] ?? $siteInfo?->text_direction ?? 'ltr';
+        $data['default_theme'] = $data['default_theme'] ?? $siteInfo?->default_theme ?? 'light';
         $data['timezone'] = $data['timezone'] ?? $siteInfo?->timezone ?? config('app.timezone');
         $data['currency_rate'] = $data['currency_rate'] ?? $siteInfo?->currency_rate ?? 1;
 

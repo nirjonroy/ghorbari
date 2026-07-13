@@ -1,5 +1,11 @@
-﻿<!doctype html>
-<html lang="en">
+@php
+  $defaultThemeValue = data_get($frontendSiteInfo, 'default_theme', 'light');
+  $defaultTheme = in_array($defaultThemeValue, ['light', 'dark'], true)
+      ? $defaultThemeValue
+      : 'light';
+@endphp
+<!doctype html>
+<html lang="en" data-default-theme="{{ $defaultTheme }}" data-theme="{{ $defaultTheme }}">
 <head>
   <title>@yield('title', 'Land Site')</title>
   <meta charset="utf-8">
@@ -16,5 +22,6 @@
   @stack('scripts')
 </body>
 </html>
+
 
 

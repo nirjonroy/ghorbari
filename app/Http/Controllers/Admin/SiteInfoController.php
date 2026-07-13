@@ -42,6 +42,7 @@ class SiteInfoController extends Controller
             'image_output_format' => ['required', 'in:jpg,png,webp'],
             'contact_email' => ['nullable', 'email', 'max:255'],
             'text_direction' => ['required', 'in:ltr,rtl'],
+            'default_theme' => ['required', 'in:light,dark'],
             'timezone' => ['required', 'string', 'max:255'],
             'sidebar_lg_header' => ['nullable', 'string', 'max:255'],
             'sidebar_sm_header' => ['nullable', 'string', 'max:255'],

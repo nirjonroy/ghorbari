@@ -29,6 +29,7 @@ class SiteInfo extends Model
         'enable_subscription_notify',
         'enable_save_contact_message',
         'text_direction',
+        'default_theme',
         'timezone',
         'sidebar_lg_header',
         'sidebar_sm_header',
