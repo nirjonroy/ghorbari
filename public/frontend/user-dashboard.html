@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>User Dashboard | Land Site</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container-fluid px-lg-5">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="assets/images/logo.png" alt="Land Site logo" class="brand-logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Buy</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="homes-for-sale.html">Homes for sale</a></li>
+              <li><a class="dropdown-item" href="new-listings.html">New listings</a></li>
+              <li><a class="dropdown-item" href="open-houses.html">Open houses</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="rent.html">Rent</a></li>
+          <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
+          <li class="nav-item"><a class="nav-link" href="calculator.html">Calculator</a></li>
+          <li class="nav-item"><a class="nav-link" href="agents.html">Agents</a></li>
+          <li class="nav-item"><a class="nav-link active" href="user-dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false"><i class="bi bi-moon"></i><span>Dark</span></button></li>
+          <li class="nav-item ms-lg-2"><button class="btn btn-dark px-4" type="button" data-bs-toggle="modal" data-bs-target="#authModal">Join / Sign in</button></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="dashboard-page">
+    <section class="dashboard-shell">
+      <aside class="dashboard-sidebar">
+        <div class="dashboard-user">
+          <img src="https://www.blacktechcorp.com/uploads/team-members/nirjon-roy-20260115054821.jpg" alt="Nirjon Roy">
+          <div>
+            <h1>Nirjon Roy</h1>
+            <p>Buyer Account</p>
+          </div>
+        </div>
+        <div class="dashboard-sidebar-actions">
+          <a href="sell.html"><i class="bi bi-plus-circle"></i> Add Property</a>
+          <button type="button" data-bs-toggle="modal" data-bs-target="#authModal"><i class="bi bi-box-arrow-right"></i> Logout</button>
+        </div>
+        <nav class="dashboard-menu" aria-label="Dashboard navigation">
+          <span class="dashboard-menu-label">Workspace</span>
+          <a class="active" href="#dashboard"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+          <a href="#subscription"><i class="bi bi-credit-card-2-front"></i> Subscription</a>
+          <a href="#my-property"><i class="bi bi-houses"></i> My Property</a>
+          <a href="#add-property"><i class="bi bi-plus-circle"></i> Add New Property</a>
+          <span class="dashboard-menu-label">Account</span>
+          <a href="#profile-details"><i class="bi bi-person-lines-fill"></i> Profile Details</a>
+          <a href="#verification"><i class="bi bi-patch-check"></i> Verification</a>
+          <a href="#home-info"><i class="bi bi-house-gear"></i> Home Info</a>
+          <span class="dashboard-menu-label">Security</span>
+          <a href="#change-password"><i class="bi bi-key"></i> Change Password</a>
+          <a href="#account-security"><i class="bi bi-shield-lock"></i> Account Security</a>
+        </nav>
+        <a class="dashboard-sidebar-progress" href="#profile-details">
+          <span>Profile Completion</span>
+          <strong>82%</strong>
+          <em><i></i></em>
+        </a>
+      </aside>
+
+      <section class="dashboard-main">
+        <div class="dashboard-topbar">
+          <div>
+            <p>Welcome Back</p>
+            <h2>Manage Your Property Journey</h2>
+          </div>
+          <div class="dashboard-actions">
+            <button class="btn btn-outline-dark" type="button"><i class="bi bi-bell"></i> Alerts</button>
+            <a class="btn btn-danger" href="homes-for-sale.html"><i class="bi bi-search"></i> Browse Properties</a>
+          </div>
+        </div>
+
+        <div class="dashboard-stats" id="dashboard">
+          <article>
+            <span><i class="bi bi-heart"></i></span>
+            <p>Saved Properties</p>
+            <h3>12</h3>
+          </article>
+          <article>
+            <span><i class="bi bi-calendar2-week"></i></span>
+            <p>Scheduled Tours</p>
+            <h3>3</h3>
+          </article>
+          <article>
+            <span><i class="bi bi-chat-dots"></i></span>
+            <p>Active Inquiries</p>
+            <h3>7</h3>
+          </article>
+          <article>
+            <span><i class="bi bi-building-check"></i></span>
+            <p>Shortlisted Areas</p>
+            <h3>5</h3>
+          </article>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-lg-4">
+            <section class="dashboard-card action-card" id="subscription">
+              <i class="bi bi-gem"></i>
+              <h2>Subscription</h2>
+              <p>Premium Seller Plan is active until 05 Apr 2026.</p>
+              <a class="btn btn-outline-dark" href="#payments">Manage Plan</a>
+            </section>
+          </div>
+          <div class="col-lg-4">
+            <section class="dashboard-card action-card" id="add-property">
+              <i class="bi bi-plus-circle"></i>
+              <h2>Add New Property</h2>
+              <p>Create a new listing with price, images, location, and availability.</p>
+              <a class="btn btn-success" href="sell.html">Add Property</a>
+            </section>
+          </div>
+          <div class="col-lg-4">
+            <section class="dashboard-card action-card" id="verification">
+              <i class="bi bi-patch-check"></i>
+              <h2>Verification</h2>
+              <p>NID verified. Add trade license or ownership papers for faster approvals.</p>
+              <a class="btn btn-outline-dark" href="#documents">Upload Documents</a>
+            </section>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-xl-8">
+            <section class="dashboard-card" id="my-property">
+              <div class="dashboard-card-head">
+                <div>
+                  <h2>My Property</h2>
+                  <p>Properties you listed, saved, or recently compared.</p>
+                </div>
+                <a href="homes-for-sale.html">View All</a>
+              </div>
+              <div class="saved-property-list">
+                <article class="saved-property">
+                  <img src="assets/images/property_img_1.jpg" alt="Gulshan Lake View Apartment">
+                  <div>
+                    <h3>Gulshan Lake View Apartment</h3>
+                    <p>Gulshan 2, Dhaka</p>
+                    <span>BDT 85,000 / month</span>
+                  </div>
+                  <a href="property-details.html" aria-label="View property"><i class="bi bi-arrow-right"></i></a>
+                </article>
+                <article class="saved-property">
+                  <img src="assets/images/card_img_21.jpg" alt="Chattogram Hillside Duplex">
+                  <div>
+                    <h3>Chattogram Hillside Duplex</h3>
+                    <p>Nasirabad, Chattogram</p>
+                    <span>BDT 6.4 Cr</span>
+                  </div>
+                  <a href="property-details.html" aria-label="View property"><i class="bi bi-arrow-right"></i></a>
+                </article>
+                <article class="saved-property">
+                  <img src="assets/images/card_img_10.jpg" alt="Sylhet Premium Family Home">
+                  <div>
+                    <h3>Sylhet Premium Family Home</h3>
+                    <p>Uposhohor, Sylhet</p>
+                    <span>BDT 3.95 Cr</span>
+                  </div>
+                  <a href="property-details.html" aria-label="View property"><i class="bi bi-arrow-right"></i></a>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <div class="col-xl-4">
+            <section class="dashboard-card" id="settings">
+              <div class="profile-completion">
+                <div class="completion-ring">82%</div>
+                <h2>Profile Completion</h2>
+                <p>Add NID verification and preferred locations to improve recommendations.</p>
+                <button class="btn btn-dark w-100" type="button">Update Profile</button>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+          <div class="col-lg-6">
+            <section class="dashboard-card" id="tours">
+              <div class="dashboard-card-head">
+                <div>
+                  <h2>Upcoming Tours</h2>
+                  <p>Confirmed and requested property visits.</p>
+                </div>
+              </div>
+              <div class="dashboard-timeline">
+                <article>
+                  <span>Jun 30</span>
+                  <div>
+                    <h3>Banani Furnished Flat</h3>
+                    <p>11:30 AM with Arif Chowdhury</p>
+                  </div>
+                </article>
+                <article>
+                  <span>Jul 02</span>
+                  <div>
+                    <h3>Gulshan Lake View Apartment</h3>
+                    <p>4:00 PM pending owner confirmation</p>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <div class="col-lg-6">
+            <section class="dashboard-card" id="inquiries">
+              <div class="dashboard-card-head">
+                <div>
+                  <h2>Recent Inquiries</h2>
+                  <p>Messages from agents and property owners.</p>
+                </div>
+              </div>
+              <div class="inquiry-list">
+                <article>
+                  <i class="bi bi-chat-left-text"></i>
+                  <div>
+                    <h3>Owner replied about service charge</h3>
+                    <p>Gulshan Lake View Apartment</p>
+                  </div>
+                  <span>New</span>
+                </article>
+                <article>
+                  <i class="bi bi-check2-circle"></i>
+                  <div>
+                    <h3>Tour request accepted</h3>
+                    <p>Banani Furnished Flat</p>
+                  </div>
+                  <span>Today</span>
+                </article>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+          <div class="col-lg-4">
+            <section class="dashboard-card mini-panel" id="documents">
+              <i class="bi bi-file-earmark-check"></i>
+              <h2>Documents</h2>
+              <p>Upload NID, income proof, and booking documents.</p>
+              <a href="#verification">Manage Documents</a>
+            </section>
+          </div>
+          <div class="col-lg-4">
+            <section class="dashboard-card mini-panel" id="payments">
+              <i class="bi bi-wallet2"></i>
+              <h2>Payments</h2>
+              <p>Track booking fees, service charges, and payment records.</p>
+              <a href="calculator.html">View Payments</a>
+            </section>
+          </div>
+          <div class="col-lg-4">
+            <section class="dashboard-card mini-panel">
+              <i class="bi bi-bell"></i>
+              <h2>Search Alerts</h2>
+              <p>Get updates when new properties match your budget.</p>
+              <a href="homes-for-sale.html">Edit Alerts</a>
+            </section>
+          </div>
+        </div>
+
+        <div class="row g-4 mt-1">
+          <div class="col-lg-6">
+            <section class="dashboard-card mini-panel" id="profile-details">
+              <i class="bi bi-person-lines-fill"></i>
+              <h2>Profile Details</h2>
+              <p>Update your name, phone number, email, preferred areas, and owner profile information.</p>
+              <a href="#settings">Edit Profile Details</a>
+            </section>
+          </div>
+          <div class="col-lg-6">
+            <section class="dashboard-card mini-panel" id="home-info">
+              <i class="bi bi-house-gear"></i>
+              <h2>Home Info</h2>
+              <p>Manage saved addresses, listing locations, utility notes, and preferred property types.</p>
+              <a href="sell.html">Update Home Info</a>
+            </section>
+          </div>
+          <div class="col-lg-6">
+            <section class="dashboard-card mini-panel" id="change-password">
+              <i class="bi bi-key"></i>
+              <h2>Change Password</h2>
+              <p>Keep your account secure by updating password and recovery information regularly.</p>
+              <a href="#account-security">Change Password</a>
+            </section>
+          </div>
+          <div class="col-lg-6">
+            <section class="dashboard-card mini-panel" id="account-security">
+              <i class="bi bi-shield-lock"></i>
+              <h2>Account Security</h2>
+              <p>Enable OTP login, review trusted devices, and manage account access activity.</p>
+              <a href="#account-security">Manage Security</a>
+            </section>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/images/logo.png" alt="Land Site logo">
+          <p>Land Site helps buyers, sellers, and renters compare trusted property options across Bangladesh.</p>
+        </div>
+        <div>
+          <h2>Join Us</h2>
+          <a href="#">Become An Agent</a>
+          <a href="#">List Your Property</a>
+          <a href="#">Partner With Us</a>
+        </div>
+        <div>
+          <h2>Company</h2>
+          <a href="#">About Us</a>
+          <a href="agents.html">Agents</a>
+          <a href="blog-details.html">Blog</a>
+        </div>
+        <div>
+          <h2>Find Us</h2>
+          <a href="#">Contact</a>
+          <a href="#">Help Center</a>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Land Site. Designed and developed by BlackTech Corp.</p>
+        <div>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms Of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <button type="button" class="btn-close auth-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-body">
+          <h2 id="authModalLabel">Join Or Sign In</h2>
+          <form>
+            <input type="email" class="form-control auth-input" placeholder="Email">
+            <button type="submit" class="btn btn-danger auth-primary">Continue with email</button>
+          </form>
+          <div class="auth-divider"><span>or</span></div>
+          <button class="btn auth-option" type="button"><i class="bi bi-phone"></i> Login with OTP</button>
+          <button class="btn auth-option" type="button"><i class="bi bi-google"></i> Continue with Google</button>
+          <button class="btn auth-option" type="button"><i class="bi bi-apple"></i> Continue with Apple</button>
+          <p class="auth-terms">By signing in you agree to Land Site's <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

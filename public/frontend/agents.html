@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Real Estate Agents | Land Site</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container-fluid px-lg-5">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="assets/images/logo.png" alt="Land Site logo" class="brand-logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Buy</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="homes-for-sale.html">Homes for sale</a></li>
+              <li><a class="dropdown-item" href="new-listings.html">New listings</a></li>
+              <li><a class="dropdown-item" href="open-houses.html">Open houses</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="rent.html">Rent</a></li>
+          <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
+          <li class="nav-item"><a class="nav-link" href="calculator.html">Calculator</a></li>
+          <li class="nav-item"><a class="nav-link active" href="agents.html">Agents</a></li>
+          <li class="nav-item"><a class="nav-link" href="user-dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false"><i class="bi bi-moon"></i><span>Dark</span></button></li>
+          <li class="nav-item ms-lg-2"><button class="btn btn-dark px-4" type="button" data-bs-toggle="modal" data-bs-target="#authModal">Join / Sign in</button></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="agents-hero">
+      <div class="container">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-7">
+            <span class="eyebrow">Trusted Bangladesh Property Advisors</span>
+            <h1>Work With An Expert Agent Who Knows Your Market</h1>
+            <p>Compare neighborhoods, pricing, documents, tours, and negotiations with verified Land Site agents across Dhaka, Sylhet, Chattogram, Rajshahi, and more.</p>
+            <form class="agents-search">
+              <div>
+                <label for="agentArea">Find an agent near</label>
+                <input id="agentArea" class="form-control" type="search" placeholder="City, area, or postcode">
+              </div>
+              <div>
+                <label for="agentService">Service</label>
+                <select id="agentService" class="form-select">
+                  <option>Buy a home</option>
+                  <option>Sell a property</option>
+                  <option>Rent a flat</option>
+                  <option>Investment advice</option>
+                </select>
+              </div>
+              <button class="btn btn-danger" type="submit"><i class="bi bi-search"></i> Search</button>
+            </form>
+            <div class="agents-hero-stats">
+              <div><strong>4.9</strong><span>Average rating</span></div>
+              <div><strong>1.8k+</strong><span>Closed deals</span></div>
+              <div><strong>24h</strong><span>Response time</span></div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="agent-spotlight-card">
+              <div class="agent-spotlight-images">
+                <img src="https://www.blacktechcorp.com/uploads/team-members/nirjon-roy-20260115054821.jpg" alt="Nirjon Roy">
+                <img src="https://www.blacktechcorp.com/uploads/team-members/rakib-alom-20260115055615.jpg" alt="Rakib Alom">
+                <img src="https://www.blacktechcorp.com/uploads/team-members/anupam-mahmud-ozone-20260216124252.jpg" alt="Anupam Mahmud Ozone">
+              </div>
+              <h2>Top Rated Local Team</h2>
+              <p>Agents are matched by city, property type, budget range, and recent transaction experience.</p>
+              <ul>
+                <li><i class="bi bi-check2-circle"></i> Verified profile and client history</li>
+                <li><i class="bi bi-check2-circle"></i> Area pricing and document guidance</li>
+                <li><i class="bi bi-check2-circle"></i> Tour scheduling and offer support</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="agents-section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Featured Agents</span>
+          <h2>Meet Experienced Property Experts</h2>
+          <p>Shortlist an agent by city, specialty, and service quality.</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-lg-4 col-md-6">
+            <article class="agent-card">
+              <div class="agent-card-top">
+                <img src="https://www.blacktechcorp.com/uploads/team-members/nirjon-roy-20260115054821.jpg" alt="Nirjon Roy">
+                <span><i class="bi bi-star-fill"></i> 4.9</span>
+              </div>
+              <h3>Nirjon Roy</h3>
+              <p class="agent-role">Senior Property Advisor</p>
+              <p class="agent-location"><i class="bi bi-geo-alt"></i> Dhaka, Bangladesh</p>
+              <div class="agent-tags">
+                <span>Residential</span>
+                <span>Buyer Guide</span>
+                <span>Luxury Flats</span>
+              </div>
+              <div class="agent-metrics">
+                <div><strong>186</strong><small>Deals</small></div>
+                <div><strong>6 yrs</strong><small>Experience</small></div>
+                <div><strong>98%</strong><small>Response</small></div>
+              </div>
+              <a href="property-details.html" class="btn btn-dark w-100">Contact Agent</a>
+            </article>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <article class="agent-card">
+              <div class="agent-card-top">
+                <img src="https://www.blacktechcorp.com/uploads/team-members/rakib-alom-20260115055615.jpg" alt="Rakib Alom">
+                <span><i class="bi bi-star-fill"></i> 4.8</span>
+              </div>
+              <h3>Rakib Alom</h3>
+              <p class="agent-role">Listing And Sales Consultant</p>
+              <p class="agent-location"><i class="bi bi-geo-alt"></i> Sylhet, Bangladesh</p>
+              <div class="agent-tags">
+                <span>For Sale</span>
+                <span>Family Homes</span>
+                <span>Negotiation</span>
+              </div>
+              <div class="agent-metrics">
+                <div><strong>142</strong><small>Deals</small></div>
+                <div><strong>5 yrs</strong><small>Experience</small></div>
+                <div><strong>96%</strong><small>Response</small></div>
+              </div>
+              <a href="property-details.html" class="btn btn-dark w-100">Contact Agent</a>
+            </article>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <article class="agent-card">
+              <div class="agent-card-top">
+                <img src="https://www.blacktechcorp.com/uploads/team-members/anupam-mahmud-ozone-20260216124252.jpg" alt="Anupam Mahmud Ozone">
+                <span><i class="bi bi-star-fill"></i> 4.9</span>
+              </div>
+              <h3>Anupam Mahmud Ozone</h3>
+              <p class="agent-role">Market Research Specialist</p>
+              <p class="agent-location"><i class="bi bi-geo-alt"></i> Dhaka, Bangladesh</p>
+              <div class="agent-tags">
+                <span>Investment</span>
+                <span>Pricing</span>
+                <span>Documents</span>
+              </div>
+              <div class="agent-metrics">
+                <div><strong>121</strong><small>Deals</small></div>
+                <div><strong>7 yrs</strong><small>Experience</small></div>
+                <div><strong>97%</strong><small>Response</small></div>
+              </div>
+              <a href="property-details.html" class="btn btn-dark w-100">Contact Agent</a>
+            </article>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <article class="agent-card">
+              <div class="agent-card-top">
+                <img src="https://www.blacktechcorp.com/uploads/team-members/sara-shahrin-20260115060122.jpg" alt="Sara Shahrin">
+                <span><i class="bi bi-star-fill"></i> 4.7</span>
+              </div>
+              <h3>Sara Shahrin</h3>
+              <p class="agent-role">Rental Property Advisor</p>
+              <p class="agent-location"><i class="bi bi-geo-alt"></i> Dhaka, Bangladesh</p>
+              <div class="agent-tags">
+                <span>Rentals</span>
+                <span>Tenant Match</span>
+                <span>Flats</span>
+              </div>
+              <div class="agent-metrics">
+                <div><strong>98</strong><small>Deals</small></div>
+                <div><strong>4 yrs</strong><small>Experience</small></div>
+                <div><strong>95%</strong><small>Response</small></div>
+              </div>
+              <a href="property-details.html" class="btn btn-dark w-100">Contact Agent</a>
+            </article>
+          </div>
+          <div class="col-lg-8">
+            <article class="agent-match-panel">
+              <div>
+                <span class="eyebrow">Smart Matching</span>
+                <h3>Not Sure Who To Contact?</h3>
+                <p>Tell us your preferred city, budget, and property goal. Land Site will match you with an agent who has recent experience in that exact market.</p>
+              </div>
+              <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#authModal">Get Matched</button>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="agent-process-section">
+      <div class="container">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-5">
+            <span class="eyebrow">How It Works</span>
+            <h2>From Shortlist To Closing, Your Agent Handles The Details</h2>
+            <p>Our agents help you compare listings, verify documents, arrange visits, negotiate confidently, and avoid hidden costs.</p>
+          </div>
+          <div class="col-lg-7">
+            <div class="agent-process-grid">
+              <div><i class="bi bi-search"></i><h3>Discover</h3><p>Shortlist homes by budget, area, commute, and lifestyle.</p></div>
+              <div><i class="bi bi-file-earmark-check"></i><h3>Verify</h3><p>Review ownership, mutation, service charges, and handover readiness.</p></div>
+              <div><i class="bi bi-calendar-check"></i><h3>Tour</h3><p>Schedule visits and compare property condition with market price.</p></div>
+              <div><i class="bi bi-hand-thumbs-up"></i><h3>Close</h3><p>Move from offer to paperwork with practical local guidance.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/images/logo.png" alt="Land Site logo">
+          <p>Land Site helps buyers, sellers, and renters compare trusted property options across Bangladesh.</p>
+        </div>
+        <div>
+          <h2>Join Us</h2>
+          <a href="agents.html">Become An Agent</a>
+          <a href="sell.html">List Your Property</a>
+          <a href="agents.html">Partner With Us</a>
+        </div>
+        <div>
+          <h2>Company</h2>
+          <a href="#">About Us</a>
+          <a href="agents.html">Agents</a>
+          <a href="blog-details.html">Blog</a>
+        </div>
+        <div>
+          <h2>Find Us</h2>
+          <a href="#">Contact</a>
+          <a href="#">Help Center</a>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Land Site. Designed and developed by BlackTech Corp.</p>
+        <div>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms Of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <button type="button" class="btn-close auth-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-body">
+          <h2 id="authModalLabel">Join Or Sign In</h2>
+          <form>
+            <input type="email" class="form-control auth-input" placeholder="Email">
+            <button type="submit" class="btn btn-danger auth-primary">Continue with email</button>
+          </form>
+          <div class="auth-divider"><span>or</span></div>
+          <button class="btn auth-option" type="button"><i class="bi bi-phone"></i> Login with OTP</button>
+          <button class="btn auth-option" type="button"><i class="bi bi-google"></i> Continue with Google</button>
+          <button class="btn auth-option" type="button"><i class="bi bi-apple"></i> Continue with Apple</button>
+          <p class="auth-terms">By signing in you agree to Land Site's <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

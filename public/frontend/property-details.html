@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Banani Modern Residence | Land Site</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="detail-page">
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container-fluid px-lg-5">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="assets/images/logo.png" alt="Land Site logo" class="brand-logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#detailsNavbar" aria-controls="detailsNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="detailsNavbar">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Buy</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="homes-for-sale.html">Homes for sale</a></li>
+              <li><a class="dropdown-item" href="new-listings.html">New listings</a></li>
+              <li><a class="dropdown-item" href="open-houses.html">Open houses</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="rent.html">Rent</a></li>
+          <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
+          <li class="nav-item"><a class="nav-link" href="calculator.html">Calculator</a></li>
+          <li class="nav-item"><a class="nav-link" href="agents.html">Agents</a></li>
+          <li class="nav-item"><a class="nav-link" href="user-dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false"><i class="bi bi-moon"></i><span>Dark</span></button></li>
+          <li class="nav-item ms-lg-2">
+            <button class="btn btn-dark px-4" type="button" data-bs-toggle="modal" data-bs-target="#authModal">Join / Sign in</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <nav class="detail-subnav" aria-label="Property page navigation">
+      <div class="container-fluid px-lg-5">
+        <a href="index.html#property-listings"><i class="bi bi-arrow-left"></i> Search</a>
+        <a class="active" href="#overview">Overview</a>
+        <a href="#neighborhood">Neighborhood</a>
+        <a href="#propertyDetails">Property Details</a>
+        <a href="#payment">Payment</a>
+        <a href="#contactAgent">Contact</a>
+        <span class="detail-subnav-actions">
+          <button type="button"><i class="bi bi-heart"></i> Favorite</button>
+          <button type="button"><i class="bi bi-eye-slash"></i> Hide</button>
+          <button type="button"><i class="bi bi-share"></i> Share</button>
+        </span>
+      </div>
+    </nav>
+
+    <section class="detail-gallery">
+      <div class="container-fluid px-lg-3">
+        <div class="gallery-grid">
+          <button class="gallery-photo gallery-main" type="button" data-bs-toggle="modal" data-bs-target="#photoGalleryModal" aria-label="Open exterior photo">
+            <img src="assets/images/card_img_1.jpg" alt="Banani residence exterior">
+            <span class="gallery-badge">New 1 hr ago</span>
+          </button>
+          <button class="gallery-photo" type="button" data-bs-toggle="modal" data-bs-target="#photoGalleryModal" aria-label="Open entry photo">
+            <img src="assets/images/card_img_2.jpg" alt="Entry hall">
+          </button>
+          <button class="gallery-photo" type="button" data-bs-toggle="modal" data-bs-target="#photoGalleryModal" aria-label="Open living room photo">
+            <img src="assets/images/card_img_3.jpg" alt="Living room">
+          </button>
+          <button class="gallery-photo" type="button" data-bs-toggle="modal" data-bs-target="#photoGalleryModal" aria-label="Open bathroom photo">
+            <img src="assets/images/card_img_4.jpg" alt="Bathroom">
+          </button>
+          <button class="gallery-photo" type="button" data-bs-toggle="modal" data-bs-target="#photoGalleryModal" aria-label="Open dining photo">
+            <img src="assets/images/card_img_5.jpg" alt="Dining area">
+          </button>
+          <div class="gallery-quick-actions">
+            <button type="button"><i class="bi bi-columns-gap"></i> Floor Plans</button>
+            <button type="button"><i class="bi bi-signpost-split"></i> Street View</button>
+            <button type="button"><i class="bi bi-stars"></i> Redesign</button>
+          </div>
+          <button class="btn btn-light gallery-btn" type="button" data-bs-toggle="modal" data-bs-target="#photoGalleryModal"><i class="bi bi-images"></i> 22 photos</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="detail-main" id="overview">
+      <div class="container">
+        <div class="row g-4 align-items-start">
+          <div class="col-lg-8">
+            <article class="detail-card property-summary">
+              <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
+                <div>
+                  <p class="detail-eyebrow"><span></span> For Sale</p>
+                  <div class="summary-row">
+                    <h1>BDT 7.35 Cr</h1>
+                    <span class="monthly-est">Est. BDT 4.82 Lac/mo</span>
+                  </div>
+                  <div class="summary-facts">
+                    <span><strong>4</strong> bds</span>
+                    <span><strong>3</strong> ba</span>
+                    <span><strong>2,120</strong> sqft</span>
+                  </div>
+                  <p class="detail-address">Road 12, Banani, Dhaka 1213</p>
+                </div>
+                <div class="summary-map" aria-label="Property map preview">
+                  <span><i class="bi bi-geo-alt-fill"></i></span>
+                </div>
+              </div>
+              <div class="detail-actions">
+                <button class="btn btn-outline-dark"><i class="bi bi-share"></i> Share</button>
+                <button class="btn btn-outline-dark"><i class="bi bi-heart"></i> Save</button>
+              </div>
+            </article>
+
+            <article class="detail-card" id="neighborhood">
+            <h2>About This Home</h2>
+              <p>Located in one of Banani's most connected residential blocks, this modern family residence offers bright living spaces, a practical bedroom layout, secure parking, and easy access to Gulshan, Mohakhali, schools, hospitals, cafes, and daily services.</p>
+              <p>The home includes a large living and dining area, fitted kitchen, staff room, storage, generator backup, lift access, and 24-hour building security.</p>
+              <div class="fact-grid">
+                <div><i class="bi bi-house-door"></i><strong>Property type</strong><span>Apartment</span></div>
+                <div><i class="bi bi-calendar-check"></i><strong>Built</strong><span>2021</span></div>
+                <div><i class="bi bi-car-front"></i><strong>Parking</strong><span>2 spaces</span></div>
+                <div><i class="bi bi-building"></i><strong>Floor</strong><span>7 of 12</span></div>
+              </div>
+            </article>
+
+            <article class="detail-card">
+            <h2>Listing Agent</h2>
+              <div class="agent-detail">
+                <img src="https://avatars.githubusercontent.com/u/36534401?v=4" alt="Nirjon Roy portrait">
+                <div>
+                  <h3>Nirjon Roy</h3>
+                  <p>Senior property advisor, Land Site Bangladesh</p>
+                  <p class="mb-0"><i class="bi bi-star-fill text-warning"></i> 4.9 rating | 128 closed deals</p>
+                </div>
+                <a href="#contactAgent" class="btn btn-outline-dark ms-lg-auto">Contact agent</a>
+              </div>
+            </article>
+
+            <article class="detail-card">
+            <h2>Open Houses</h2>
+              <div class="open-house">
+                <div>
+                  <strong>Friday, June 28</strong>
+                  <span>3:00 PM - 6:00 PM</span>
+                </div>
+                <button class="btn btn-danger">Schedule tour</button>
+              </div>
+            </article>
+
+            <article class="detail-card">
+            <h2>Around This Home</h2>
+              <div class="detail-map">
+                <span class="map-pin"><i class="bi bi-geo-alt-fill"></i></span>
+                <p>Banani, Dhaka</p>
+              </div>
+              <div class="nearby-list">
+                <div><span>Banani Bidyaniketan School</span><strong>0.8 km</strong></div>
+                <div><span>Gulshan Lake Park</span><strong>1.4 km</strong></div>
+                <div><span>Banani Railway Station</span><strong>1.8 km</strong></div>
+              </div>
+            </article>
+
+            <article class="detail-card" id="payment">
+            <h2>Payment Calculator</h2>
+              <p class="text-secondary">Estimated monthly cost based on a 20% down payment and sample financing terms.</p>
+              <div class="payment-total">BDT 4.82 Lac / month</div>
+              <div class="payment-bars">
+                <span style="width: 62%"></span>
+                <span style="width: 21%"></span>
+                <span style="width: 17%"></span>
+              </div>
+              <div class="payment-legend">
+                <span><i class="legend principal"></i> Principal and interest</span>
+                <span><i class="legend tax"></i> Taxes and fees</span>
+                <span><i class="legend service"></i> Service charge</span>
+              </div>
+              <a href="#contactAgent" class="btn btn-dark mt-3">Contact agent</a>
+            </article>
+
+            <article class="detail-card" id="propertyDetails">
+            <h2>Property Details</h2>
+              <div class="detail-tabs">
+                <img src="assets/images/card_img_6.jpg" alt="Interior thumbnail">
+                <img src="assets/images/card_img_7.jpg" alt="Bedroom thumbnail">
+                <img src="assets/images/card_img_8.jpg" alt="Kitchen thumbnail">
+                <img src="assets/images/card_img_9.jpg" alt="Balcony thumbnail">
+              </div>
+              <div class="details-list">
+                <div><strong>Interior</strong><span>Open living area, fitted kitchen, marble floors, built-in cabinets</span></div>
+                <div><strong>Utilities</strong><span>Gas, electricity, WASA water, generator backup, lift</span></div>
+                <div><strong>Security</strong><span>24-hour guard, CCTV, controlled entry</span></div>
+                <div><strong>Community</strong><span>Near schools, shopping, restaurants, hospitals, and offices</span></div>
+              </div>
+            </article>
+
+            <article class="detail-card">
+            <h2>Public Record</h2>
+              <div class="record-table">
+                <div><span>Property type</span><strong>Apartment</strong></div>
+                <div><span>Holding status</span><strong>Ready</strong></div>
+                <div><span>Registration</span><strong>Available</strong></div>
+                <div><span>Mutation</span><strong>Completed</strong></div>
+                <div><span>Utility connection</span><strong>Active</strong></div>
+                <div><span>Parking spaces</span><strong>2</strong></div>
+              </div>
+            </article>
+
+            <article class="detail-card">
+            <h2>About This Listing</h2>
+              <div class="listing-source">
+                <img src="assets/images/logo.png" alt="Land Site logo">
+                <div>
+                  <strong>Listed by Land Site Bangladesh</strong>
+                  <p>Updated today. Listing data is provided by the seller and verified by the assigned agent.</p>
+                </div>
+              </div>
+            </article>
+
+            <section class="detail-card">
+              <div class="d-flex justify-content-between align-items-center gap-3 mb-3">
+              <h2 class="mb-0">Recommended For You</h2>
+                <a href="index.html#property-listings" class="text-danger fw-semibold">View more</a>
+              </div>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <article class="mini-listing">
+                    <img src="assets/images/card_img_10.jpg" alt="Sylhet property">
+                    <strong>BDT 3.95 Cr</strong>
+                    <span>Uposhohor, Sylhet</span>
+                  </article>
+                </div>
+                <div class="col-md-4">
+                  <article class="mini-listing">
+                    <img src="assets/images/card_img_21.jpg" alt="Chattogram property">
+                    <strong>BDT 6.4 Cr</strong>
+                    <span>Nasirabad, Chattogram</span>
+                  </article>
+                </div>
+                <div class="col-md-4">
+                  <article class="mini-listing">
+                    <img src="assets/images/card_img_22.jpg" alt="Rajshahi property">
+                    <strong>BDT 3.25 Cr</strong>
+                    <span>Boalia, Rajshahi</span>
+                  </article>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <aside class="col-lg-4">
+            <div class="contact-card detail-card" id="contactAgent">
+            <h2>This Home Is Popular</h2>
+              <button class="btn btn-danger w-100 request-showing" type="button">Request Showing</button>
+              <p class="small text-secondary mt-2 mb-3">Tour for free, no strings attached.</p>
+              <button class="btn btn-outline-dark w-100 ask-question" type="button">Ask A Question</button>
+              <div class="tour-options" aria-label="Tour type">
+                <button class="active" type="button">In-person</button>
+                <button type="button">Video chat</button>
+              </div>
+              <form>
+                <div class="row g-2">
+                  <div class="col-sm-6"><input type="text" class="form-control" placeholder="First name"></div>
+                  <div class="col-sm-6"><input type="text" class="form-control" placeholder="Last name"></div>
+                  <div class="col-12"><input type="email" class="form-control" placeholder="Email"></div>
+                  <div class="col-12"><input type="tel" class="form-control" placeholder="Phone"></div>
+                  <div class="col-12"><textarea class="form-control" rows="4" placeholder="I'm interested in this property."></textarea></div>
+                </div>
+                <button class="btn btn-dark w-100 mt-3" type="submit">Contact Agent</button>
+              </form>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/images/logo.png" alt="Land Site logo">
+          <p>Land Site helps buyers, sellers, and renters compare trusted property options across Bangladesh.</p>
+        </div>
+        <div>
+          <h2>Join Us</h2>
+          <a href="#">Become An Agent</a>
+          <a href="#">List Your Property</a>
+          <a href="#">Partner With Us</a>
+        </div>
+        <div>
+          <h2>Company</h2>
+          <a href="#">About Us</a>
+          <a href="agents.html">Agents</a>
+          <a href="#">Blog</a>
+        </div>
+        <div>
+          <h2>Find Us</h2>
+          <a href="#">Contact</a>
+          <a href="#">Help Center</a>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Land Site. Designed and developed by BlackTech Corp.</p>
+        <div>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms Of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <button type="button" class="btn-close auth-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-body">
+        <h2 id="authModalLabel">Join Or Sign In</h2>
+          <form>
+            <input type="email" class="form-control auth-input" placeholder="Email">
+            <button type="submit" class="btn btn-danger auth-primary">Continue with email</button>
+          </form>
+          <div class="auth-divider"><span>or</span></div>
+          <button class="btn auth-option" type="button"><i class="bi bi-phone"></i> Login with OTP</button>
+          <button class="btn auth-option" type="button"><i class="bi bi-google"></i> Continue with Google</button>
+          <button class="btn auth-option" type="button"><i class="bi bi-apple"></i> Continue with Apple</button>
+          <p class="auth-terms">By signing in you agree to Land Site's <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade photo-gallery-modal" id="photoGalleryModal" tabindex="-1" aria-labelledby="photoGalleryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="photo-modal-header">
+          <div class="photo-modal-left">
+            <button type="button" class="photo-close" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+            <nav class="photo-modal-tabs" aria-label="Photo sections">
+              <button class="active" type="button">Photos</button>
+              <button type="button">Floor Plan</button>
+              <button type="button">Street View</button>
+              <button type="button">Neighborhood</button>
+            </nav>
+          </div>
+          <div class="photo-modal-actions">
+            <button type="button"><i class="bi bi-heart"></i> Favorite</button>
+            <button type="button"><i class="bi bi-share"></i> Share</button>
+          </div>
+        </div>
+        <div class="photo-modal-body">
+          <div class="photo-modal-main">
+            <div class="photo-category-row">
+              <button class="active" type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="0">
+                <img src="assets/images/card_img_1.jpg" alt="">
+                <span><i class="bi bi-grid"></i> All<br><small>22 photos</small></span>
+              </button>
+              <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="1">
+                <img src="assets/images/card_img_2.jpg" alt="">
+                <span><i class="bi bi-cup-hot"></i> Kitchen</span>
+              </button>
+              <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="2">
+                <img src="assets/images/card_img_3.jpg" alt="">
+                <span><i class="bi bi-droplet"></i> Bathroom</span>
+              </button>
+              <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="5">
+                <img src="assets/images/card_img_6.jpg" alt="">
+                <span><i class="bi bi-lamp"></i> Bedroom</span>
+              </button>
+              <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="6">
+                <img src="assets/images/card_img_7.jpg" alt="">
+                <span><i class="bi bi-tv"></i> Living</span>
+              </button>
+              <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="4">
+                <img src="assets/images/card_img_5.jpg" alt="">
+                <span><i class="bi bi-fork-knife"></i> Dining</span>
+              </button>
+            </div>
+
+            <div id="detailPhotoCarousel" class="carousel slide" data-bs-ride="false">
+              <div class="carousel-inner">
+                <div class="carousel-item active"><img src="assets/images/card_img_1.jpg" alt="Banani residence exterior"></div>
+                <div class="carousel-item"><img src="assets/images/card_img_2.jpg" alt="Entry hall"></div>
+                <div class="carousel-item"><img src="assets/images/card_img_3.jpg" alt="Living room"></div>
+                <div class="carousel-item"><img src="assets/images/card_img_4.jpg" alt="Bathroom"></div>
+                <div class="carousel-item"><img src="assets/images/card_img_5.jpg" alt="Dining area"></div>
+                <div class="carousel-item"><img src="assets/images/card_img_6.jpg" alt="Bedroom"></div>
+                <div class="carousel-item"><img src="assets/images/card_img_7.jpg" alt="Kitchen"></div>
+                <div class="carousel-item"><img src="assets/images/card_img_8.jpg" alt="Balcony"></div>
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide="prev" aria-label="Previous photo">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide="next" aria-label="Next photo">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+
+          <aside class="photo-summary-card">
+            <h2 id="photoGalleryModalLabel">BDT 7.35 Cr</h2>
+            <p class="photo-summary-facts">4 bd • 3 ba • 2,120 sqft</p>
+            <p>Road 12, Banani, Dhaka 1213</p>
+            <button class="btn btn-dark w-100" type="button">Contact Agent</button>
+          </aside>
+
+          <div class="photo-thumb-row">
+            <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="0" class="active" aria-label="View photo 1"><img src="assets/images/card_img_1.jpg" alt=""></button>
+            <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="1" aria-label="View photo 2"><img src="assets/images/card_img_2.jpg" alt=""></button>
+            <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="2" aria-label="View photo 3"><img src="assets/images/card_img_3.jpg" alt=""></button>
+            <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="3" aria-label="View photo 4"><img src="assets/images/card_img_4.jpg" alt=""></button>
+            <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="4" aria-label="View photo 5"><img src="assets/images/card_img_5.jpg" alt=""></button>
+            <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="5" aria-label="View photo 6"><img src="assets/images/card_img_6.jpg" alt=""></button>
+            <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="6" aria-label="View photo 7"><img src="assets/images/card_img_7.jpg" alt=""></button>
+            <button type="button" data-bs-target="#detailPhotoCarousel" data-bs-slide-to="7" aria-label="View photo 8"><img src="assets/images/card_img_8.jpg" alt=""></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

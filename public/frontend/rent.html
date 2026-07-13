@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Rent Properties | Land Site</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container-fluid px-lg-5">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="assets/images/logo.png" alt="Land Site logo" class="brand-logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Buy</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="homes-for-sale.html">Homes for sale</a></li>
+              <li><a class="dropdown-item" href="new-listings.html">New listings</a></li>
+              <li><a class="dropdown-item" href="open-houses.html">Open houses</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link active" href="rent.html">Rent</a></li>
+          <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
+          <li class="nav-item"><a class="nav-link" href="calculator.html">Calculator</a></li>
+          <li class="nav-item"><a class="nav-link" href="agents.html">Agents</a></li>
+          <li class="nav-item"><a class="nav-link" href="user-dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false"><i class="bi bi-moon"></i><span>Dark</span></button></li>
+          <li class="nav-item ms-lg-2"><button class="btn btn-dark px-4" type="button" data-bs-toggle="modal" data-bs-target="#authModal">Join / Sign in</button></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page-hero rent-hero">
+      <div class="container">
+        <p>Rent in Bangladesh</p>
+        <h1>Homes And Apartments For Rent</h1>
+        <p class="page-hero-subtitle">Find verified apartments, family homes, and ready-to-move rentals across Dhaka, Chattogram, Sylhet, and other major cities.</p>
+        <form class="page-search">
+          <input type="search" class="form-control" placeholder="Search rentals by city, area, or postcode">
+          <button class="btn btn-danger" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+      </div>
+    </section>
+
+    <section class="directory-section">
+      <div class="container">
+        <div class="directory-toolbar">
+          <div>
+        <h2>Rental Listings</h2>
+            <p>Find ready apartments and family homes for rent.</p>
+          </div>
+          <select class="form-select">
+            <option>Newest rentals</option>
+            <option>Lowest rent</option>
+            <option>Highest rent</option>
+          </select>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-4">
+            <div class="listing-card">
+              <a href="property-details.html" class="card-link-fill" aria-label="View Gulshan rental details"></a>
+              <img src="assets/images/property_img_1.jpg" alt="Gulshan rental apartment">
+              <div class="listing-card-body">
+                <h3>Gulshan Lake View Apartment</h3>
+                <p class="listing-price">BDT 85,000 / month</p>
+                <p class="listing-meta">3 beds | 3 baths | 1,850 sqft</p>
+                <p class="listing-location"><i class="bi bi-geo-alt"></i> Gulshan 2, Dhaka</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="listing-card">
+              <a href="property-details.html" class="card-link-fill" aria-label="View Banani rental details"></a>
+              <img src="assets/images/property_img_2.jpg" alt="Banani furnished flat">
+              <div class="listing-card-body">
+                <h3>Banani Furnished Flat</h3>
+                <p class="listing-price">BDT 72,000 / month</p>
+                <p class="listing-meta">3 beds | 2 baths | 1,520 sqft</p>
+                <p class="listing-location"><i class="bi bi-geo-alt"></i> Banani, Dhaka</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="listing-card">
+              <a href="property-details.html" class="card-link-fill" aria-label="View Chattogram rental details"></a>
+              <img src="assets/images/property_img_3.jpg" alt="Chattogram family rental">
+              <div class="listing-card-body">
+                <h3>Chattogram Family Rental</h3>
+                <p class="listing-price">BDT 58,000 / month</p>
+                <p class="listing-meta">4 beds | 3 baths | 2,100 sqft</p>
+                <p class="listing-location"><i class="bi bi-geo-alt"></i> Khulshi, Chattogram</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rent-types-section">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">Explore Rentals By Type</h2>
+          <p>Choose the rental category that fits your lifestyle, budget, and location needs.</p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-3">
+            <div class="rent-type-card">
+              <div class="rent-type-icon"><i class="bi bi-house-door"></i></div>
+              <h3>Rent Homes</h3>
+              <p>Family houses with privacy, parking, outdoor space, and room to grow.</p>
+              <a href="rent.html">Browse homes <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="rent-type-card">
+              <div class="rent-type-icon"><i class="bi bi-building"></i></div>
+              <h3>Rent Apartments</h3>
+              <p>Verified flats in prime neighborhoods near offices, schools, and daily essentials.</p>
+              <a href="rent.html">Browse apartments <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="rent-type-card">
+              <div class="rent-type-icon"><i class="bi bi-briefcase"></i></div>
+              <h3>Commercial Rent</h3>
+              <p>Office floors, shops, and business-ready spaces across key commercial areas.</p>
+              <a href="rent.html">Find spaces <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-3">
+            <div class="rent-type-card">
+              <div class="rent-type-icon"><i class="bi bi-calendar2-check"></i></div>
+              <h3>Short Stay</h3>
+              <p>Flexible furnished rentals for temporary stays, relocation, and project teams.</p>
+              <a href="rent.html">Explore stays <i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="blogs-section">
+      <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+          <div>
+            <h2 class="section-title">Latest Real Estate Articles</h2>
+            <p class="text-secondary mb-0">Rental guides, market updates, and Bangladesh housing tips.</p>
+          </div>
+          <a href="blog-details.html" class="btn btn-outline-dark">All Articles</a>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-4">
+            <div class="blog-card">
+              <a href="blog-details.html" class="blog-image-link" aria-label="Read Dhaka Rental Price Guide">
+                <img src="assets/images/post_img_1.jpg" alt="Dhaka rental market">
+              </a>
+              <div class="blog-body">
+                <span>Rental guide</span>
+                <h3><a href="blog-details.html">Dhaka Rental Prices: What Tenants Should Check First</a></h3>
+                <p>Compare neighborhoods, service charges, commute time, and building facilities before you book a visit.</p>
+                <a href="blog-details.html">Read Article <i class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="blog-card">
+              <a href="blog-details.html" class="blog-image-link" aria-label="Read Apartment Rental Checklist">
+                <img src="assets/images/post_img_2.jpg" alt="Family planning rental budget">
+              </a>
+              <div class="blog-body">
+                <span>Tenant tips</span>
+                <h3><a href="blog-details.html">Apartment Rental Checklist For Bangladesh Tenants</a></h3>
+                <p>Review utility bills, lift backup, parking, security, agreement terms, and handover condition.</p>
+                <a href="blog-details.html">Read Article <i class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="blog-card">
+              <a href="blog-details.html" class="blog-image-link" aria-label="Read Documents Needed Before Renting">
+                <img src="assets/images/post_img_3.jpg" alt="Rental document checklist">
+              </a>
+              <div class="blog-body">
+                <span>Documents</span>
+                <h3><a href="blog-details.html">Documents To Verify Before Renting A Home</a></h3>
+                <p>Know which owner papers, NID copies, deposits, and agreement clauses matter before moving in.</p>
+                <a href="blog-details.html">Read Article <i class="bi bi-arrow-right"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sitemap-section rent-sitemap-section">
+      <div class="container">
+        <div class="sitemap-group">
+          <div class="sitemap-heading">
+            <h2>Search For Rentals By City</h2>
+            <a href="#">View Full List</a>
+          </div>
+          <div class="sitemap-links">
+            <a href="rent.html">Dhaka Homes For Rent</a>
+            <a href="rent.html">Chattogram Homes For Rent</a>
+            <a href="rent.html">Sylhet Homes For Rent</a>
+            <a href="rent.html">Cox's Bazar Homes For Rent</a>
+            <a href="rent.html">Rajshahi Homes For Rent</a>
+            <a href="rent.html">Khulna Homes For Rent</a>
+            <a href="rent.html">Barishal Homes For Rent</a>
+            <a href="rent.html">Rangpur Homes For Rent</a>
+            <a href="rent.html">Mymensingh Homes For Rent</a>
+            <a href="rent.html">Gazipur Homes For Rent</a>
+            <a href="rent.html">Narayanganj Homes For Rent</a>
+            <a href="rent.html">Cumilla Homes For Rent</a>
+            <a href="rent.html">Savar Homes For Rent</a>
+            <a href="rent.html">Uttara Homes For Rent</a>
+            <a href="rent.html">Banani Homes For Rent</a>
+          </div>
+        </div>
+
+        <div class="sitemap-group">
+          <div class="sitemap-heading">
+            <h2>Search For Apartments By Area</h2>
+            <a href="#">View Full List</a>
+          </div>
+          <div class="sitemap-links">
+            <a href="rent.html">Gulshan Apartments For Rent</a>
+            <a href="rent.html">Banani Apartments For Rent</a>
+            <a href="rent.html">Bashundhara Apartments For Rent</a>
+            <a href="rent.html">Dhanmondi Apartments For Rent</a>
+            <a href="rent.html">Uttara Apartments For Rent</a>
+            <a href="rent.html">Mirpur Apartments For Rent</a>
+            <a href="rent.html">Mohammadpur Apartments For Rent</a>
+            <a href="rent.html">Banasree Apartments For Rent</a>
+            <a href="rent.html">Khulshi Apartments For Rent</a>
+            <a href="rent.html">Zindabazar Apartments For Rent</a>
+          </div>
+        </div>
+
+        <div class="sitemap-group mb-0">
+          <div class="sitemap-heading">
+            <h2>Search For Rentals By Division</h2>
+            <a href="#">View Full List</a>
+          </div>
+          <div class="sitemap-links">
+            <a href="rent.html">Dhaka Division Rentals</a>
+            <a href="rent.html">Chattogram Division Rentals</a>
+            <a href="rent.html">Sylhet Division Rentals</a>
+            <a href="rent.html">Rajshahi Division Rentals</a>
+            <a href="rent.html">Khulna Division Rentals</a>
+            <a href="rent.html">Barishal Division Rentals</a>
+            <a href="rent.html">Rangpur Division Rentals</a>
+            <a href="rent.html">Mymensingh Division Rentals</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/images/logo.png" alt="Land Site logo">
+          <p>Land Site helps buyers, sellers, and renters compare trusted property options across Bangladesh.</p>
+        </div>
+        <div>
+          <h2>Join Us</h2>
+          <a href="#">Become An Agent</a>
+          <a href="#">List Your Property</a>
+          <a href="#">Partner With Us</a>
+        </div>
+        <div>
+          <h2>Company</h2>
+          <a href="#">About Us</a>
+          <a href="agents.html">Agents</a>
+          <a href="blog-details.html">Blog</a>
+        </div>
+        <div>
+          <h2>Find Us</h2>
+          <a href="#">Contact</a>
+          <a href="#">Help Center</a>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Land Site. Designed and developed by BlackTech Corp.</p>
+        <div>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms Of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <button type="button" class="btn-close auth-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-body">
+        <h2 id="authModalLabel">Join Or Sign In</h2>
+          <form>
+            <input type="email" class="form-control auth-input" placeholder="Email">
+            <button type="submit" class="btn btn-danger auth-primary">Continue with email</button>
+          </form>
+          <div class="auth-divider"><span>or</span></div>
+          <button class="btn auth-option" type="button"><i class="bi bi-phone"></i> Login with OTP</button>
+          <button class="btn auth-option" type="button"><i class="bi bi-google"></i> Continue with Google</button>
+          <button class="btn auth-option" type="button"><i class="bi bi-apple"></i> Continue with Apple</button>
+          <p class="auth-terms">By signing in you agree to Land Site's <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Homes for Sale | Land Site</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="search-results-page">
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container-fluid px-lg-5">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+        <img src="assets/images/logo.png" alt="Land Site logo" class="brand-logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown">Buy</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="homes-for-sale.html">Homes for sale</a></li>
+              <li><a class="dropdown-item" href="new-listings.html">New listings</a></li>
+              <li><a class="dropdown-item" href="open-houses.html">Open houses</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="rent.html">Rent</a></li>
+          <li class="nav-item"><a class="nav-link" href="sell.html">Sell</a></li>
+          <li class="nav-item"><a class="nav-link" href="calculator.html">Calculator</a></li>
+          <li class="nav-item"><a class="nav-link" href="agents.html">Agents</a></li>
+          <li class="nav-item"><a class="nav-link" href="user-dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false"><i class="bi bi-moon"></i><span>Dark</span></button></li>
+          <li class="nav-item ms-lg-2"><button class="btn btn-dark px-4" type="button" data-bs-toggle="modal" data-bs-target="#authModal">Join / Sign in</button></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="results-shell">
+    <section class="results-list-pane">
+      <div class="results-search-row">
+        <form class="results-search" role="search">
+          <i class="bi bi-search"></i>
+          <input type="search" value="Dhaka" aria-label="Search city or area">
+        </form>
+      </div>
+
+      <div class="results-filters" aria-label="Search filters">
+        <button class="ai-search" type="button"><i class="bi bi-stars"></i> AI Search</button>
+        <button type="button">For Sale <i class="bi bi-chevron-down"></i></button>
+        <button type="button">Price <i class="bi bi-chevron-down"></i></button>
+        <button type="button">Beds/Baths <i class="bi bi-chevron-down"></i></button>
+        <button type="button"><i class="bi bi-sliders"></i> Filters</button>
+        <button class="save-search" type="button">Save Search</button>
+        <button class="layout-toggle" type="button"><i class="bi bi-layout-sidebar-reverse"></i><span>Layout</span></button>
+      </div>
+
+      <div class="results-heading">
+        <div>
+          <h1>Dhaka, Bangladesh Homes For Sale & Real Estate</h1>
+          <p>5,484 homes + 297 early access <i class="bi bi-info-circle-fill"></i></p>
+        </div>
+        <label>Sort: <select aria-label="Sort results"><option>Recommended</option><option>Newest</option><option>Price: low to high</option></select></label>
+      </div>
+
+      <div class="results-grid">
+        <article class="result-card">
+          <a href="property-details.html" class="card-link-fill" aria-label="View Banani Modern Residence details"></a>
+          <div class="result-media">
+            <img src="assets/images/card_img_1.jpg" alt="Banani modern residence">
+            <span>Early Access</span>
+            <span class="partner-badge">BlackTech Coming Soon</span>
+            <button type="button" class="media-arrow left"><i class="bi bi-chevron-left"></i></button>
+            <button type="button" class="media-arrow right"><i class="bi bi-chevron-right"></i></button>
+          </div>
+          <div class="result-body">
+            <div class="result-price-row">
+              <h2>BDT 7.35 Cr</h2>
+              <div>
+                <button type="button" aria-label="Share"><i class="bi bi-share"></i></button>
+                <button type="button" aria-label="Save"><i class="bi bi-heart"></i></button>
+              </div>
+            </div>
+            <p class="result-facts">4 beds <span>3 baths</span> <span>2,120 sq ft</span></p>
+            <p class="result-address">Road 12, Banani, Dhaka 1213</p>
+            <p class="result-note">Lift access • Generator backup • Near Gulshan</p>
+          </div>
+        </article>
+
+        <article class="result-card">
+          <a href="property-details.html" class="card-link-fill" aria-label="View Gulshan luxury apartment details"></a>
+          <div class="result-media">
+            <img src="assets/images/card_img_23.jpg" alt="Gulshan luxury apartment">
+            <span>Early Access</span>
+            <span class="partner-badge red">Land Site Coming Soon</span>
+          </div>
+          <div class="result-body">
+            <div class="result-price-row">
+              <h2>BDT 8.2 Cr</h2>
+              <div>
+                <button type="button" aria-label="Share"><i class="bi bi-share"></i></button>
+                <button type="button" aria-label="Save"><i class="bi bi-heart"></i></button>
+              </div>
+            </div>
+            <p class="result-facts">4 beds <span>4 baths</span> <span>2,850 sq ft</span></p>
+            <p class="result-address">Gulshan Avenue, Dhaka</p>
+            <p class="result-note">Lake view • Corner balcony • 2 parking spaces</p>
+          </div>
+        </article>
+
+        <article class="result-card">
+          <a href="property-details.html" class="card-link-fill" aria-label="View Chattogram hillside duplex details"></a>
+          <div class="result-media">
+            <img src="assets/images/card_img_21.jpg" alt="Chattogram hillside duplex">
+            <span>For Sale</span>
+          </div>
+          <div class="result-body">
+            <div class="result-price-row">
+              <h2>BDT 6.4 Cr</h2>
+              <div>
+                <button type="button" aria-label="Share"><i class="bi bi-share"></i></button>
+                <button type="button" aria-label="Save"><i class="bi bi-heart"></i></button>
+              </div>
+            </div>
+            <p class="result-facts">5 beds <span>5 baths</span> <span>3,600 sq ft</span></p>
+            <p class="result-address">Nasirabad Housing Society, Chattogram</p>
+            <p class="result-note">Quiet block • Rooftop terrace • Family layout</p>
+          </div>
+        </article>
+
+        <article class="result-card">
+          <a href="property-details.html" class="card-link-fill" aria-label="View Uttara ready apartment details"></a>
+          <div class="result-media">
+            <img src="assets/images/card_img_12.jpg" alt="Uttara ready apartment">
+            <span>New Listing</span>
+          </div>
+          <div class="result-body">
+            <div class="result-price-row">
+              <h2>BDT 1.65 Cr</h2>
+              <div>
+                <button type="button" aria-label="Share"><i class="bi bi-share"></i></button>
+                <button type="button" aria-label="Save"><i class="bi bi-heart"></i></button>
+              </div>
+            </div>
+            <p class="result-facts">3 beds <span>2 baths</span> <span>1,420 sq ft</span></p>
+            <p class="result-address">Sector 13, Uttara, Dhaka</p>
+            <p class="result-note">Ready flat • Close to metro • Secure building</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <aside class="results-map-pane" aria-label="Map of properties">
+      <div class="fake-map">
+        <div id="bdResultsMap" class="real-results-map" aria-label="Interactive property map"></div>
+        <div class="map-toolbox">
+          <button type="button"><i class="bi bi-hand-index-thumb"></i><span>Draw</span></button>
+          <button type="button"><i class="bi bi-layers"></i><span>Options</span></button>
+          <button type="button"><i class="bi bi-globe-americas"></i><span>Map</span></button>
+        </div>
+        <button class="remove-outline" type="button">Remove outline</button>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/images/logo.png" alt="Land Site logo">
+          <p>Land Site helps buyers, sellers, and renters compare trusted property options across Bangladesh.</p>
+        </div>
+        <div>
+          <h2>Join Us</h2>
+          <a href="#">Become An Agent</a>
+          <a href="#">List Your Property</a>
+          <a href="#">Partner With Us</a>
+        </div>
+        <div>
+          <h2>Company</h2>
+          <a href="#">About Us</a>
+          <a href="agents.html">Agents</a>
+          <a href="#">Blog</a>
+        </div>
+        <div>
+          <h2>Find Us</h2>
+          <a href="#">Contact</a>
+          <a href="#">Help Center</a>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Land Site. Designed and developed by BlackTech Corp.</p>
+        <div>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms Of Use</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <button type="button" class="btn-close auth-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-body">
+        <h2 id="authModalLabel">Join Or Sign In</h2>
+          <form>
+            <input type="email" class="form-control auth-input" placeholder="Email">
+            <button type="submit" class="btn btn-danger auth-primary">Continue with email</button>
+          </form>
+          <div class="auth-divider"><span>or</span></div>
+          <button class="btn auth-option" type="button"><i class="bi bi-phone"></i> Login with OTP</button>
+          <button class="btn auth-option" type="button"><i class="bi bi-google"></i> Continue with Google</button>
+          <button class="btn auth-option" type="button"><i class="bi bi-apple"></i> Continue with Apple</button>
+          <p class="auth-terms">By signing in you agree to Land Site's <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
