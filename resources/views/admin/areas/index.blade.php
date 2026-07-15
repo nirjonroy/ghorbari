@@ -37,6 +37,7 @@
                     <thead>
                       <tr>
                         <th>Name</th>
+                        <th>City</th>
                         <th>District</th>
                         <th>Division</th>
                         <th>Post Office</th>
@@ -49,6 +50,7 @@
                       @forelse ($areas as $area)
                         <tr>
                           <td>{{ $area->name }}</td>
+                          <td>{{ $area->city?->name ?? 'Not set' }}</td>
                           <td>{{ $area->district?->name ?? 'Not set' }}</td>
                           <td>{{ $area->district?->division?->name ?? 'Not set' }}</td>
                           <td>{{ $area->post_office ?? 'Not set' }}</td>
@@ -66,7 +68,7 @@
                           </td>
                         </tr>
                       @empty
-                        <tr><td colspan="7" class="text-center text-secondary">No areas found.</td></tr>
+                        <tr><td colspan="8" class="text-center text-secondary">No areas found.</td></tr>
                       @endforelse
                     </tbody>
                   </table>

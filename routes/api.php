@@ -28,6 +28,18 @@ Route::get('/for-rent', [FrontendHubController::class, 'rent'])->name('api.front
 Route::get('/sell', [FrontendHubController::class, 'sell'])->name('api.frontend.sell');
 Route::get('/open-houses', [FrontendHubController::class, 'openHouses'])->name('api.frontend.open-houses');
 Route::get('/early-access', [FrontendHubController::class, 'earlyAccess'])->name('api.frontend.early-access');
+Route::get('/property/{purpose}/{category}/{type}', [FrontendHubController::class, 'type'])
+    ->where('purpose', 'for-sale|for-rent|sell')
+    ->name('api.frontend.property.type');
+Route::get('/property/{purpose}/{category}', [FrontendHubController::class, 'category'])
+    ->where('purpose', 'for-sale|for-rent|sell')
+    ->name('api.frontend.property.category');
+Route::get('/property/{district}/{city}/{localArea}', [FrontendHubController::class, 'localArea'])
+    ->name('api.frontend.property.local-area');
+Route::get('/property/{district}/{city}', [FrontendHubController::class, 'city'])
+    ->name('api.frontend.property.city');
+Route::get('/property/{district}', [FrontendHubController::class, 'district'])
+    ->name('api.frontend.property.district');
 
 Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminAuthController::class, 'login'])->name('api.admin.login');

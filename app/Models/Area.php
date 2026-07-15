@@ -12,6 +12,7 @@ class Area extends Model
 
     protected $fillable = [
         'district_id',
+        'city_id',
         'name',
         'slug',
         'post_office',
@@ -26,5 +27,15 @@ class Area extends Model
     public function district(): BelongsTo
     {
         return $this->belongsTo(District::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function properties()
+    {
+        return $this->hasMany(Property::class);
     }
 }

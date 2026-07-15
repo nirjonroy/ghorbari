@@ -19,5 +19,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminRolePermissionSeeder::class);
         $this->call(EarlyAccessPropertySeeder::class);
         $this->call(PropertySampleDataSeeder::class);
+        $this->call(PropertyLocationBackfillSeeder::class);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Area;
+use App\Models\City;
 use App\Models\District;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class AreaController extends Controller
     public function index(): View
     {
         $areas = Area::query()
-            ->with('district.division')
+            ->with(['district.division', 'city'])
             ->orderBy('name')
             ->paginate(15);
 
@@ -28,6 +29,7 @@ class AreaController extends Controller
         return view('Admin.areas.create', [
             'area' => new Area(),
             'districts' => $this->districts(),
+            'cities' => $this->cities(),
         ]);
     }
 
@@ -45,6 +47,7 @@ class AreaController extends Controller
         return view('Admin.areas.edit', [
             'area' => $area,
             'districts' => $this->districts(),
+            'cities' => $this->cities(),
         ]);
     }
 
@@ -70,6 +73,7 @@ class AreaController extends Controller
     {
         $data = $request->validate([
             'district_id' => ['required', 'exists:districts,id'],
+            'city_id' => ['nullable', 'exists:cities,id'],
             'name' => [
                 'required',
                 'string',
@@ -92,6 +96,15 @@ class AreaController extends Controller
     {
         return District::query()
             ->with('division')
+            ->where('status', true)
+            ->orderBy('name')
+            ->get();
+    }
+
+    private function cities()
+    {
+        return City::query()
+            ->with('district')
             ->where('status', true)
             ->orderBy('name')
             ->get();

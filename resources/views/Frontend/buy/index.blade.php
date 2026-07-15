@@ -16,6 +16,8 @@
 @php
   $routeName = $page['route_name'] ?? 'frontend.buy.index';
   $apiRouteName = $page['api_route_name'] ?? 'api.frontend.for-sale';
+  $pageAction = $page['route_url'] ?? route($routeName);
+  $pageApiUrl = $page['api_url'] ?? route($apiRouteName);
   $searchValue = $filters['q'] ?? ($page['default_search'] ?? 'Dhaka');
   $statusLabels = [
       '' => $page['default_status_label'] ?? 'For Sale',
@@ -51,12 +53,12 @@
 @endphp
 
 @section('content')
-  <main class="results-shell" data-api-url="{{ route($apiRouteName) }}">
+  <main class="results-shell" data-api-url="{{ $pageApiUrl }}">
     <section class="results-list-pane">
       <button class="layout-toggle results-layout-floating" type="button" data-layout-toggle><i class="bi bi-layout-sidebar-reverse"></i><span>Layout</span></button>
 
       <div class="results-search-row">
-        <form class="results-search" role="search" method="GET" action="{{ route($routeName) }}">
+        <form class="results-search" role="search" method="GET" action="{{ $pageAction }}">
           <i class="bi bi-search"></i>
           <input type="search" name="q" value="{{ $searchValue }}" aria-label="Search city or area">
           @foreach (['property_type', 'property_status', 'min_price', 'max_price', 'beds', 'baths', 'sort'] as $field)
@@ -67,7 +69,7 @@
         </form>
       </div>
 
-      <form class="results-filters" aria-label="Search filters" method="GET" action="{{ route($routeName) }}">
+      <form class="results-filters" aria-label="Search filters" method="GET" action="{{ $pageAction }}">
         <input type="hidden" name="q" value="{{ $searchValue }}">
         @if(filled($filters['sort'] ?? null))
           <input type="hidden" name="sort" value="{{ $filters['sort'] }}">
@@ -101,7 +103,7 @@
         </label>
 
         <button type="submit"><i class="bi bi-sliders"></i> Apply</button>
-        <a class="filter-reset" href="{{ route($routeName) }}">Reset</a>
+        <a class="filter-reset" href="{{ $pageAction }}">Reset</a>
         <button class="save-search" type="button" data-save-search-url="{{ request()->fullUrl() }}">Save Search</button>
       </form>
 
@@ -110,7 +112,7 @@
           <h1>{{ $searchValue ?: 'Bangladesh' }}, Bangladesh {{ $page['heading_suffix'] ?? 'Homes For Sale & Real Estate' }}</h1>
           <p>{{ number_format($properties->total()) }} shown from {{ number_format($totalProperties) }} homes + {{ number_format($earlyAccessCount) }} early access <i class="bi bi-info-circle-fill"></i></p>
         </div>
-        <form method="GET" action="{{ route($routeName) }}">
+        <form method="GET" action="{{ $pageAction }}">
           @foreach (['q', 'property_type', 'property_status', 'min_price', 'max_price', 'beds', 'baths'] as $field)
             @if(filled($filters[$field] ?? null))
               <input type="hidden" name="{{ $field }}" value="{{ $filters[$field] }}">

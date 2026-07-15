@@ -154,8 +154,8 @@
                 </ul>
               </li>
 
-              <li class="nav-item {{ request()->routeIs('admin.divisions.*') || request()->routeIs('admin.districts.*') || request()->routeIs('admin.areas.*') ? 'menu-open' : '' }}">
-                <a href="#" class="nav-link {{ request()->routeIs('admin.divisions.*') || request()->routeIs('admin.districts.*') || request()->routeIs('admin.areas.*') ? 'active' : '' }}">
+              <li class="nav-item {{ request()->routeIs('admin.divisions.*') || request()->routeIs('admin.districts.*') || request()->routeIs('admin.cities.*') || request()->routeIs('admin.areas.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('admin.divisions.*') || request()->routeIs('admin.districts.*') || request()->routeIs('admin.cities.*') || request()->routeIs('admin.areas.*') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-geo-alt-fill"></i>
                   <p>
                     Locations
@@ -173,6 +173,12 @@
                     <a href="{{ route('admin.districts.index') }}" class="nav-link {{ request()->routeIs('admin.districts.*') ? 'active' : '' }}">
                       <i class="nav-icon bi bi-circle"></i>
                       <p>Districts</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('admin.cities.index') }}" class="nav-link {{ request()->routeIs('admin.cities.*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Cities</p>
                     </a>
                   </li>
                   <li class="nav-item">

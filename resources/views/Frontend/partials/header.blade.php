@@ -9,11 +9,59 @@
       <div class="collapse navbar-collapse" id="mainNavbar">
         <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle {{ request()->routeIs('frontend.buy.*') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown">Buy</a>
-            <ul class="dropdown-menu">
+            <a class="nav-link dropdown-toggle {{ request()->routeIs('frontend.buy.*', 'frontend.open-houses.*', 'frontend.early-access.*', 'frontend.property.*') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown">Buy</a>
+            <ul class="dropdown-menu buy-directory-menu">
               <li><a class="dropdown-item" href="{{ route('frontend.buy.index') }}">Homes for sale</a></li>
               <li><a class="dropdown-item" href="new-listings.html">New listings</a></li>
               <li><a class="dropdown-item" href="{{ route('frontend.open-houses.index') }}">Open houses</a></li>
+              <li><a class="dropdown-item" href="{{ route('frontend.early-access.index') }}">Early access</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <div class="buy-directory-grid">
+                  <div>
+                    <span class="buy-directory-title">District</span>
+                    @forelse(($frontendMenuData['districts'] ?? collect()) as $district)
+                      <a class="dropdown-item" href="{{ route('frontend.property.district', ['district' => $district->slug]) }}">{{ $district->name }}</a>
+                    @empty
+                      <span class="buy-directory-empty">No district</span>
+                    @endforelse
+                  </div>
+                  <div>
+                    <span class="buy-directory-title">City</span>
+                    @forelse(($frontendMenuData['cities'] ?? collect()) as $city)
+                      @if($city->district)
+                        <a class="dropdown-item" href="{{ route('frontend.property.city', ['district' => $city->district->slug, 'city' => $city->slug]) }}">{{ $city->name }}</a>
+                      @endif
+                    @empty
+                      <span class="buy-directory-empty">No city</span>
+                    @endforelse
+                  </div>
+                  <div>
+                    <span class="buy-directory-title">Local Area</span>
+                    @forelse(($frontendMenuData['areas'] ?? collect()) as $area)
+                      @if($area->district && $area->city)
+                        <a class="dropdown-item" href="{{ route('frontend.property.local-area', ['district' => $area->district->slug, 'city' => $area->city->slug, 'localArea' => $area->slug]) }}">{{ $area->name }}</a>
+                      @endif
+                    @empty
+                      <span class="buy-directory-empty">No area</span>
+                    @endforelse
+                  </div>
+                  <div>
+                    <span class="buy-directory-title">By Category</span>
+                    @foreach(($frontendMenuData['categories'] ?? collect()) as $category)
+                      <a class="dropdown-item" href="{{ route('frontend.property.category', ['purpose' => 'for-sale', 'category' => $category['slug']]) }}">{{ $category['name'] }}</a>
+                    @endforeach
+                  </div>
+                  <div>
+                    <span class="buy-directory-title">By Type</span>
+                    @forelse(($frontendMenuData['types'] ?? collect()) as $type)
+                      <a class="dropdown-item" href="{{ route('frontend.property.type', ['purpose' => 'for-sale', 'category' => 'residential', 'type' => $type->slug]) }}">{{ $type->name }}</a>
+                    @empty
+                      <span class="buy-directory-empty">No type</span>
+                    @endforelse
+                  </div>
+                </div>
+              </li>
             </ul>
           </li>
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.rent.*') ? 'active' : '' }}" href="{{ route('frontend.rent.index') }}">Rent</a></li>

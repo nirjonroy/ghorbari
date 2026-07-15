@@ -31,6 +31,10 @@
                   <div class="col-md-4"><strong>Type:</strong> {{ $property->type?->name ?? 'Unknown' }}</div>
                   <div class="col-md-4"><strong>Price:</strong> {{ number_format((float) $property->price, 2) }}</div>
                   <div class="col-md-4"><strong>Listing:</strong> {{ ucfirst($property->listing_type) }}</div>
+                  <div class="col-md-4"><strong>Category:</strong> {{ ucfirst($property->property_category ?? 'residential') }}</div>
+                  <div class="col-md-4"><strong>District:</strong> {{ $property->district?->name ?? 'Not set' }}</div>
+                  <div class="col-md-4"><strong>City:</strong> {{ $property->city?->name ?? 'Not set' }}</div>
+                  <div class="col-md-4"><strong>Local Area:</strong> {{ $property->area?->name ?? 'Not set' }}</div>
                   <div class="col-md-4"><strong>Status:</strong> {{ ucfirst($property->property_status) }}</div>
                   <div class="col-md-4"><strong>Verification:</strong> {{ ucfirst($property->verification_status) }}</div>
                   <div class="col-md-4"><strong>Early Access:</strong> {{ $property->is_early_access ? 'Yes' : 'No' }}</div>

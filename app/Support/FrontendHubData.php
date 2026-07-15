@@ -3,6 +3,9 @@
 namespace App\Support;
 
 use App\Models\BlogPost;
+use App\Models\Area;
+use App\Models\City;
+use App\Models\District;
 use App\Models\Property;
 use App\Models\PropertyType;
 use Illuminate\Http\Request;
@@ -87,6 +90,122 @@ class FrontendHubData
         ]);
     }
 
+    public function districtPage(Request $request, string $districtSlug): array
+    {
+        $district = District::query()->where('slug', $districtSlug)->first();
+        $districtName = $district?->name ?? str($districtSlug)->headline();
+
+        return $this->propertyResults($request, [
+            'listing_types' => ['buy', 'sell', 'rent'],
+            'route_name' => 'frontend.property.district',
+            'api_route_name' => 'api.frontend.property.district',
+            'route_params' => ['district' => $districtSlug],
+            'title' => $districtName.' Properties | Land Site',
+            'heading_suffix' => 'Properties & Real Estate',
+            'default_status_label' => 'All Properties',
+            'empty_label' => 'No properties found in '.$districtName,
+            'badge_label' => 'Property',
+            'default_search' => $districtName,
+            'district_id' => $district?->id ?? 0,
+        ]);
+    }
+
+    public function cityPage(Request $request, string $districtSlug, string $citySlug): array
+    {
+        $district = District::query()->where('slug', $districtSlug)->first();
+        $city = City::query()
+            ->when($district, fn ($query) => $query->where('district_id', $district->id))
+            ->where('slug', $citySlug)
+            ->first();
+        $cityName = $city?->name ?? str($citySlug)->headline();
+
+        return $this->propertyResults($request, [
+            'listing_types' => ['buy', 'sell', 'rent'],
+            'route_name' => 'frontend.property.city',
+            'api_route_name' => 'api.frontend.property.city',
+            'route_params' => ['district' => $districtSlug, 'city' => $citySlug],
+            'title' => $cityName.' Properties | Land Site',
+            'heading_suffix' => 'Properties & Real Estate',
+            'default_status_label' => 'All Properties',
+            'empty_label' => 'No properties found in '.$cityName,
+            'badge_label' => 'Property',
+            'default_search' => $cityName,
+            'district_id' => $district?->id ?? 0,
+            'city_id' => $city?->id ?? 0,
+        ]);
+    }
+
+    public function localAreaPage(Request $request, string $districtSlug, string $citySlug, string $localAreaSlug): array
+    {
+        $district = District::query()->where('slug', $districtSlug)->first();
+        $city = City::query()
+            ->when($district, fn ($query) => $query->where('district_id', $district->id))
+            ->where('slug', $citySlug)
+            ->first();
+        $area = Area::query()
+            ->when($district, fn ($query) => $query->where('district_id', $district->id))
+            ->when($city, fn ($query) => $query->where('city_id', $city->id))
+            ->where('slug', $localAreaSlug)
+            ->first();
+        $areaName = $area?->name ?? str($localAreaSlug)->headline();
+
+        return $this->propertyResults($request, [
+            'listing_types' => ['buy', 'sell', 'rent'],
+            'route_name' => 'frontend.property.local-area',
+            'api_route_name' => 'api.frontend.property.local-area',
+            'route_params' => ['district' => $districtSlug, 'city' => $citySlug, 'localArea' => $localAreaSlug],
+            'title' => $areaName.' Properties | Land Site',
+            'heading_suffix' => 'Properties & Real Estate',
+            'default_status_label' => 'All Properties',
+            'empty_label' => 'No properties found in '.$areaName,
+            'badge_label' => 'Property',
+            'default_search' => $areaName,
+            'district_id' => $district?->id ?? 0,
+            'city_id' => $city?->id ?? 0,
+            'area_id' => $area?->id ?? 0,
+        ]);
+    }
+
+    public function categoryPage(Request $request, string $purpose, string $category): array
+    {
+        $categoryName = str($category)->replace('-', ' ')->headline();
+
+        return $this->propertyResults($request, [
+            'listing_types' => $this->listingTypesForPurpose($purpose),
+            'route_name' => 'frontend.property.category',
+            'api_route_name' => 'api.frontend.property.category',
+            'route_params' => ['purpose' => $purpose, 'category' => $category],
+            'title' => $categoryName.' Properties | Land Site',
+            'heading_suffix' => $categoryName.' Properties & Real Estate',
+            'default_status_label' => str($purpose)->replace('-', ' ')->headline(),
+            'empty_label' => 'No '.$categoryName.' properties found',
+            'badge_label' => $categoryName,
+            'default_search' => 'Bangladesh',
+            'property_category' => $category,
+        ]);
+    }
+
+    public function typePage(Request $request, string $purpose, string $category, string $type): array
+    {
+        $propertyType = PropertyType::query()->where('slug', $type)->first();
+        $typeName = $propertyType?->name ?? str($type)->replace('-', ' ')->headline();
+
+        return $this->propertyResults($request, [
+            'listing_types' => $this->listingTypesForPurpose($purpose),
+            'route_name' => 'frontend.property.type',
+            'api_route_name' => 'api.frontend.property.type',
+            'route_params' => ['purpose' => $purpose, 'category' => $category, 'type' => $type],
+            'title' => $typeName.' Properties | Land Site',
+            'heading_suffix' => $typeName.' Properties & Real Estate',
+            'default_status_label' => str($purpose)->replace('-', ' ')->headline(),
+            'empty_label' => 'No '.$typeName.' properties found',
+            'badge_label' => $typeName,
+            'default_search' => 'Bangladesh',
+            'property_category' => $category,
+            'property_type_id' => $propertyType?->id ?? 0,
+        ]);
+    }
+
     private function propertyResults(Request $request, array $page): array
     {
         $propertyTypes = $this->propertyTypes();
@@ -104,6 +223,16 @@ class FrontendHubData
 
         if ($baseQuery && filled($page['default_property_status'] ?? null) && ! $request->filled('property_status')) {
             $baseQuery->where('property_status', $page['default_property_status']);
+        }
+
+        foreach (['district_id', 'city_id', 'area_id', 'property_type_id'] as $field) {
+            if ($baseQuery && filled($page[$field] ?? null)) {
+                $baseQuery->where($field, $page[$field]);
+            }
+        }
+
+        if ($baseQuery && filled($page['property_category'] ?? null)) {
+            $baseQuery->where('property_category', $page['property_category']);
         }
 
         $properties = $baseQuery
@@ -131,7 +260,7 @@ class FrontendHubData
             'earlyAccessCount' => $earlyAccessCount,
             'mapMarkers' => $mapMarkers,
             'filters' => $request->only(['q', 'property_type', 'property_status', 'min_price', 'max_price', 'beds', 'baths', 'sort']),
-            'page' => $page,
+            'page' => $this->withPageUrls($page),
         ];
     }
 
@@ -184,12 +313,16 @@ class FrontendHubData
             ->select([
                 'id',
                 'property_type_id',
+                'property_category',
                 'title',
                 'slug',
                 'listing_type',
                 'property_status',
                 'price',
                 'rent_period',
+                'district_id',
+                'city_id',
+                'area_id',
                 'area_size',
                 'land_size',
                 'bedrooms',
@@ -205,6 +338,9 @@ class FrontendHubData
             ->where('is_published', true)
             ->with([
                 'type:id,name,slug',
+                'district:id,name,slug',
+                'city:id,name,slug,district_id',
+                'area:id,name,slug,city_id,district_id',
                 'media:id,property_id,media_type,file_path,alt_text,is_primary,sort_order',
             ]);
     }
@@ -263,5 +399,29 @@ class FrontendHubData
         ];
 
         return $points[($property->id + $index) % count($points)][$axis];
+    }
+
+    private function listingTypesForPurpose(string $purpose): array
+    {
+        return match ($purpose) {
+            'for-rent' => ['rent'],
+            'sell' => ['sell'],
+            default => ['buy', 'sell'],
+        };
+    }
+
+    private function withPageUrls(array $page): array
+    {
+        $params = $page['route_params'] ?? [];
+
+        if (! isset($page['route_url']) && isset($page['route_name'])) {
+            $page['route_url'] = route($page['route_name'], $params);
+        }
+
+        if (! isset($page['api_url']) && isset($page['api_route_name'])) {
+            $page['api_url'] = route($page['api_route_name'], $params);
+        }
+
+        return $page;
     }
 }

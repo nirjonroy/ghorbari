@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogCommentController;
 use App\Http\Controllers\Admin\BlogPageController;
 use App\Http\Controllers\Admin\BlogPostController;
+use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DistrictController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Frontend\BuyController;
 use App\Http\Controllers\Frontend\EarlyAccessController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\OpenHouseController;
+use App\Http\Controllers\Frontend\PropertyDirectoryController;
 use App\Http\Controllers\Frontend\RentController;
 use App\Http\Controllers\Frontend\SellController;
 use App\Http\Controllers\ProfileController;
@@ -49,6 +51,18 @@ Route::get('/for-rent/', [RentController::class, 'index'])->name('frontend.rent.
 Route::get('/sell/', [SellController::class, 'index'])->name('frontend.sell.index');
 Route::get('/open-houses/', [OpenHouseController::class, 'index'])->name('frontend.open-houses.index');
 Route::get('/early-access/', [EarlyAccessController::class, 'index'])->name('frontend.early-access.index');
+Route::get('/property/{purpose}/{category}/{type}/', [PropertyDirectoryController::class, 'type'])
+    ->where('purpose', 'for-sale|for-rent|sell')
+    ->name('frontend.property.type');
+Route::get('/property/{purpose}/{category}/', [PropertyDirectoryController::class, 'category'])
+    ->where('purpose', 'for-sale|for-rent|sell')
+    ->name('frontend.property.category');
+Route::get('/property/{district}/{city}/{localArea}/', [PropertyDirectoryController::class, 'localArea'])
+    ->name('frontend.property.local-area');
+Route::get('/property/{district}/{city}/', [PropertyDirectoryController::class, 'city'])
+    ->name('frontend.property.city');
+Route::get('/property/{district}/', [PropertyDirectoryController::class, 'district'])
+    ->name('frontend.property.district');
 
 Route::get('/dashboard', [FrontendUserController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
@@ -153,6 +167,10 @@ Route::resource('/admin/districts', DistrictController::class)
     ->except('show')
     ->middleware(['auth:admin', 'permission:manage locations|manage districts,admin'])
     ->names('admin.districts');
+Route::resource('/admin/cities', CityController::class)
+    ->except('show')
+    ->middleware(['auth:admin', 'permission:manage locations,admin'])
+    ->names('admin.cities');
 Route::resource('/admin/areas', AreaController::class)
     ->except('show')
     ->middleware(['auth:admin', 'permission:manage locations|manage areas,admin'])

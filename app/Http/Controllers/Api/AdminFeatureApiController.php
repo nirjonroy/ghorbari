@@ -13,6 +13,7 @@ use App\Models\BlogCategory;
 use App\Models\BlogComment;
 use App\Models\BlogPage;
 use App\Models\BlogPost;
+use App\Models\City;
 use App\Models\ContactMessage;
 use App\Models\District;
 use App\Models\Division;
@@ -268,6 +269,7 @@ class AdminFeatureApiController extends Controller
             'properties' => $this->propertyRules($model),
             'divisions' => $this->locationRules('divisions', $model),
             'districts' => $this->districtRules($model),
+            'cities' => $this->cityRules($model),
             'areas' => $this->areaRules($model),
             'blog-categories' => $this->blogCategoryRules($model),
             'blog-posts' => $this->blogPostRules($model),
@@ -288,7 +290,7 @@ class AdminFeatureApiController extends Controller
             }
         }
 
-        if (in_array($resource, ['sliders', 'divisions', 'districts', 'areas'], true) && $request->has('status')) {
+        if (in_array($resource, ['sliders', 'divisions', 'districts', 'cities', 'areas'], true) && $request->has('status')) {
             $data['status'] = $request->boolean('status');
         }
 
@@ -303,7 +305,7 @@ class AdminFeatureApiController extends Controller
             unset($data['tags_input']);
         }
 
-        if (isset($data['slug']) || in_array($resource, ['abouts', 'agencies', 'property-types', 'amenities', 'divisions', 'districts', 'areas', 'blog-categories', 'blog-posts', 'properties'], true)) {
+        if (isset($data['slug']) || in_array($resource, ['abouts', 'agencies', 'property-types', 'amenities', 'divisions', 'districts', 'cities', 'areas', 'blog-categories', 'blog-posts', 'properties'], true)) {
             $data['slug'] = $this->uniqueSlug($resource, $data['slug'] ?? ($data['title'] ?? $data['name'] ?? 'item'), $model);
         }
 
@@ -345,7 +347,8 @@ class AdminFeatureApiController extends Controller
             'properties' => ['model' => Property::class, 'with' => ['owner', 'type', 'amenities', 'media']],
             'divisions' => ['model' => Division::class, 'order' => [['name', 'asc']]],
             'districts' => ['model' => District::class, 'with' => ['division'], 'order' => [['name', 'asc']]],
-            'areas' => ['model' => Area::class, 'with' => ['district.division'], 'order' => [['name', 'asc']]],
+            'cities' => ['model' => City::class, 'with' => ['district.division'], 'order' => [['name', 'asc']]],
+            'areas' => ['model' => Area::class, 'with' => ['district.division', 'city'], 'order' => [['name', 'asc']]],
             'blog-categories' => ['model' => BlogCategory::class, 'order' => [['display_order', 'asc'], ['name', 'asc']]],
             'blog-posts' => ['model' => BlogPost::class, 'with' => ['category', 'comments']],
             'blog-comments' => ['model' => BlogComment::class, 'with' => ['post', 'user']],
@@ -525,7 +528,11 @@ class AdminFeatureApiController extends Controller
             'agent_profile_id' => ['nullable', 'integer', 'min:1'],
             'agency_id' => ['nullable', 'integer', 'min:1'],
             'property_type_id' => [$model ? 'sometimes' : 'required', 'exists:property_types,id'],
+            'property_category' => ['nullable', Rule::in(['residential', 'commercial', 'land', 'industrial'])],
             'address_id' => [$model ? 'sometimes' : 'required', 'integer', 'min:1'],
+            'district_id' => ['nullable', 'exists:districts,id'],
+            'city_id' => ['nullable', 'exists:cities,id'],
+            'area_id' => ['nullable', 'exists:areas,id'],
             'title' => [$model ? 'sometimes' : 'required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('properties', 'slug')->ignore($model)],
             'listing_type' => [$model ? 'sometimes' : 'required', Rule::in(['buy', 'sell', 'rent'])],
@@ -578,8 +585,16 @@ class AdminFeatureApiController extends Controller
     {
         return $this->locationRules('areas', $model) + [
             'district_id' => [$model ? 'sometimes' : 'required', 'exists:districts,id'],
+            'city_id' => ['nullable', 'exists:cities,id'],
             'post_office' => ['nullable', 'string', 'max:255'],
             'postal_code' => ['nullable', 'string', 'max:255'],
+        ];
+    }
+
+    private function cityRules(?Model $model): array
+    {
+        return $this->locationRules('cities', $model) + [
+            'district_id' => [$model ? 'sometimes' : 'required', 'exists:districts,id'],
         ];
     }
 

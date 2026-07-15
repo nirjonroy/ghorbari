@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Amenity;
+use App\Models\Area;
+use App\Models\City;
+use App\Models\District;
 use App\Models\Property;
 use App\Models\PropertyMedia;
 use App\Models\PropertyPriceHistory;
@@ -24,7 +27,7 @@ class PropertyController extends Controller
     public function index(): View
     {
         $properties = Property::query()
-            ->with(['owner', 'type', 'media'])
+            ->with(['owner', 'type', 'media', 'district', 'city', 'area'])
             ->latest()
             ->paginate(15);
 
@@ -54,7 +57,7 @@ class PropertyController extends Controller
 
     public function show(Property $property): View
     {
-        $property->load(['owner', 'type', 'amenities', 'media', 'priceHistory', 'views']);
+        $property->load(['owner', 'type', 'district', 'city', 'area', 'amenities', 'media', 'priceHistory', 'views']);
 
         return view('Admin.properties.show', compact('property'));
     }
@@ -120,6 +123,9 @@ class PropertyController extends Controller
             'property' => $property,
             'users' => User::query()->orderBy('name')->get(),
             'propertyTypes' => PropertyType::query()->where('status', 'active')->orderBy('name')->get(),
+            'districts' => District::query()->where('status', true)->orderBy('name')->get(),
+            'cities' => City::query()->with('district')->where('status', true)->orderBy('name')->get(),
+            'areas' => Area::query()->with(['district', 'city'])->where('status', true)->orderBy('name')->get(),
             'amenities' => Amenity::query()->where('status', 'active')->orderBy('name')->get(),
             'selectedAmenities' => $property->exists ? $property->amenities->pluck('id')->all() : [],
         ];
@@ -132,7 +138,11 @@ class PropertyController extends Controller
             'agent_profile_id' => ['nullable', 'integer', 'min:1'],
             'agency_id' => ['nullable', 'integer', 'min:1'],
             'property_type_id' => ['required', 'exists:property_types,id'],
+            'property_category' => ['required', Rule::in(['residential', 'commercial', 'land', 'industrial'])],
             'address_id' => ['required', 'integer', 'min:1'],
+            'district_id' => ['nullable', 'exists:districts,id'],
+            'city_id' => ['nullable', 'exists:cities,id'],
+            'area_id' => ['nullable', 'exists:areas,id'],
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('properties', 'slug')->ignore($property)],
             'listing_type' => ['required', Rule::in(['buy', 'sell', 'rent'])],

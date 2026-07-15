@@ -14,7 +14,11 @@ class Property extends Model
         'agent_profile_id',
         'agency_id',
         'property_type_id',
+        'property_category',
         'address_id',
+        'district_id',
+        'city_id',
+        'area_id',
         'title',
         'slug',
         'listing_type',
@@ -58,6 +62,21 @@ class Property extends Model
     public function type()
     {
         return $this->belongsTo(PropertyType::class, 'property_type_id');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class);
     }
 
     public function agent()

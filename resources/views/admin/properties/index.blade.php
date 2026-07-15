@@ -34,6 +34,7 @@
                         <th>Owner</th>
                         <th>Type</th>
                         <th>Listing</th>
+                        <th>Location</th>
                         <th>Price</th>
                         <th>Status</th>
                         <th style="width: 160px">Actions</th>
@@ -49,6 +50,11 @@
                           <td>{{ $property->owner?->name ?? 'Unknown' }}</td>
                           <td>{{ $property->type?->name ?? 'Unknown' }}</td>
                           <td>{{ ucfirst($property->listing_type) }}</td>
+                          <td>
+                            <div>{{ $property->district?->name ?? 'Not set' }}</div>
+                            <div class="text-secondary small">{{ collect([$property->city?->name, $property->area?->name])->filter()->join(' / ') ?: 'No city or area' }}</div>
+                            <span class="badge text-bg-light">{{ ucfirst($property->property_category ?? 'residential') }}</span>
+                          </td>
                           <td>{{ number_format((float) $property->price, 2) }}</td>
                           <td>
                             <span class="badge text-bg-info">{{ ucfirst($property->property_status) }}</span>
@@ -70,7 +76,7 @@
                           </td>
                         </tr>
                       @empty
-                        <tr><td colspan="7" class="text-center text-secondary">No properties found.</td></tr>
+                        <tr><td colspan="8" class="text-center text-secondary">No properties found.</td></tr>
                       @endforelse
                     </tbody>
                   </table>

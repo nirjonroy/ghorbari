@@ -24,6 +24,18 @@
         @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
       <div class="col-md-6">
+        <label for="city_id" class="form-label">City</label>
+        <select id="city_id" name="city_id" class="form-select @error('city_id') is-invalid @enderror">
+          <option value="">Select city</option>
+          @foreach ($cities as $city)
+            <option value="{{ $city->id }}" @selected((string) old('city_id', $area->city_id) === (string) $city->id)>
+              {{ $city->name }} - {{ $city->district?->name }}
+            </option>
+          @endforeach
+        </select>
+        @error('city_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+      </div>
+      <div class="col-md-6">
         <label for="post_office" class="form-label">Post Office</label>
         <input id="post_office" type="text" name="post_office" class="form-control @error('post_office') is-invalid @enderror" value="{{ old('post_office', $area->post_office) }}">
         @error('post_office')<div class="invalid-feedback">{{ $message }}</div>@enderror

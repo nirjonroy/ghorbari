@@ -38,9 +38,49 @@
         @error('property_type_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
       <div class="col-md-4">
+        <label for="property_category" class="form-label">Property Category</label>
+        <select id="property_category" name="property_category" class="form-select @error('property_category') is-invalid @enderror" required>
+          @foreach (['residential' => 'Residential', 'commercial' => 'Commercial', 'land' => 'Land', 'industrial' => 'Industrial'] as $value => $label)
+            <option value="{{ $value }}" @selected(old('property_category', $property->property_category ?? 'residential') === $value)>{{ $label }}</option>
+          @endforeach
+        </select>
+        @error('property_category')<div class="invalid-feedback">{{ $message }}</div>@enderror
+      </div>
+      <div class="col-md-4">
         <label for="address_id" class="form-label">Address ID</label>
         <input id="address_id" type="number" min="1" name="address_id" class="form-control @error('address_id') is-invalid @enderror" value="{{ old('address_id', $property->address_id) }}" required>
         @error('address_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+      </div>
+
+      <div class="col-md-4">
+        <label for="district_id" class="form-label">District</label>
+        <select id="district_id" name="district_id" class="form-select @error('district_id') is-invalid @enderror">
+          <option value="">Select district</option>
+          @foreach ($districts as $district)
+            <option value="{{ $district->id }}" @selected((string) old('district_id', $property->district_id) === (string) $district->id)>{{ $district->name }}</option>
+          @endforeach
+        </select>
+        @error('district_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+      </div>
+      <div class="col-md-4">
+        <label for="city_id" class="form-label">City</label>
+        <select id="city_id" name="city_id" class="form-select @error('city_id') is-invalid @enderror">
+          <option value="">Select city</option>
+          @foreach ($cities as $city)
+            <option value="{{ $city->id }}" @selected((string) old('city_id', $property->city_id) === (string) $city->id)>{{ $city->name }} - {{ $city->district?->name }}</option>
+          @endforeach
+        </select>
+        @error('city_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+      </div>
+      <div class="col-md-4">
+        <label for="area_id" class="form-label">Local Area</label>
+        <select id="area_id" name="area_id" class="form-select @error('area_id') is-invalid @enderror">
+          <option value="">Select area</option>
+          @foreach ($areas as $area)
+            <option value="{{ $area->id }}" @selected((string) old('area_id', $property->area_id) === (string) $area->id)>{{ $area->name }} - {{ $area->city?->name ?? $area->district?->name }}</option>
+          @endforeach
+        </select>
+        @error('area_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
       <div class="col-md-3">
