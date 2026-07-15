@@ -55,6 +55,7 @@
                             @if ($property->is_published)<span class="badge text-bg-success">Published</span>@endif
                             @if ($property->is_featured)<span class="badge text-bg-warning">Featured</span>@endif
                             @if ($property->is_early_access)<span class="badge text-bg-dark">Early Access</span>@endif
+                            @if ($property->is_open_house)<span class="badge text-bg-primary">Open House</span>@endif
                           </td>
                           <td>
                             <div class="d-flex gap-1">

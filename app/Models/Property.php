@@ -34,6 +34,7 @@ class Property extends Model
         'verification_status',
         'is_featured',
         'is_early_access',
+        'is_open_house',
         'is_published',
         'published_at',
     ];
@@ -44,6 +45,7 @@ class Property extends Model
         'land_size' => 'decimal:2',
         'is_featured' => 'boolean',
         'is_early_access' => 'boolean',
+        'is_open_house' => 'boolean',
         'is_published' => 'boolean',
         'published_at' => 'datetime',
     ];

@@ -282,7 +282,7 @@ class AdminFeatureApiController extends Controller
 
         $data = $request->validate($rules);
 
-        foreach (['is_active', 'is_published', 'show_on_home', 'is_approved', 'is_featured', 'is_early_access'] as $field) {
+        foreach (['is_active', 'is_published', 'show_on_home', 'is_approved', 'is_featured', 'is_early_access', 'is_open_house'] as $field) {
             if ($request->has($field)) {
                 $data[$field] = $request->boolean($field);
             }
@@ -545,6 +545,7 @@ class AdminFeatureApiController extends Controller
             'verification_status' => ['nullable', Rule::in(['pending', 'approved', 'rejected'])],
             'is_featured' => ['nullable', 'boolean'],
             'is_early_access' => ['nullable', 'boolean'],
+            'is_open_house' => ['nullable', 'boolean'],
             'is_published' => ['nullable', 'boolean'],
             'published_at' => ['nullable', 'date'],
             'amenities' => ['nullable', 'array'],

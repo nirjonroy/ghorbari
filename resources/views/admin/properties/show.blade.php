@@ -34,6 +34,7 @@
                   <div class="col-md-4"><strong>Status:</strong> {{ ucfirst($property->property_status) }}</div>
                   <div class="col-md-4"><strong>Verification:</strong> {{ ucfirst($property->verification_status) }}</div>
                   <div class="col-md-4"><strong>Early Access:</strong> {{ $property->is_early_access ? 'Yes' : 'No' }}</div>
+                  <div class="col-md-4"><strong>Open House:</strong> {{ $property->is_open_house ? 'Yes' : 'No' }}</div>
                   <div class="col-12"><strong>Amenities:</strong> {{ $property->amenities->pluck('name')->join(', ') ?: 'None' }}</div>
                   <div class="col-12"><strong>Description:</strong><div class="mt-2">{!! nl2br(e($property->description)) !!}</div></div>
                 </div>

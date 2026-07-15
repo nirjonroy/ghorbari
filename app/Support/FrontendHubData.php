@@ -67,7 +67,7 @@ class FrontendHubData
             'empty_label' => 'No open houses found',
             'badge_label' => 'Open House',
             'default_search' => 'Dhaka',
-            'default_property_status' => 'available',
+            'open_house_only' => true,
         ]);
     }
 
@@ -96,6 +96,10 @@ class FrontendHubData
 
         if ($baseQuery && ($page['early_access_only'] ?? false)) {
             $baseQuery->where('is_early_access', true);
+        }
+
+        if ($baseQuery && ($page['open_house_only'] ?? false)) {
+            $baseQuery->where('is_open_house', true);
         }
 
         if ($baseQuery && filled($page['default_property_status'] ?? null) && ! $request->filled('property_status')) {
@@ -193,6 +197,7 @@ class FrontendHubData
                 'description',
                 'is_featured',
                 'is_early_access',
+                'is_open_house',
                 'is_published',
                 'published_at',
                 'created_at',
