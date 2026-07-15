@@ -11,6 +11,6 @@ class RentController extends Controller
 {
     public function index(Request $request, FrontendHubData $hubData): View
     {
-        return view('Frontend.rent.index', $hubData->rent($request));
+        return view('Frontend.buy.index', $hubData->rent($request));
     }
 }

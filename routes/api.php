@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/home', [HomeController::class, 'api'])->name('api.frontend.home');
+Route::get('/for-sale', [FrontendHubController::class, 'forSale'])->name('api.frontend.for-sale');
 Route::get('/for-rent', [FrontendHubController::class, 'rent'])->name('api.frontend.rent');
 Route::get('/sell', [FrontendHubController::class, 'sell'])->name('api.frontend.sell');
 

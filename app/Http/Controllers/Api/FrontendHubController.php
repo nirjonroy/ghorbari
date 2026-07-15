@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class FrontendHubController extends Controller
 {
+    public function forSale(Request $request, FrontendHubData $hubData): JsonResponse
+    {
+        return response()->json(['data' => $hubData->forSale($request)]);
+    }
+
     public function rent(Request $request, FrontendHubData $hubData): JsonResponse
     {
         return response()->json(['data' => $hubData->rent($request)]);
