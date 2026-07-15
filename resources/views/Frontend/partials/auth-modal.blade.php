@@ -1,4 +1,4 @@
-﻿<div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+<div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <button type="button" class="btn-close auth-close" data-bs-dismiss="modal" aria-label="Close"></button>

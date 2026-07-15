@@ -1,4 +1,4 @@
-﻿@extends('Frontend.layouts.master')
+@extends('Frontend.layouts.master')
 @section('title', 'Land Site | Home')
 @section('body_class', 'frontend-page frontend-home-page')
 @section('content')
@@ -188,8 +188,7 @@
                   $images = $mediaItems->isNotEmpty()
                       ? $mediaItems->map(fn ($media) => asset($media->file_path))
                       : $fallbackImages;
-                  $price = 'BDT '.number_format((float) $property->price);
-                  $price .= $property->rent_period ? ' / '.$property->rent_period : '';
+                  $price = $propertyPrice($property);
                   $size = $property->area_size ?: $property->land_size;
                   $meta = collect([
                       $property->bedrooms !== null ? $property->bedrooms.' beds' : null,

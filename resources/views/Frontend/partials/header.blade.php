@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
     <div class="container-fluid px-lg-5">
       <a class="navbar-brand d-flex align-items-center gap-2" href="#">
         <img src="{{ asset('frontend/assets') }}/images/logo.png" alt="Land Site logo" class="brand-logo">
