@@ -6312,16 +6312,29 @@ html[data-theme="dark"] .tour-options button.active {
 
 .results-shell {
   display: grid;
-  grid-template-columns: minmax(620px, 66vw) minmax(360px, 1fr);
+  grid-template-columns: minmax(720px, 66vw) minmax(360px, 1fr);
   align-items: start;
   min-height: calc(100vh - 64px);
   background: #ffffff;
 }
 
 .results-list-pane {
+  position: relative;
   min-width: 0;
   padding: 18px 22px 34px;
   background: #ffffff;
+}
+
+body.results-map-collapsed .results-shell {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+body.results-map-collapsed .results-map-pane {
+  display: none;
+}
+
+body.results-map-collapsed .results-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .results-search-row {
@@ -6357,15 +6370,12 @@ html[data-theme="dark"] .tour-options button.active {
 
 .results-filters {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+  max-width: calc(100% - 72px);
   padding: 6px 0 18px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.results-filters::-webkit-scrollbar {
-  display: none;
+  overflow: visible;
 }
 
 .results-filters button,
@@ -6395,13 +6405,35 @@ html[data-theme="dark"] .tour-options button.active {
 }
 
 .results-filters .layout-toggle {
-  margin-left: auto;
   display: inline-grid;
   place-items: center;
   gap: 0;
   min-width: 46px;
   padding-inline: 10px;
   font-size: 12px;
+}
+
+.results-layout-floating {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  z-index: 5;
+  display: inline-grid;
+  place-items: center;
+  gap: 0;
+  min-width: 46px;
+  min-height: 42px;
+  padding: 7px 10px;
+  color: #111827;
+  background: #ffffff;
+  border: 1px solid #d3d5db;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.results-layout-floating i {
+  font-size: 1.05rem;
 }
 
 .results-filters .layout-toggle i {
@@ -6865,7 +6897,7 @@ html[data-theme="dark"] .results-map-pane {
 
 @media (max-width: 1199.98px) {
   .results-shell {
-    grid-template-columns: minmax(520px, 62vw) minmax(320px, 1fr);
+    grid-template-columns: minmax(560px, 62vw) minmax(320px, 1fr);
   }
 
   .result-media {
@@ -6889,6 +6921,15 @@ html[data-theme="dark"] .results-map-pane {
 
   .results-list-pane {
     padding-inline: 16px;
+  }
+
+  .results-filters {
+    max-width: 100%;
+  }
+
+  .results-layout-floating {
+    position: static;
+    margin-bottom: 12px;
   }
 
   .results-search-row {
@@ -7134,10 +7175,63 @@ body {
 }
 
 /* Search results typography refinement */
-.search-results-page .results-filters button {
+.search-results-page .results-filters button,
+.search-results-page .results-filters .filter-reset {
   font-size: 14px;
   line-height: 1.2;
   font-weight: 600;
+}
+
+.search-results-page .results-filters .filter-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 14px;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.search-results-page .results-filters .filter-control select,
+.search-results-page .results-filters .filter-control input {
+  width: auto;
+  max-width: 88px;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font: inherit;
+}
+
+.search-results-page .results-filters .filter-control input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.search-results-page .results-filters .filter-control select {
+  max-width: 130px;
+}
+
+.search-results-page .results-filters .filter-control.compact {
+  gap: 7px;
+}
+
+.search-results-page .results-filters .filter-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 14px;
+  color: var(--brand);
+  background: rgba(220, 53, 69, .08);
+  border: 1px solid rgba(220, 53, 69, .18);
+  border-radius: 6px;
 }
 
 .search-results-page .results-heading h1 {
@@ -7191,6 +7285,15 @@ body {
   font-size: 12px;
   line-height: 1.2;
   font-weight: 700;
+}
+
+.search-results-page .map-toolbox button.is-active {
+  color: #ffffff;
+  background: var(--brand);
+}
+
+.search-results-page .real-results-map.is-drawing {
+  cursor: crosshair;
 }
 
 .leaflet-price-marker {

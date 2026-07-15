@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AdminAuthController;
 use App\Http\Controllers\Api\AdminFeatureApiController;
+use App\Http\Controllers\Api\FrontendHubController;
 use App\Http\Controllers\Frontend\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/home', [HomeController::class, 'api'])->name('api.frontend.home');
+Route::get('/for-rent', [FrontendHubController::class, 'rent'])->name('api.frontend.rent');
+Route::get('/sell', [FrontendHubController::class, 'sell'])->name('api.frontend.sell');
 
 Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminAuthController::class, 'login'])->name('api.admin.login');

@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  var properties = [
+  var properties = window.landsiteResultsMapProperties || [
     { title: "Banani Modern Residence", price: "7.35 Cr", lat: 23.7948, lng: 90.4043, active: true },
     { title: "Gulshan Luxury Apartment", price: "8.2 Cr", lat: 23.7925, lng: 90.4143 },
     { title: "Bashundhara Ready Flat", price: "4.89 Cr", lat: 23.8196, lng: 90.4520 },
@@ -331,10 +331,23 @@ document.addEventListener("DOMContentLoaded", function () {
     scrollWheelZoom: true
   });
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  window.addEventListener("resize", function () {
+    map.invalidateSize();
+  });
+
+  var streetLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: "&copy; OpenStreetMap contributors"
-  }).addTo(map);
+  });
+
+  var satelliteLayer = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+    maxZoom: 19,
+    attribution: "Tiles &copy; Esri"
+  });
+
+  streetLayer.addTo(map);
+
+  var markerBounds = [];
 
   properties.forEach(function (property) {
     var icon = L.divIcon({
@@ -343,6 +356,8 @@ document.addEventListener("DOMContentLoaded", function () {
       iconSize: null,
       iconAnchor: [34, 14]
     });
+
+    markerBounds.push([property.lat, property.lng]);
 
     L.marker([property.lat, property.lng], { icon: icon })
       .addTo(map)
@@ -363,6 +378,134 @@ document.addEventListener("DOMContentLoaded", function () {
       })
     }).addTo(map);
   });
+
+  if (markerBounds.length) {
+    map.fitBounds(markerBounds, { padding: [32, 32], maxZoom: 13 });
+  }
+
+  var drawing = false;
+  var drawPoints = [];
+  var drawLayer = null;
+  var drawMarkers = [];
+  var drawButton = document.querySelector(".map-draw-toggle");
+  var layerButton = document.querySelector(".map-layer-toggle");
+  var resetButton = document.querySelector(".map-reset");
+  var removeButton = document.querySelector(".remove-outline");
+  var usingSatellite = false;
+
+  var clearDrawing = function () {
+    drawPoints = [];
+    if (drawLayer) {
+      map.removeLayer(drawLayer);
+      drawLayer = null;
+    }
+    drawMarkers.forEach(function (marker) {
+      map.removeLayer(marker);
+    });
+    drawMarkers = [];
+  };
+
+  var stopDrawing = function () {
+    drawing = false;
+    mapElement.classList.remove("is-drawing");
+    if (drawButton) {
+      drawButton.classList.remove("is-active");
+    }
+    map.doubleClickZoom.enable();
+  };
+
+  if (drawButton) {
+    drawButton.addEventListener("click", function () {
+      drawing = !drawing;
+      drawButton.classList.toggle("is-active", drawing);
+      mapElement.classList.toggle("is-drawing", drawing);
+      if (drawing) {
+        clearDrawing();
+        map.doubleClickZoom.disable();
+      } else {
+        map.doubleClickZoom.enable();
+      }
+    });
+  }
+
+  map.on("click", function (event) {
+    if (!drawing) {
+      return;
+    }
+
+    drawPoints.push(event.latlng);
+    drawMarkers.push(L.circleMarker(event.latlng, {
+      radius: 5,
+      color: "#e03445",
+      fillColor: "#e03445",
+      fillOpacity: 1
+    }).addTo(map));
+
+    if (drawLayer) {
+      map.removeLayer(drawLayer);
+    }
+
+    drawLayer = drawPoints.length > 2
+      ? L.polygon(drawPoints, { color: "#e03445", weight: 3, fillOpacity: .12 }).addTo(map)
+      : L.polyline(drawPoints, { color: "#e03445", weight: 3 }).addTo(map);
+  });
+
+  map.on("dblclick", function () {
+    if (drawing) {
+      stopDrawing();
+    }
+  });
+
+  if (removeButton) {
+    removeButton.addEventListener("click", function () {
+      clearDrawing();
+      stopDrawing();
+    });
+  }
+
+  if (layerButton) {
+    layerButton.addEventListener("click", function () {
+      usingSatellite = !usingSatellite;
+      if (usingSatellite) {
+        map.removeLayer(streetLayer);
+        satelliteLayer.addTo(map);
+      } else {
+        map.removeLayer(satelliteLayer);
+        streetLayer.addTo(map);
+      }
+      layerButton.classList.toggle("is-active", usingSatellite);
+    });
+  }
+
+  if (resetButton) {
+    resetButton.addEventListener("click", function () {
+      if (markerBounds.length) {
+        map.fitBounds(markerBounds, { padding: [32, 32], maxZoom: 13 });
+      } else {
+        map.setView([23.7937, 90.4066], 12);
+      }
+    });
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  var saveSearchButton = document.querySelector(".save-search[data-save-search-url]");
+  if (saveSearchButton) {
+    saveSearchButton.addEventListener("click", function () {
+      localStorage.setItem("landsite-saved-search", saveSearchButton.getAttribute("data-save-search-url"));
+      saveSearchButton.textContent = "Saved";
+    });
+  }
+
+  var layoutToggle = document.querySelector("[data-layout-toggle]");
+  if (layoutToggle) {
+    layoutToggle.addEventListener("click", function () {
+      document.body.classList.toggle("results-map-collapsed");
+      setTimeout(function () {
+        window.dispatchEvent(new Event("resize"));
+      }, 100);
+    });
+  }
 });
 
 document.addEventListener("DOMContentLoaded", function () {

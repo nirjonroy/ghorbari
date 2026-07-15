@@ -22,7 +22,10 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Frontend\BuyController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\RentController;
+use App\Http\Controllers\Frontend\SellController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserController as FrontendUserController;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +42,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('frontend.home');
+Route::get('/for-sale/', [BuyController::class, 'index'])->name('frontend.buy.index');
+Route::get('/for-rent/', [RentController::class, 'index'])->name('frontend.rent.index');
+Route::get('/sell/', [SellController::class, 'index'])->name('frontend.sell.index');
 
 Route::get('/dashboard', [FrontendUserController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
