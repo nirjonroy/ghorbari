@@ -58,4 +58,19 @@ class FrontendHubController extends Controller
     {
         return response()->json(['data' => $hubData->typePage($request, $purpose, $category, $type)]);
     }
+
+    public function purposeTypeDistrict(Request $request, FrontendHubData $hubData, string $purpose, string $type, string $district): JsonResponse
+    {
+        return response()->json(['data' => $hubData->purposeTypeDistrictPage($request, $purpose, $type, $district)]);
+    }
+
+    public function purposeTypeCity(Request $request, FrontendHubData $hubData, string $purpose, string $type, string $district, string $city): JsonResponse
+    {
+        return response()->json(['data' => $hubData->purposeTypeCityPage($request, $purpose, $type, $district, $city)]);
+    }
+
+    public function purposeTypeLocalArea(Request $request, FrontendHubData $hubData, string $purpose, string $type, string $district, string $city, string $localArea): JsonResponse
+    {
+        return response()->json(['data' => $hubData->purposeTypeLocalAreaPage($request, $purpose, $type, $district, $city, $localArea)]);
+    }
 }

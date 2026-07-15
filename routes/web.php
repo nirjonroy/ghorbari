@@ -51,11 +51,25 @@ Route::get('/for-rent/', [RentController::class, 'index'])->name('frontend.rent.
 Route::get('/sell/', [SellController::class, 'index'])->name('frontend.sell.index');
 Route::get('/open-houses/', [OpenHouseController::class, 'index'])->name('frontend.open-houses.index');
 Route::get('/early-access/', [EarlyAccessController::class, 'index'])->name('frontend.early-access.index');
+Route::get('/property/{purpose}/{type}/{district}/{city}/{localArea}/', [PropertyDirectoryController::class, 'purposeTypeLocalArea'])
+    ->where('purpose', 'for-sale|for-rent|sell')
+    ->where('type', '(?!residential$|commercial$|land$|industrial$)[A-Za-z0-9-]+')
+    ->name('frontend.property.purpose-type-local-area');
+Route::get('/property/{purpose}/{type}/{district}/{city}/', [PropertyDirectoryController::class, 'purposeTypeCity'])
+    ->where('purpose', 'for-sale|for-rent|sell')
+    ->where('type', '(?!residential$|commercial$|land$|industrial$)[A-Za-z0-9-]+')
+    ->name('frontend.property.purpose-type-city');
+Route::get('/property/{purpose}/{type}/{district}/', [PropertyDirectoryController::class, 'purposeTypeDistrict'])
+    ->where('purpose', 'for-sale|for-rent|sell')
+    ->where('type', '(?!residential$|commercial$|land$|industrial$)[A-Za-z0-9-]+')
+    ->name('frontend.property.purpose-type-district');
 Route::get('/property/{purpose}/{category}/{type}/', [PropertyDirectoryController::class, 'type'])
     ->where('purpose', 'for-sale|for-rent|sell')
+    ->where('category', 'residential|commercial|land|industrial')
     ->name('frontend.property.type');
 Route::get('/property/{purpose}/{category}/', [PropertyDirectoryController::class, 'category'])
     ->where('purpose', 'for-sale|for-rent|sell')
+    ->where('category', 'residential|commercial|land|industrial')
     ->name('frontend.property.category');
 Route::get('/property/{district}/{city}/{localArea}/', [PropertyDirectoryController::class, 'localArea'])
     ->name('frontend.property.local-area');

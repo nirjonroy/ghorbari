@@ -206,6 +206,91 @@ class FrontendHubData
         ]);
     }
 
+    public function purposeTypeDistrictPage(Request $request, string $purpose, string $type, string $districtSlug): array
+    {
+        $propertyType = PropertyType::query()->where('slug', $type)->first();
+        $district = District::query()->where('slug', $districtSlug)->first();
+        $typeName = $propertyType?->name ?? str($type)->replace('-', ' ')->headline();
+        $districtName = $district?->name ?? str($districtSlug)->headline();
+
+        return $this->propertyResults($request, [
+            'listing_types' => $this->listingTypesForPurpose($purpose),
+            'route_name' => 'frontend.property.purpose-type-district',
+            'api_route_name' => 'api.frontend.property.purpose-type-district',
+            'route_params' => ['purpose' => $purpose, 'type' => $type, 'district' => $districtSlug],
+            'title' => $typeName.' in '.$districtName.' | Land Site',
+            'heading_suffix' => $typeName.' Properties & Real Estate',
+            'default_status_label' => str($purpose)->replace('-', ' ')->headline(),
+            'empty_label' => 'No '.$typeName.' properties found in '.$districtName,
+            'badge_label' => $typeName,
+            'default_search' => $districtName,
+            'property_type_id' => $propertyType?->id ?? 0,
+            'district_id' => $district?->id ?? 0,
+        ]);
+    }
+
+    public function purposeTypeCityPage(Request $request, string $purpose, string $type, string $districtSlug, string $citySlug): array
+    {
+        $propertyType = PropertyType::query()->where('slug', $type)->first();
+        $district = District::query()->where('slug', $districtSlug)->first();
+        $city = City::query()
+            ->when($district, fn ($query) => $query->where('district_id', $district->id))
+            ->where('slug', $citySlug)
+            ->first();
+        $typeName = $propertyType?->name ?? str($type)->replace('-', ' ')->headline();
+        $cityName = $city?->name ?? str($citySlug)->headline();
+
+        return $this->propertyResults($request, [
+            'listing_types' => $this->listingTypesForPurpose($purpose),
+            'route_name' => 'frontend.property.purpose-type-city',
+            'api_route_name' => 'api.frontend.property.purpose-type-city',
+            'route_params' => ['purpose' => $purpose, 'type' => $type, 'district' => $districtSlug, 'city' => $citySlug],
+            'title' => $typeName.' in '.$cityName.' | Land Site',
+            'heading_suffix' => $typeName.' Properties & Real Estate',
+            'default_status_label' => str($purpose)->replace('-', ' ')->headline(),
+            'empty_label' => 'No '.$typeName.' properties found in '.$cityName,
+            'badge_label' => $typeName,
+            'default_search' => $cityName,
+            'property_type_id' => $propertyType?->id ?? 0,
+            'district_id' => $district?->id ?? 0,
+            'city_id' => $city?->id ?? 0,
+        ]);
+    }
+
+    public function purposeTypeLocalAreaPage(Request $request, string $purpose, string $type, string $districtSlug, string $citySlug, string $localAreaSlug): array
+    {
+        $propertyType = PropertyType::query()->where('slug', $type)->first();
+        $district = District::query()->where('slug', $districtSlug)->first();
+        $city = City::query()
+            ->when($district, fn ($query) => $query->where('district_id', $district->id))
+            ->where('slug', $citySlug)
+            ->first();
+        $area = Area::query()
+            ->when($district, fn ($query) => $query->where('district_id', $district->id))
+            ->when($city, fn ($query) => $query->where('city_id', $city->id))
+            ->where('slug', $localAreaSlug)
+            ->first();
+        $typeName = $propertyType?->name ?? str($type)->replace('-', ' ')->headline();
+        $areaName = $area?->name ?? str($localAreaSlug)->headline();
+
+        return $this->propertyResults($request, [
+            'listing_types' => $this->listingTypesForPurpose($purpose),
+            'route_name' => 'frontend.property.purpose-type-local-area',
+            'api_route_name' => 'api.frontend.property.purpose-type-local-area',
+            'route_params' => ['purpose' => $purpose, 'type' => $type, 'district' => $districtSlug, 'city' => $citySlug, 'localArea' => $localAreaSlug],
+            'title' => $typeName.' in '.$areaName.' | Land Site',
+            'heading_suffix' => $typeName.' Properties & Real Estate',
+            'default_status_label' => str($purpose)->replace('-', ' ')->headline(),
+            'empty_label' => 'No '.$typeName.' properties found in '.$areaName,
+            'badge_label' => $typeName,
+            'default_search' => $areaName,
+            'property_type_id' => $propertyType?->id ?? 0,
+            'district_id' => $district?->id ?? 0,
+            'city_id' => $city?->id ?? 0,
+            'area_id' => $area?->id ?? 0,
+        ]);
+    }
+
     private function propertyResults(Request $request, array $page): array
     {
         $propertyTypes = $this->propertyTypes();
