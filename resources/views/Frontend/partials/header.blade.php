@@ -13,7 +13,7 @@
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{{ route('frontend.buy.index') }}">Homes for sale</a></li>
               <li><a class="dropdown-item" href="new-listings.html">New listings</a></li>
-              <li><a class="dropdown-item" href="open-houses.html">Open houses</a></li>
+              <li><a class="dropdown-item" href="{{ route('frontend.open-houses.index') }}">Open houses</a></li>
             </ul>
           </li>
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.rent.*') ? 'active' : '' }}" href="{{ route('frontend.rent.index') }}">Rent</a></li>

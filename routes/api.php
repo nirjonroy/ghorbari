@@ -26,6 +26,8 @@ Route::get('/home', [HomeController::class, 'api'])->name('api.frontend.home');
 Route::get('/for-sale', [FrontendHubController::class, 'forSale'])->name('api.frontend.for-sale');
 Route::get('/for-rent', [FrontendHubController::class, 'rent'])->name('api.frontend.rent');
 Route::get('/sell', [FrontendHubController::class, 'sell'])->name('api.frontend.sell');
+Route::get('/open-houses', [FrontendHubController::class, 'openHouses'])->name('api.frontend.open-houses');
+Route::get('/early-access', [FrontendHubController::class, 'earlyAccess'])->name('api.frontend.early-access');
 
 Route::prefix('admin')->group(function () {
     Route::post('/login', [AdminAuthController::class, 'login'])->name('api.admin.login');

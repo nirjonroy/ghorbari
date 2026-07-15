@@ -55,12 +55,52 @@ class FrontendHubData
         ]);
     }
 
+    public function openHouses(Request $request): array
+    {
+        return $this->propertyResults($request, [
+            'listing_types' => ['buy', 'sell'],
+            'route_name' => 'frontend.open-houses.index',
+            'api_route_name' => 'api.frontend.open-houses',
+            'title' => 'Open Houses | Land Site',
+            'heading_suffix' => 'Open Houses & Real Estate',
+            'default_status_label' => 'Open Houses',
+            'empty_label' => 'No open houses found',
+            'badge_label' => 'Open House',
+            'default_search' => 'Dhaka',
+            'default_property_status' => 'available',
+        ]);
+    }
+
+    public function earlyAccess(Request $request): array
+    {
+        return $this->propertyResults($request, [
+            'listing_types' => ['buy', 'sell', 'rent'],
+            'route_name' => 'frontend.early-access.index',
+            'api_route_name' => 'api.frontend.early-access',
+            'title' => 'Early Access | Land Site',
+            'heading_suffix' => 'Early Access Homes & Real Estate',
+            'default_status_label' => 'Early Access',
+            'empty_label' => 'No early access properties found',
+            'badge_label' => 'Early Access',
+            'default_search' => 'Dhaka',
+            'early_access_only' => true,
+        ]);
+    }
+
     private function propertyResults(Request $request, array $page): array
     {
         $propertyTypes = $this->propertyTypes();
         $baseQuery = $this->tableExists(Property::class)
             ? $this->publishedProperties()->whereIn('listing_type', $page['listing_types'])
             : null;
+
+        if ($baseQuery && ($page['early_access_only'] ?? false)) {
+            $baseQuery->where('is_early_access', true);
+        }
+
+        if ($baseQuery && filled($page['default_property_status'] ?? null) && ! $request->filled('property_status')) {
+            $baseQuery->where('property_status', $page['default_property_status']);
+        }
 
         $properties = $baseQuery
             ? $this->applyPropertyFilters(clone $baseQuery, $request)

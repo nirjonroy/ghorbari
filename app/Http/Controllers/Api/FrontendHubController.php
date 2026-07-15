@@ -23,4 +23,14 @@ class FrontendHubController extends Controller
     {
         return response()->json(['data' => $hubData->sell($request)]);
     }
+
+    public function openHouses(Request $request, FrontendHubData $hubData): JsonResponse
+    {
+        return response()->json(['data' => $hubData->openHouses($request)]);
+    }
+
+    public function earlyAccess(Request $request, FrontendHubData $hubData): JsonResponse
+    {
+        return response()->json(['data' => $hubData->earlyAccess($request)]);
+    }
 }
