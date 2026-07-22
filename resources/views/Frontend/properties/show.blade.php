@@ -24,7 +24,8 @@
         ? 'BDT '.rtrim(rtrim(number_format((float) $property->price / 10000000, 2), '0'), '.').' Cr'
         : 'BDT '.number_format((float) $property->price);
     $displayPrice = $property->listing_type === 'rent' ? $price.' / '.($property->rent_period ?: 'month') : $price;
-    $monthlyEstimate = 'BDT '.number_format(max((float) $property->price * 0.0065, 0) / 100000, 2).' Lac/mo';
+    $paymentEstimate = $page['calculator'] ?? app(\App\Support\CalculatorSettings::class)->estimate((float) $property->price);
+    $monthlyEstimate = 'BDT '.number_format(($paymentEstimate['total'] ?? 0) / 100000, 2).' Lac/mo';
     $address = collect([
         optional($property->area)->name,
         optional($property->city)->name,
@@ -179,19 +180,23 @@
 
             <article class="detail-card" id="payment">
               <h2>Payment Calculator</h2>
-              <p class="text-secondary">Estimated monthly cost based on sample financing terms.</p>
+              <p class="text-secondary">
+                Estimated monthly cost based on {{ data_get($paymentEstimate, 'settings.default_loan_years', 20) }} year term,
+                {{ data_get($paymentEstimate, 'settings.default_down_percent', 20) }}% down payment,
+                and {{ data_get($paymentEstimate, 'settings.default_interest_rate', 9.5) }}% rate.
+              </p>
               <div class="payment-total">{{ $property->listing_type === 'rent' ? $displayPrice : $monthlyEstimate }}</div>
               <div class="payment-bars">
-                <span style="width: 62%"></span>
-                <span style="width: 21%"></span>
-                <span style="width: 17%"></span>
+                <span style="width: {{ number_format($paymentEstimate['principal_percent'] ?? 0, 4, '.', '') }}%"></span>
+                <span style="width: {{ number_format($paymentEstimate['tax_percent'] ?? 0, 4, '.', '') }}%"></span>
+                <span style="width: {{ number_format($paymentEstimate['service_percent'] ?? 0, 4, '.', '') }}%"></span>
               </div>
               <div class="payment-legend">
-                <span><i class="legend principal"></i> Principal and interest</span>
-                <span><i class="legend tax"></i> Taxes and fees</span>
-                <span><i class="legend service"></i> Service charge</span>
+                <span><i class="legend principal"></i> Principal and interest: BDT {{ number_format($paymentEstimate['principal'] ?? 0) }}</span>
+                <span><i class="legend tax"></i> Taxes and fees: BDT {{ number_format($paymentEstimate['taxes'] ?? 0) }}</span>
+                <span><i class="legend service"></i> Service charge: BDT {{ number_format($paymentEstimate['service'] ?? 0) }}</span>
               </div>
-              <a href="#contactAgent" class="btn btn-dark mt-3">Contact agent</a>
+              <a href="{{ route('frontend.calculator.index', ['price' => (int) $property->price]) }}" class="btn btn-dark mt-3">Open calculator</a>
             </article>
 
             <article class="detail-card" id="propertyDetails">

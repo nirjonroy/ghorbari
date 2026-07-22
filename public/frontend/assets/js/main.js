@@ -203,6 +203,14 @@ document.addEventListener("DOMContentLoaded", function () {
     serviceCharge: 15000
   };
 
+  if (calculator.dataset.defaults) {
+    try {
+      defaults = Object.assign(defaults, JSON.parse(calculator.dataset.defaults));
+    } catch (error) {
+      defaults = defaults;
+    }
+  }
+
   var fields = {
     homePrice: document.getElementById("homePrice"),
     homePriceRange: document.getElementById("homePriceRange"),

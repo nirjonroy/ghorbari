@@ -357,6 +357,7 @@ class FrontendHubData
             ->take(3)
             ->get();
         $coordinates = $this->propertyMapCoordinates($property, 0);
+        $calculator = app(CalculatorSettings::class)->estimate((float) $property->price);
         $mapQuery = collect([
             optional($property->area)->name,
             optional($property->city)->name,
@@ -374,6 +375,7 @@ class FrontendHubData
                 'map_lng' => $coordinates['lng'],
                 'map_url' => 'https://www.google.com/maps/search/?api=1&query='.rawurlencode($mapQuery),
                 'street_view_url' => 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='.$coordinates['lat'].','.$coordinates['lng'],
+                'calculator' => $calculator,
             ],
         ];
     }

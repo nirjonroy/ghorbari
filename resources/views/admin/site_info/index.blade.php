@@ -87,6 +87,23 @@
 
                     <dt class="col-sm-3">Slider Image Size</dt>
                     <dd class="col-sm-9">{{ $siteInfo->slider_width ?: 'auto' }} x {{ $siteInfo->slider_height ?: 'auto' }}</dd>
+
+                    <dt class="col-sm-3">Calculator Price Range</dt>
+                    <dd class="col-sm-9">
+                      BDT {{ number_format($siteInfo->calculator_price_min ?? 1000000) }}
+                      -
+                      BDT {{ number_format($siteInfo->calculator_price_max ?? 200000000) }}
+                    </dd>
+
+                    <dt class="col-sm-3">Calculator Defaults</dt>
+                    <dd class="col-sm-9">
+                      Price: BDT {{ number_format($siteInfo->calculator_default_price ?? 73500000) }},
+                      Down: {{ $siteInfo->calculator_default_down_percent ?? 20 }}%,
+                      Term: {{ $siteInfo->calculator_default_loan_years ?? 20 }} years,
+                      Rate: {{ $siteInfo->calculator_default_interest_rate ?? 9.5 }}%,
+                      Tax: {{ $siteInfo->calculator_default_tax_rate ?? 0.6 }}%,
+                      Service: BDT {{ number_format($siteInfo->calculator_default_service_charge ?? 15000) }}
+                    </dd>
                   </dl>
                 @else
                   <p class="mb-0 text-secondary">No site info has been saved yet. Use the edit button to create it.</p>

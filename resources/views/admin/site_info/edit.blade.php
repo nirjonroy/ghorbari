@@ -242,6 +242,71 @@
 
               <div class="card mt-3">
                 <div class="card-header">
+                  <h3 class="card-title">Payment Calculator Settings</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row g-3">
+                    @foreach ([
+                      'calculator_price_min' => ['label' => 'Price Minimum', 'default' => 1000000, 'step' => 100000],
+                      'calculator_price_max' => ['label' => 'Price Maximum', 'default' => 200000000, 'step' => 100000],
+                      'calculator_price_step' => ['label' => 'Price Step', 'default' => 100000, 'step' => 1000],
+                      'calculator_default_price' => ['label' => 'Default Price', 'default' => 73500000, 'step' => 100000],
+                    ] as $field => $input)
+                      <div class="col-md-3">
+                        <label for="{{ $field }}" class="form-label">{{ $input['label'] }}</label>
+                        <input id="{{ $field }}" type="number" min="1" step="{{ $input['step'] }}" name="{{ $field }}" class="form-control @error($field) is-invalid @enderror" value="{{ old($field, $siteInfo->{$field} ?? $input['default']) }}" required>
+                        @error($field)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                      </div>
+                    @endforeach
+
+                    @foreach ([
+                      'calculator_down_percent_min' => ['label' => 'Down Payment % Min', 'default' => 0],
+                      'calculator_down_percent_max' => ['label' => 'Down Payment % Max', 'default' => 80],
+                      'calculator_default_down_percent' => ['label' => 'Default Down Payment %', 'default' => 20],
+                      'calculator_loan_year_min' => ['label' => 'Loan Years Min', 'default' => 5],
+                      'calculator_loan_year_max' => ['label' => 'Loan Years Max', 'default' => 30],
+                      'calculator_default_loan_years' => ['label' => 'Default Loan Years', 'default' => 20],
+                    ] as $field => $input)
+                      <div class="col-md-2">
+                        <label for="{{ $field }}" class="form-label">{{ $input['label'] }}</label>
+                        <input id="{{ $field }}" type="number" min="0" max="100" name="{{ $field }}" class="form-control @error($field) is-invalid @enderror" value="{{ old($field, $siteInfo->{$field} ?? $input['default']) }}" required>
+                        @error($field)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                      </div>
+                    @endforeach
+
+                    @foreach ([
+                      'calculator_interest_min' => ['label' => 'Interest % Min', 'default' => 1],
+                      'calculator_interest_max' => ['label' => 'Interest % Max', 'default' => 20],
+                      'calculator_default_interest_rate' => ['label' => 'Default Interest %', 'default' => 9.5],
+                      'calculator_tax_min' => ['label' => 'Tax % Min', 'default' => 0],
+                      'calculator_tax_max' => ['label' => 'Tax % Max', 'default' => 5],
+                      'calculator_default_tax_rate' => ['label' => 'Default Tax %', 'default' => 0.6],
+                    ] as $field => $input)
+                      <div class="col-md-2">
+                        <label for="{{ $field }}" class="form-label">{{ $input['label'] }}</label>
+                        <input id="{{ $field }}" type="number" min="0" max="100" step="0.01" name="{{ $field }}" class="form-control @error($field) is-invalid @enderror" value="{{ old($field, $siteInfo->{$field} ?? $input['default']) }}" required>
+                        @error($field)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                      </div>
+                    @endforeach
+
+                    @foreach ([
+                      'calculator_service_charge_min' => ['label' => 'Service Charge Min', 'default' => 0, 'step' => 1000],
+                      'calculator_service_charge_max' => ['label' => 'Service Charge Max', 'default' => 100000, 'step' => 1000],
+                      'calculator_default_service_charge' => ['label' => 'Default Service Charge', 'default' => 15000, 'step' => 1000],
+                      'calculator_service_charge_step' => ['label' => 'Service Charge Step', 'default' => 1000, 'step' => 100],
+                    ] as $field => $input)
+                      <div class="col-md-3">
+                        <label for="{{ $field }}" class="form-label">{{ $input['label'] }}</label>
+                        <input id="{{ $field }}" type="number" min="0" step="{{ $input['step'] }}" name="{{ $field }}" class="form-control @error($field) is-invalid @enderror" value="{{ old($field, $siteInfo->{$field} ?? $input['default']) }}" required>
+                        @error($field)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                      </div>
+                    @endforeach
+                  </div>
+                </div>
+              </div>
+
+              <div class="card mt-3">
+                <div class="card-header">
                   <h3 class="card-title">Image Settings</h3>
                 </div>
                 <div class="card-body">
