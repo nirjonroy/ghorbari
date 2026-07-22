@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('Frontend.layouts.master', function ($view) {
             $siteInfo = Schema::hasTable('siteinfo')
-                ? SiteInfo::query()->select('id', 'default_theme', 'text_direction', 'favicon')->first()
+                ? SiteInfo::query()->select('id', 'default_theme', 'text_direction', 'logo', 'logo_width', 'logo_height', 'favicon')->first()
                 : null;
             $landTypeIds = Schema::hasTable('property_types')
                 ? PropertyType::query()->whereIn('slug', ['land-plot', 'land'])->pluck('id')->all()

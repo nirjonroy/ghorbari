@@ -1,8 +1,13 @@
+@php
+  $footerLogo = filled(data_get($frontendSiteInfo, 'logo'))
+      ? asset(data_get($frontendSiteInfo, 'logo'))
+      : asset('frontend/assets/images/logo.png');
+@endphp
 <footer class="footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <img src="{{ asset('frontend/assets') }}/images/logo.png" alt="Land Site logo">
+          <img src="{{ $footerLogo }}" alt="{{ data_get($frontendSiteInfo, 'sidebar_lg_header', 'Land Site') }} logo">
           <p>Land Site helps buyers, sellers, and renters compare trusted property options across Bangladesh.</p>
         </div>
         <div>

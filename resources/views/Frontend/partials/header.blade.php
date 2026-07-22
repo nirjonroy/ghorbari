@@ -1,7 +1,16 @@
+@php
+  $frontendLogo = filled(data_get($frontendSiteInfo, 'logo'))
+      ? asset(data_get($frontendSiteInfo, 'logo'))
+      : asset('frontend/assets/images/logo.png');
+  $frontendLogoStyle = collect([
+      data_get($frontendSiteInfo, 'logo_width') ? 'width: '.data_get($frontendSiteInfo, 'logo_width').'px' : null,
+      data_get($frontendSiteInfo, 'logo_height') ? 'height: '.data_get($frontendSiteInfo, 'logo_height').'px' : null,
+  ])->filter()->join('; ');
+@endphp
 <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
     <div class="container-fluid px-lg-5">
       <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('frontend.home') }}">
-        <img src="{{ asset('frontend/assets') }}/images/logo.png" alt="Land Site logo" class="brand-logo">
+        <img src="{{ $frontendLogo }}" alt="{{ data_get($frontendSiteInfo, 'sidebar_lg_header', 'Land Site') }} logo" class="brand-logo" @if($frontendLogoStyle) style="{{ $frontendLogoStyle }}" @endif>
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

@@ -11,6 +11,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
+  @if(filled(data_get($frontendSiteInfo, 'favicon')))
+    <link rel="icon" href="{{ asset(data_get($frontendSiteInfo, 'favicon')) }}">
+    <link rel="shortcut icon" href="{{ asset(data_get($frontendSiteInfo, 'favicon')) }}">
+  @endif
   @include('Frontend.partials.styles')
   @stack('styles')
 </head>
