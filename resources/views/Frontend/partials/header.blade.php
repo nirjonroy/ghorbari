@@ -60,6 +60,14 @@
                       <span class="buy-directory-empty">No type</span>
                     @endforelse
                   </div>
+                  <div>
+                    <span class="buy-directory-title">Land Sale</span>
+                    @forelse(($frontendMenuData['land_sale_cities'] ?? collect()) as $city)
+                      <a class="dropdown-item" href="{{ route('frontend.property.land-sale-city', ['city' => $city->slug]) }}">{{ $city->name }} Land</a>
+                    @empty
+                      <span class="buy-directory-empty">No land city</span>
+                    @endforelse
+                  </div>
                 </div>
               </li>
             </ul>

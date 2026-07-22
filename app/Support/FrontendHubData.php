@@ -292,6 +292,32 @@ class FrontendHubData
         ]);
     }
 
+    public function landSaleCityPage(Request $request, string $citySlug): array
+    {
+        $city = City::query()->where('slug', $citySlug)->first();
+        $cityName = $city?->name ?? str($citySlug)->headline();
+        $landTypeIds = PropertyType::query()
+            ->whereIn('slug', ['land-plot', 'land'])
+            ->pluck('id')
+            ->all();
+
+        return $this->propertyResults($request, [
+            'listing_types' => ['buy', 'sell'],
+            'route_name' => 'frontend.property.land-sale-city',
+            'api_route_name' => 'api.frontend.property.land-sale-city',
+            'route_params' => ['city' => $citySlug],
+            'title' => 'Land For Sale in '.$cityName.' | Land Site',
+            'heading_suffix' => 'Land For Sale & Real Estate',
+            'default_status_label' => 'For Sale',
+            'empty_label' => 'No land plots found in '.$cityName,
+            'badge_label' => 'Land For Sale',
+            'default_search' => $cityName,
+            'city_id' => $city?->id ?? 0,
+            'property_type_ids' => $landTypeIds ?: [0],
+            'property_categories' => ['land', 'residential'],
+        ]);
+    }
+
     public function propertyDetail(Request $request, string $propertySlug): array
     {
         $property = $this->findPublishedProperty($propertySlug);
@@ -351,8 +377,16 @@ class FrontendHubData
             }
         }
 
+        if ($baseQuery && filled($page['property_type_ids'] ?? null)) {
+            $baseQuery->whereIn('property_type_id', $page['property_type_ids']);
+        }
+
         if ($baseQuery && filled($page['property_category'] ?? null)) {
             $baseQuery->where('property_category', $page['property_category']);
+        }
+
+        if ($baseQuery && filled($page['property_categories'] ?? null)) {
+            $baseQuery->whereIn('property_category', $page['property_categories']);
         }
 
         $properties = $baseQuery

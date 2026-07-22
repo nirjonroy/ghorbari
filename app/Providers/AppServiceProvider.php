@@ -37,6 +37,9 @@ class AppServiceProvider extends ServiceProvider
             $siteInfo = Schema::hasTable('siteinfo')
                 ? SiteInfo::query()->select('id', 'default_theme', 'text_direction', 'favicon')->first()
                 : null;
+            $landTypeIds = Schema::hasTable('property_types')
+                ? PropertyType::query()->whereIn('slug', ['land-plot', 'land'])->pluck('id')->all()
+                : [];
 
             $menuData = [
                 'districts' => Schema::hasTable('districts')
@@ -56,6 +59,19 @@ class AppServiceProvider extends ServiceProvider
                 ]),
                 'types' => Schema::hasTable('property_types')
                     ? PropertyType::query()->select('id', 'name', 'slug')->where('status', 'active')->orderBy('name')->take(6)->get()
+                    : collect(),
+                'land_sale_cities' => Schema::hasTable('cities') && Schema::hasTable('properties') && $landTypeIds
+                    ? City::query()
+                        ->select('id', 'name', 'slug')
+                        ->where('status', true)
+                        ->whereHas('properties', function ($query) use ($landTypeIds) {
+                            $query->where('is_published', true)
+                                ->whereIn('listing_type', ['buy', 'sell'])
+                                ->whereIn('property_type_id', $landTypeIds);
+                        })
+                        ->orderBy('name')
+                        ->take(6)
+                        ->get()
                     : collect(),
             ];
 

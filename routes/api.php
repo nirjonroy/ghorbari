@@ -31,6 +31,8 @@ Route::get('/early-access', [FrontendHubController::class, 'earlyAccess'])->name
 Route::get('/property-details/{property}', [FrontendHubController::class, 'propertyDetail'])
     ->where('property', '.+-[0-9]+')
     ->name('api.frontend.property.show');
+Route::get('/property/for-sale/residential/land-plot/{city}', [FrontendHubController::class, 'landSaleCity'])
+    ->name('api.frontend.property.land-sale-city');
 Route::get('/property/{purpose}/{type}/{district}/{city}/{localArea}', [FrontendHubController::class, 'purposeTypeLocalArea'])
     ->where('purpose', 'for-sale|for-rent|sell')
     ->where('type', '(?!residential$|commercial$|land$|industrial$)[A-Za-z0-9-]+')

@@ -39,6 +39,11 @@ class PropertyDirectoryController extends Controller
         return view('Frontend.buy.index', $hubData->typePage($request, $purpose, $category, $type));
     }
 
+    public function landSaleCity(Request $request, FrontendHubData $hubData, string $city): View
+    {
+        return view('Frontend.buy.index', $hubData->landSaleCityPage($request, $city));
+    }
+
     public function purposeTypeDistrict(Request $request, FrontendHubData $hubData, string $purpose, string $type, string $district): View
     {
         return view('Frontend.buy.index', $hubData->purposeTypeDistrictPage($request, $purpose, $type, $district));
