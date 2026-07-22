@@ -18,6 +18,15 @@
     $rentProperties = collect($homeData['rent_properties'] ?? []);
     $saleProperties = collect($homeData['sale_properties'] ?? []);
     $blogPosts = collect($homeData['blog_posts'] ?? []);
+    $agents = collect($homeData['agents'] ?? []);
+    $agentFallbackImages = [
+        'https://www.blacktechcorp.com/uploads/team-members/nirjon-roy-20260115054821.jpg',
+        'https://www.blacktechcorp.com/uploads/team-members/rakib-alom-20260115055615.jpg',
+        'https://www.blacktechcorp.com/uploads/team-members/anupam-mahmud-ozone-20260216124252.jpg',
+    ];
+    $agentImage = fn ($agent, $index = 0) => $agent->user?->profile_photo_path
+        ? asset($agent->user->profile_photo_path)
+        : $agentFallbackImages[$index % count($agentFallbackImages)];
     $propertyImage = function ($property, $fallback = 'property_img_1.jpg') {
         $media = $property->media->firstWhere('is_primary', true) ?: $property->media->first();
 
@@ -768,10 +777,14 @@
           </div>
           <div class="col-lg-5">
             <div class="agent-stack">
-              <img src="https://www.blacktechcorp.com/uploads/team-members/nirjon-roy-20260115054821.jpg" alt="Nirjon Roy">
-              <img src="https://www.blacktechcorp.com/uploads/team-members/rakib-alom-20260115055615.jpg" alt="Rakib Alom">
-              <img src="https://www.blacktechcorp.com/uploads/team-members/anupam-mahmud-ozone-20260216124252.jpg" alt="Anupam Mahmud Ozone">
-              <a href="agents.html" class="btn btn-danger ms-3">Meet agents</a>
+              @forelse($agents->take(3) as $agent)
+                <img src="{{ $agentImage($agent, $loop->index) }}" alt="{{ $agent->user?->name ?? 'Land Site agent' }}">
+              @empty
+                @foreach($agentFallbackImages as $image)
+                  <img src="{{ $image }}" alt="Land Site agent">
+                @endforeach
+              @endforelse
+              <a href="{{ route('frontend.agents.index') }}" class="btn btn-danger ms-3">Meet agents</a>
             </div>
           </div>
         </div>

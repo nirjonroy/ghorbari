@@ -75,7 +75,7 @@
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.rent.*') ? 'active' : '' }}" href="{{ route('frontend.rent.index') }}">Rent</a></li>
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.sell.*') ? 'active' : '' }}" href="{{ route('frontend.sell.index') }}">Sell</a></li>
           <li class="nav-item"><a class="nav-link" href="calculator.html">Calculator</a></li>
-          <li class="nav-item"><a class="nav-link" href="agents.html">Agents</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.agents.*') ? 'active' : '' }}" href="{{ route('frontend.agents.index') }}">Agents</a></li>
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('dashboard', 'user.dashboard', 'user.profile.*') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a></li>
           <li class="nav-item"><button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false"><i class="bi bi-moon"></i><span>Dark</span></button></li>
           <li class="nav-item ms-lg-2">

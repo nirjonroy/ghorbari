@@ -7,14 +7,14 @@
         </div>
         <div>
           <h2>Join Us</h2>
-          <a href="#">Become An Agent</a>
+          <a href="{{ route('frontend.agents.index') }}">Become An Agent</a>
           <a href="#">List Your Property</a>
-          <a href="#">Partner With Us</a>
+          <a href="{{ route('frontend.agents.index') }}">Partner With Us</a>
         </div>
         <div>
           <h2>Company</h2>
           <a href="#">About Us</a>
-          <a href="agents.html">Agents</a>
+          <a href="{{ route('frontend.agents.index') }}">Agents</a>
           <a href="{{ route('frontend.blog.index') }}">Blog</a>
         </div>
         <div>
