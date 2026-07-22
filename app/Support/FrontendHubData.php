@@ -356,6 +356,13 @@ class FrontendHubData
             })
             ->take(3)
             ->get();
+        $coordinates = $this->propertyMapCoordinates($property, 0);
+        $mapQuery = collect([
+            optional($property->area)->name,
+            optional($property->city)->name,
+            optional($property->district)->name,
+            optional($property->area)->postal_code,
+        ])->filter()->unique()->join(', ') ?: $property->title;
 
         return [
             'property' => $property,
@@ -363,6 +370,10 @@ class FrontendHubData
             'page' => [
                 'title' => $property->title.' | Land Site',
                 'api_url' => route('api.frontend.property.show', ['property' => $property->detailSlug()]),
+                'map_lat' => $coordinates['lat'],
+                'map_lng' => $coordinates['lng'],
+                'map_url' => 'https://www.google.com/maps/search/?api=1&query='.rawurlencode($mapQuery),
+                'street_view_url' => 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='.$coordinates['lat'].','.$coordinates['lng'],
             ],
         ];
     }

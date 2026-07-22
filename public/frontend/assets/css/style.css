@@ -2889,6 +2889,8 @@ html[data-theme="dark"] .theme-toggle:focus {
     #eaf3f1;
   background-size: 44px 44px;
   border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
 }
 
 .map-pin {
@@ -5847,6 +5849,7 @@ html[data-theme="dark"] .theme-toggle {
     #f7f7f7;
   background-size: 22px 22px;
   border-radius: 6px;
+  text-decoration: none;
 }
 
 .summary-map span {

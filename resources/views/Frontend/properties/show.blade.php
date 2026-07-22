@@ -49,6 +49,8 @@
     $recommendedImage = fn ($related, $fallback) => ($related->media->firstWhere('is_primary', true) ?: $related->media->first())
         ? asset(($related->media->firstWhere('is_primary', true) ?: $related->media->first())->file_path)
         : asset('frontend/assets/images/'.$fallback);
+    $mapUrl = $page['map_url'] ?? 'https://www.google.com/maps/search/?api=1&query='.rawurlencode($address ?: $property->title);
+    $streetViewUrl = $page['street_view_url'] ?? $mapUrl;
 @endphp
 
 @section('content')
@@ -82,7 +84,7 @@
           @endforeach
           <div class="gallery-quick-actions">
             <button type="button"><i class="bi bi-columns-gap"></i> Floor Plans</button>
-            <button type="button"><i class="bi bi-signpost-split"></i> Street View</button>
+            <button type="button" onclick="window.open('{{ $streetViewUrl }}', '_blank', 'noopener')"><i class="bi bi-signpost-split"></i> Street View</button>
             <button type="button"><i class="bi bi-stars"></i> Redesign</button>
           </div>
           <button class="btn btn-light gallery-btn" type="button" data-bs-toggle="modal" data-bs-target="#photoGalleryModal"><i class="bi bi-images"></i> {{ $galleryImages->count() }} photos</button>
@@ -111,9 +113,9 @@
                   </div>
                   <p class="detail-address">{{ $address ?: $property->description }}</p>
                 </div>
-                <div class="summary-map" aria-label="Property map preview">
+                <a class="summary-map" href="{{ $mapUrl }}" target="_blank" rel="noopener" aria-label="Open {{ $address ?: $property->title }} on map">
                   <span><i class="bi bi-geo-alt-fill"></i></span>
-                </div>
+                </a>
               </div>
               <div class="detail-actions">
                 @include('Frontend.partials.property-action-buttons', ['property' => $property, 'labels' => true, 'shareClass' => 'btn btn-outline-dark', 'favoriteClass' => 'btn btn-outline-dark'])
@@ -162,10 +164,10 @@
 
             <article class="detail-card">
               <h2>Around This Home</h2>
-              <div class="detail-map">
+              <a class="detail-map" href="{{ $mapUrl }}" target="_blank" rel="noopener">
                 <span class="map-pin"><i class="bi bi-geo-alt-fill"></i></span>
                 <p>{{ collect([optional($property->area)->name, optional($property->city)->name])->filter()->join(', ') ?: 'Bangladesh' }}</p>
-              </div>
+              </a>
               <div class="nearby-list">
                 <div><span>{{ optional($property->area)->name ?: 'Local neighborhood' }}</span><strong>Nearby</strong></div>
                 <div><span>{{ optional($property->city)->name ?: 'City center' }}</span><strong>Connected</strong></div>
@@ -291,7 +293,7 @@
             <nav class="photo-modal-tabs" aria-label="Photo sections">
               <button class="active" type="button">Photos</button>
               <button type="button">Floor Plan</button>
-              <button type="button">Street View</button>
+              <button type="button" onclick="window.open('{{ $streetViewUrl }}', '_blank', 'noopener')">Street View</button>
               <button type="button">Neighborhood</button>
             </nav>
           </div>
