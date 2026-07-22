@@ -69,7 +69,7 @@
             @endphp
             <div class="col-md-6 col-xl-4">
               <div class="listing-card">
-                <a href="property-details.html" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
+                <a href="{{ $property->detailUrl() }}" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
                 <img src="{{ $propertyImage($property, $fallbackImage) }}" alt="{{ $property->title }}">
                 <div class="listing-card-body">
                   <h3>{{ $property->title }}</h3>
@@ -81,9 +81,9 @@
             </div>
           @empty
             @foreach($fallbackRentals as $rental)
-              <div class="col-md-6 col-xl-4">
-                <div class="listing-card">
-                  <a href="property-details.html" class="card-link-fill" aria-label="View {{ $rental['title'] }} details"></a>
+            <div class="col-md-6 col-xl-4">
+              <div class="listing-card">
+                  <a href="{{ route('frontend.rent.index') }}" class="card-link-fill" aria-label="View {{ $rental['title'] }} details"></a>
                   <img src="{{ asset('frontend/assets/images/'.$rental['image']) }}" alt="{{ $rental['title'] }}">
                   <div class="listing-card-body">
                     <h3>{{ $rental['title'] }}</h3>

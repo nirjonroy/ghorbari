@@ -7,6 +7,9 @@ use App\Models\SiteInfo;
 use App\Services\ImageUploadService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class SiteInfoController extends Controller
@@ -35,6 +38,9 @@ class SiteInfoController extends Controller
             'footer_contact_note' => ['nullable', 'string'],
             'logo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'favicon' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:1024'],
+            'buy_home_icon' => ['nullable', 'file', 'mimes:svg,jpg,jpeg,png,webp', 'max:1024'],
+            'sell_home_icon' => ['nullable', 'file', 'mimes:svg,jpg,jpeg,png,webp', 'max:1024'],
+            'rent_property_icon' => ['nullable', 'file', 'mimes:svg,jpg,jpeg,png,webp', 'max:1024'],
             'logo_width' => ['nullable', 'integer', 'min:1', 'max:5000'],
             'logo_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
             'favicon_width' => ['nullable', 'integer', 'min:1', 'max:512'],
@@ -78,7 +84,7 @@ class SiteInfoController extends Controller
             $data[$field] = $request->boolean($field);
         }
 
-        unset($data['logo'], $data['favicon']);
+        unset($data['logo'], $data['favicon'], $data['buy_home_icon'], $data['sell_home_icon'], $data['rent_property_icon']);
 
         $imageUploadService = new ImageUploadService();
 
@@ -95,6 +101,17 @@ class SiteInfoController extends Controller
             }
         }
 
+        foreach (['buy_home_icon', 'sell_home_icon', 'rent_property_icon'] as $field) {
+            if ($request->hasFile($field)) {
+                $data[$field] = $this->storeServiceIcon(
+                    $request->file($field),
+                    $siteInfo?->{$field},
+                    $imageUploadService,
+                    $data['image_output_format']
+                );
+            }
+        }
+
         SiteInfo::query()->updateOrCreate(
             ['id' => optional($siteInfo)->id],
             $data
@@ -103,5 +120,40 @@ class SiteInfoController extends Controller
         return redirect()
             ->route('admin.site-info.index')
             ->with('status', 'Site info updated successfully.');
+    }
+
+    private function storeServiceIcon(
+        UploadedFile $file,
+        ?string $oldPath,
+        ImageUploadService $imageUploadService,
+        string $format
+    ): string {
+        if (strtolower($file->getClientOriginalExtension()) !== 'svg') {
+            return $imageUploadService->storeConverted($file, 'uploads/siteinfo', null, null, $oldPath, $format);
+        }
+
+        $directory = 'uploads/siteinfo';
+        $targetDirectory = public_path($directory);
+
+        if (! File::isDirectory($targetDirectory)) {
+            File::makeDirectory($targetDirectory, 0755, true);
+        }
+
+        if ($oldPath && File::exists(public_path($oldPath))) {
+            File::delete(public_path($oldPath));
+        }
+
+        $baseName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'icon';
+        $fileName = $baseName.'.svg';
+        $counter = 2;
+
+        while (File::exists($targetDirectory.DIRECTORY_SEPARATOR.$fileName)) {
+            $fileName = $baseName.'-'.$counter.'.svg';
+            $counter++;
+        }
+
+        $file->move($targetDirectory, $fileName);
+
+        return $directory.'/'.$fileName;
     }
 }

@@ -106,6 +106,41 @@
 
               <div class="card mt-3">
                 <div class="card-header">
+                  <h3 class="card-title">Homepage Service Icons</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row g-3">
+                    @foreach ([
+                      'buy_home_icon' => ['label' => 'Buy A Home Icon', 'fallback' => 'house_icon.svg'],
+                      'sell_home_icon' => ['label' => 'Sell Your Home Icon', 'fallback' => 'key_handover_icon.svg'],
+                      'rent_property_icon' => ['label' => 'Rent Your Property Icon', 'fallback' => 'apartment_icon.svg'],
+                    ] as $field => $icon)
+                      @php
+                        $currentIcon = old($field, $siteInfo->{$field} ?? '');
+                        $previewSource = $currentIcon ? asset($currentIcon) : asset('frontend/assets/images/icons/'.$icon['fallback']);
+                      @endphp
+                      <div class="col-md-4">
+                        <label for="{{ $field }}" class="form-label">{{ $icon['label'] }}</label>
+                        <input id="{{ $field }}" type="file" name="{{ $field }}" class="form-control @error($field) is-invalid @enderror" accept=".svg,image/*" data-preview="{{ $field }}_preview">
+                        @error($field)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        <div class="form-text">Accepted: SVG, JPG, PNG, WEBP. Raster files follow the converted image format setting.</div>
+                        <div class="mt-2">
+                          <img
+                            id="{{ $field }}_preview"
+                            src="{{ $previewSource }}"
+                            alt="{{ $icon['label'] }} preview"
+                            class="img-thumbnail"
+                            style="max-height: 72px"
+                          >
+                        </div>
+                      </div>
+                    @endforeach
+                  </div>
+                </div>
+              </div>
+
+              <div class="card mt-3">
+                <div class="card-header">
                   <h3 class="card-title">Header, Footer, and Currency</h3>
                 </div>
                 <div class="card-body">

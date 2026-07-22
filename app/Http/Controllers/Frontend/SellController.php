@@ -11,6 +11,6 @@ class SellController extends Controller
 {
     public function index(Request $request, FrontendHubData $hubData): View
     {
-        return view('Frontend.buy.index', $hubData->sell($request));
+        return view('Frontend.sell.index', $hubData->sell($request));
     }
 }

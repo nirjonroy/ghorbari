@@ -19,6 +19,10 @@
     $saleProperties = collect($homeData['sale_properties'] ?? []);
     $blogPosts = collect($homeData['blog_posts'] ?? []);
     $agents = collect($homeData['agents'] ?? []);
+    $siteInfo = $homeData['site_info'] ?? null;
+    $serviceIcon = fn ($field, $fallback) => filled($siteInfo?->{$field})
+        ? asset($siteInfo->{$field})
+        : asset('frontend/assets/images/icons/'.$fallback);
     $agentFallbackImages = [
         'https://www.blacktechcorp.com/uploads/team-members/nirjon-roy-20260115054821.jpg',
         'https://www.blacktechcorp.com/uploads/team-members/rakib-alom-20260115055615.jpg',
@@ -410,7 +414,7 @@
         <div class="row g-4 align-items-stretch">
           <div class="col-lg-4">
             <div class="service-panel h-100">
-              <img src="{{ asset('frontend/assets') }}/images/icons/house_icon.svg" alt="" class="service-icon">
+              <img src="{{ $serviceIcon('buy_home_icon', 'house_icon.svg') }}" alt="" class="service-icon">
               <h2>Buy A Home</h2>
               <p>See accurate listing data, compare saved homes, and schedule tours with trusted agents.</p>
               <a href="{{ route('frontend.property.buy-search') }}" class="btn btn-outline-danger">Search homes</a>
@@ -418,18 +422,18 @@
           </div>
           <div class="col-lg-4">
             <div class="service-panel h-100">
-              <img src="{{ asset('frontend/assets') }}/images/icons/key_handover_icon.svg" alt="" class="service-icon">
+              <img src="{{ $serviceIcon('sell_home_icon', 'key_handover_icon.svg') }}" alt="" class="service-icon">
               <h2>Sell Your Home</h2>
               <p>Estimate your home value, review demand nearby, and list with a clear pricing plan.</p>
-              <a href="sell.html" class="btn btn-outline-danger">Get estimate</a>
+              <a href="{{ route('frontend.sell.index') }}" class="btn btn-outline-danger">Get estimate</a>
             </div>
           </div>
           <div class="col-lg-4">
             <div class="service-panel h-100">
-              <img src="{{ asset('frontend/assets') }}/images/icons/apartment_icon.svg" alt="" class="service-icon">
+              <img src="{{ $serviceIcon('rent_property_icon', 'apartment_icon.svg') }}" alt="" class="service-icon">
               <h2>Rent Your Property</h2>
               <p>Promote vacant flats, family homes, and commercial spaces to verified renters across Bangladesh.</p>
-              <a href="rent.html" class="btn btn-outline-danger">List for rent</a>
+              <a href="{{ route('frontend.rent.index') }}" class="btn btn-outline-danger">List for rent</a>
             </div>
           </div>
         </div>
@@ -997,14 +1001,9 @@
             <a href="#">View Full List</a>
           </div>
           <div class="sitemap-links">
-            <a href="rent.html">Dhaka Apartments For Rent</a>
-            <a href="rent.html">Chattogram Apartments For Rent</a>
-            <a href="rent.html">Sylhet Apartments For Rent</a>
-            <a href="rent.html">Rajshahi Apartments For Rent</a>
-            <a href="rent.html">Khulna Apartments For Rent</a>
-            <a href="rent.html">Barishal Apartments For Rent</a>
-            <a href="rent.html">Rangpur Apartments For Rent</a>
-            <a href="rent.html">Mymensingh Apartments For Rent</a>
+            @foreach(['Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh'] as $rentCity)
+              <a href="{{ route('frontend.rent.index', ['q' => $rentCity]) }}">{{ $rentCity }} Apartments For Rent</a>
+            @endforeach
           </div>
         </div>
       </div>
