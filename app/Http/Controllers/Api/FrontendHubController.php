@@ -14,6 +14,11 @@ class FrontendHubController extends Controller
         return response()->json(['data' => $hubData->forSale($request)]);
     }
 
+    public function buySearch(Request $request, FrontendHubData $hubData): JsonResponse
+    {
+        return response()->json(['data' => $hubData->buySearch($request)]);
+    }
+
     public function rent(Request $request, FrontendHubData $hubData): JsonResponse
     {
         return response()->json(['data' => $hubData->rent($request)]);

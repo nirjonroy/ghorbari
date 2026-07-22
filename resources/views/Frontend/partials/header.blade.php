@@ -11,7 +11,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle {{ request()->routeIs('frontend.buy.*', 'frontend.open-houses.*', 'frontend.early-access.*', 'frontend.property.*') ? 'active' : '' }}" href="#" role="button" data-bs-toggle="dropdown">Buy</a>
             <ul class="dropdown-menu buy-directory-menu">
-              <li><a class="dropdown-item" href="{{ route('frontend.buy.index') }}">Homes for sale</a></li>
+              <li><a class="dropdown-item" href="{{ route('frontend.property.buy-search') }}">Homes for sale</a></li>
               <li><a class="dropdown-item" href="new-listings.html">New listings</a></li>
               <li><a class="dropdown-item" href="{{ route('frontend.open-houses.index') }}">Open houses</a></li>
               <li><a class="dropdown-item" href="{{ route('frontend.early-access.index') }}">Early access</a></li>

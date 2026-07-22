@@ -29,6 +29,21 @@ class FrontendHubData
         ]);
     }
 
+    public function buySearch(Request $request): array
+    {
+        return $this->propertyResults($request, [
+            'listing_types' => ['buy', 'sell'],
+            'route_name' => 'frontend.property.buy-search',
+            'api_route_name' => 'api.frontend.property.buy-search',
+            'title' => 'Buy Property Search | Land Site',
+            'heading_suffix' => 'Homes For Sale & Real Estate',
+            'default_status_label' => 'For Sale',
+            'empty_label' => 'No sale properties found',
+            'badge_label' => 'For Sale',
+            'default_search' => 'Dhaka',
+        ]);
+    }
+
     public function rent(Request $request): array
     {
         return $this->propertyResults($request, [

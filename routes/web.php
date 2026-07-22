@@ -51,6 +51,8 @@ Route::get('/for-rent/', [RentController::class, 'index'])->name('frontend.rent.
 Route::get('/sell/', [SellController::class, 'index'])->name('frontend.sell.index');
 Route::get('/open-houses/', [OpenHouseController::class, 'index'])->name('frontend.open-houses.index');
 Route::get('/early-access/', [EarlyAccessController::class, 'index'])->name('frontend.early-access.index');
+Route::get('/property/for-sale/', [PropertyDirectoryController::class, 'buySearch'])
+    ->name('frontend.property.buy-search');
 Route::get('/property/for-sale/residential/land-plot/{city}/', [PropertyDirectoryController::class, 'landSaleCity'])
     ->name('frontend.property.land-sale-city');
 Route::get('/property/{purpose}/{type}/{district}/{city}/{localArea}/', [PropertyDirectoryController::class, 'purposeTypeLocalArea'])

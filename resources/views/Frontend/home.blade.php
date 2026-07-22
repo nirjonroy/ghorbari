@@ -400,7 +400,7 @@
               <img src="{{ asset('frontend/assets') }}/images/icons/house_icon.svg" alt="" class="service-icon">
               <h2>Buy A Home</h2>
               <p>See accurate listing data, compare saved homes, and schedule tours with trusted agents.</p>
-              <a href="homes-for-sale.html" class="btn btn-outline-danger">Search homes</a>
+              <a href="{{ route('frontend.property.buy-search') }}" class="btn btn-outline-danger">Search homes</a>
             </div>
           </div>
           <div class="col-lg-4">
@@ -589,7 +589,7 @@
           </div>
         </div>
         <div class="text-center mt-4">
-          <a href="homes-for-sale.html" class="btn view-all-properties-btn">
+          <a href="{{ route('frontend.property.buy-search') }}" class="btn view-all-properties-btn">
             <span>View All Properties</span>
             <i class="bi bi-arrow-right"></i>
           </a>
@@ -903,15 +903,15 @@
       <div class="container text-center">
         <h2>Browse The <span>Newest</span> Homes Across Bangladesh</h2>
         <div class="newest-chip-list">
-          <a href="homes-for-sale.html"><i class="bi bi-geo-alt-fill"></i> Dhaka</a>
-          <a href="homes-for-sale.html"><i class="bi bi-geo-alt-fill"></i> Chattogram</a>
-          <a href="homes-for-sale.html"><i class="bi bi-geo-alt-fill"></i> Sylhet</a>
-          <a href="homes-for-sale.html"><i class="bi bi-geo-alt-fill"></i> Cox's Bazar</a>
-          <a href="homes-for-sale.html"><i class="bi bi-geo-alt-fill"></i> Rajshahi</a>
-          <a href="homes-for-sale.html"><i class="bi bi-geo-alt-fill"></i> Khulna</a>
-          <a href="homes-for-sale.html"><i class="bi bi-geo-alt-fill"></i> Barishal</a>
-          <a href="homes-for-sale.html"><i class="bi bi-geo-alt-fill"></i> Rangpur</a>
-          <a href="homes-for-sale.html"><i class="bi bi-geo-alt-fill"></i> Mymensingh</a>
+          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Dhaka</a>
+          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Chattogram</a>
+          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Sylhet</a>
+          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Cox's Bazar</a>
+          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Rajshahi</a>
+          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Khulna</a>
+          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Barishal</a>
+          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Rangpur</a>
+          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Mymensingh</a>
         </div>
       </div>
     </section>
@@ -924,21 +924,21 @@
             <a href="#">View Full List</a>
           </div>
           <div class="sitemap-links">
-            <a href="homes-for-sale.html">Dhaka Real Estate</a>
-            <a href="homes-for-sale.html">Chattogram Real Estate</a>
-            <a href="homes-for-sale.html">Sylhet Real Estate</a>
-            <a href="homes-for-sale.html">Cox's Bazar Real Estate</a>
-            <a href="homes-for-sale.html">Rajshahi Real Estate</a>
-            <a href="homes-for-sale.html">Khulna Real Estate</a>
-            <a href="homes-for-sale.html">Barishal Real Estate</a>
-            <a href="homes-for-sale.html">Rangpur Real Estate</a>
-            <a href="homes-for-sale.html">Mymensingh Real Estate</a>
-            <a href="homes-for-sale.html">Gazipur Real Estate</a>
-            <a href="homes-for-sale.html">Narayanganj Real Estate</a>
-            <a href="homes-for-sale.html">Cumilla Real Estate</a>
-            <a href="homes-for-sale.html">Bogura Real Estate</a>
-            <a href="homes-for-sale.html">Jashore Real Estate</a>
-            <a href="homes-for-sale.html">Savar Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Dhaka Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Chattogram Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Sylhet Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Cox's Bazar Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Rajshahi Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Khulna Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Barishal Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Rangpur Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Mymensingh Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Gazipur Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Narayanganj Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Cumilla Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Bogura Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Jashore Real Estate</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Savar Real Estate</a>
           </div>
         </div>
 
@@ -948,16 +948,16 @@
             <a href="#">View Full List</a>
           </div>
           <div class="sitemap-links">
-            <a href="homes-for-sale.html">Dhaka District Homes For Sale</a>
-            <a href="homes-for-sale.html">Chattogram District Homes For Sale</a>
-            <a href="homes-for-sale.html">Sylhet District Homes For Sale</a>
-            <a href="homes-for-sale.html">Gazipur District Homes For Sale</a>
-            <a href="homes-for-sale.html">Narayanganj District Homes For Sale</a>
-            <a href="homes-for-sale.html">Cumilla District Homes For Sale</a>
-            <a href="homes-for-sale.html">Khulna District Homes For Sale</a>
-            <a href="homes-for-sale.html">Rajshahi District Homes For Sale</a>
-            <a href="homes-for-sale.html">Barishal District Homes For Sale</a>
-            <a href="homes-for-sale.html">Rangpur District Homes For Sale</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Dhaka District Homes For Sale</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Chattogram District Homes For Sale</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Sylhet District Homes For Sale</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Gazipur District Homes For Sale</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Narayanganj District Homes For Sale</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Cumilla District Homes For Sale</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Khulna District Homes For Sale</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Rajshahi District Homes For Sale</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Barishal District Homes For Sale</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Rangpur District Homes For Sale</a>
           </div>
         </div>
 
@@ -967,14 +967,14 @@
             <a href="#">View Full List</a>
           </div>
           <div class="sitemap-links">
-            <a href="homes-for-sale.html">Dhaka Division Properties</a>
-            <a href="homes-for-sale.html">Chattogram Division Properties</a>
-            <a href="homes-for-sale.html">Sylhet Division Properties</a>
-            <a href="homes-for-sale.html">Rajshahi Division Properties</a>
-            <a href="homes-for-sale.html">Khulna Division Properties</a>
-            <a href="homes-for-sale.html">Barishal Division Properties</a>
-            <a href="homes-for-sale.html">Rangpur Division Properties</a>
-            <a href="homes-for-sale.html">Mymensingh Division Properties</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Dhaka Division Properties</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Chattogram Division Properties</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Sylhet Division Properties</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Rajshahi Division Properties</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Khulna Division Properties</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Barishal Division Properties</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Rangpur Division Properties</a>
+            <a href="{{ route('frontend.property.buy-search') }}">Mymensingh Division Properties</a>
           </div>
         </div>
 

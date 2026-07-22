@@ -28,6 +28,8 @@ Route::get('/for-rent', [FrontendHubController::class, 'rent'])->name('api.front
 Route::get('/sell', [FrontendHubController::class, 'sell'])->name('api.frontend.sell');
 Route::get('/open-houses', [FrontendHubController::class, 'openHouses'])->name('api.frontend.open-houses');
 Route::get('/early-access', [FrontendHubController::class, 'earlyAccess'])->name('api.frontend.early-access');
+Route::get('/property/for-sale', [FrontendHubController::class, 'buySearch'])
+    ->name('api.frontend.property.buy-search');
 Route::get('/property-details/{property}', [FrontendHubController::class, 'propertyDetail'])
     ->where('property', '.+-[0-9]+')
     ->name('api.frontend.property.show');
