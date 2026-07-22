@@ -8,11 +8,106 @@ use App\Models\Property;
 use App\Models\PropertyView;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class UserController extends Controller
 {
     public function dashboard(Request $request): View
+    {
+        return view('User.dashboard', [
+            'dashboardData' => $this->dashboardData($request),
+        ]);
+    }
+
+    public function profile(Request $request): View
+    {
+        return view('User.profile', [
+            'dashboardData' => $this->dashboardData($request),
+        ]);
+    }
+
+    public function edit(Request $request): View
+    {
+        return view('User.edit', [
+            'dashboardData' => $this->dashboardData($request),
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $user = $request->user();
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'account_type' => ['nullable', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'phone' => ['nullable', 'string', 'max:255'],
+            'alternative_phone' => ['nullable', 'string', 'max:255'],
+            'date_of_birth' => ['nullable', 'date'],
+            'gender' => ['nullable', 'string', 'max:255'],
+            'profession' => ['nullable', 'string', 'max:255'],
+            'home_name' => ['nullable', 'string', 'max:255'],
+            'home_type' => ['nullable', 'string', 'max:255'],
+            'present_address' => ['nullable', 'string'],
+            'permanent_address' => ['nullable', 'string'],
+            'area_name' => ['nullable', 'string', 'max:255'],
+            'post_office' => ['nullable', 'string', 'max:255'],
+            'postal_code' => ['nullable', 'string', 'max:255'],
+            'upazila' => ['nullable', 'string', 'max:255'],
+            'district' => ['nullable', 'string', 'max:255'],
+            'division' => ['nullable', 'string', 'max:255'],
+            'country' => ['nullable', 'string', 'max:255'],
+            'bio' => ['nullable', 'string'],
+            'nid_number' => ['nullable', 'string', 'max:255'],
+            'passport_number' => ['nullable', 'string', 'max:255'],
+            'ownership_document_type' => ['nullable', 'string', 'max:255'],
+            'emergency_contact_name' => ['nullable', 'string', 'max:255'],
+            'emergency_contact_phone' => ['nullable', 'string', 'max:255'],
+            'profile_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'nid_front_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'nid_back_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'passport_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'ownership_proof' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,pdf', 'max:5120'],
+            'home_elevation_images.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+        ]);
+
+        foreach ([
+            'profile_photo' => 'profile_photo_path',
+            'nid_front_image' => 'nid_front_image_path',
+            'nid_back_image' => 'nid_back_image_path',
+            'passport_image' => 'passport_image_path',
+            'ownership_proof' => 'ownership_proof_path',
+        ] as $input => $column) {
+            if ($request->hasFile($input)) {
+                $validated[$column] = $this->storeUserFile($request->file($input), $input);
+            }
+        }
+
+        if ($request->hasFile('home_elevation_images')) {
+            $existingImages = collect($user->home_elevation_image_paths ?? []);
+            $newImages = collect($request->file('home_elevation_images'))
+                ->map(fn ($file) => $this->storeUserFile($file, 'home_elevation'));
+
+            $validated['home_elevation_image_paths'] = $existingImages->merge($newImages)->values()->all();
+        }
+
+        unset(
+            $validated['profile_photo'],
+            $validated['nid_front_image'],
+            $validated['nid_back_image'],
+            $validated['passport_image'],
+            $validated['ownership_proof'],
+            $validated['home_elevation_images']
+        );
+
+        $user->update($validated);
+
+        return redirect()
+            ->route('dashboard')
+            ->with('status', 'Profile updated successfully.');
+    }
+
+    private function dashboardData(Request $request): array
     {
         $user = $request->user();
         $propertyIds = $this->tableExists(Property::class)
@@ -35,7 +130,7 @@ class UserController extends Controller
                 ->get()
             : collect();
 
-        $dashboardData = [
+        return [
             'user' => $user,
             'account_type' => $this->accountTypeLabel($user->account_type),
             'profile_completion' => $this->profileCompletion($user),
@@ -51,8 +146,6 @@ class UserController extends Controller
             'recent_properties' => $recentProperties,
             'recent_messages' => $this->recentMessages($user->id),
         ];
-
-        return view('User.dashboard', compact('dashboardData'));
     }
 
     private function propertyViewsCount($propertyIds): int
@@ -112,5 +205,19 @@ class UserController extends Controller
     private function tableExists(string $model): bool
     {
         return Schema::hasTable((new $model())->getTable());
+    }
+
+    private function storeUserFile($file, string $prefix): string
+    {
+        $directory = public_path('uploads/users');
+
+        if (! is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $filename = $prefix.'-'.auth()->id().'-'.time().'-'.uniqid().'.'.$file->getClientOriginalExtension();
+        $file->move($directory, $filename);
+
+        return 'uploads/users/'.$filename;
     }
 }

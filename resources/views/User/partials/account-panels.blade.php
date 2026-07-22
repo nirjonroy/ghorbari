@@ -4,7 +4,7 @@
       <i class="bi bi-file-earmark-check"></i>
       <h2>Documents</h2>
       <p>Upload NID, passport, ownership proof, and home elevation documents.</p>
-      <a href="{{ route('profile.edit') }}">Manage Documents</a>
+      <a href="{{ route('user.profile.edit') }}">Manage Documents</a>
     </section>
   </div>
   <div class="col-lg-4">
@@ -31,7 +31,7 @@
       <i class="bi bi-person-lines-fill"></i>
       <h2>Profile Details</h2>
       <p>Update your name, phone number, email, preferred areas, and owner profile information.</p>
-      <a href="{{ route('profile.edit') }}">Edit Profile Details</a>
+      <a href="{{ route('user.profile.edit') }}">Edit Profile Details</a>
     </section>
   </div>
   <div class="col-lg-6">
@@ -39,7 +39,7 @@
       <i class="bi bi-house-gear"></i>
       <h2>Home Info</h2>
       <p>Manage home name, type, area, post office, upazila, district, and division.</p>
-      <a href="{{ route('profile.edit') }}">Update Home Info</a>
+      <a href="{{ route('user.profile.edit') }}">Update Home Info</a>
     </section>
   </div>
   <div class="col-lg-6">
@@ -55,7 +55,7 @@
       <i class="bi bi-shield-lock"></i>
       <h2>Account Security</h2>
       <p>Review account information, emergency contact, and verification status.</p>
-      <a href="{{ route('profile.edit') }}">Manage Security</a>
+      <a href="{{ route('user.profile.edit') }}">Manage Security</a>
     </section>
   </div>
 </div>

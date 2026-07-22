@@ -88,9 +88,15 @@ Route::get('/property/{district}/{city}/', [PropertyDirectoryController::class, 
 Route::get('/property/{district}/', [PropertyDirectoryController::class, 'district'])
     ->name('frontend.property.district');
 
-Route::get('/dashboard', [FrontendUserController::class, 'dashboard'])
+Route::get('/dashboard', [FrontendUserController::class, 'profile'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
+Route::get('/dashboard/account/', [FrontendUserController::class, 'edit'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.profile.edit');
+Route::put('/dashboard/account/', [FrontendUserController::class, 'update'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.profile.update');
 Route::get('/user/dashboard', [FrontendUserController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('user.dashboard');
