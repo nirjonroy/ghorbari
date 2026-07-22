@@ -3,9 +3,11 @@
 use App\Http\Controllers\Api\AdminAuthController;
 use App\Http\Controllers\Api\AdminFeatureApiController;
 use App\Http\Controllers\Api\FrontendHubController;
+use App\Http\Controllers\Frontend\AboutController;
 use App\Http\Controllers\Frontend\AgentController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\CalculatorController;
+use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +33,8 @@ Route::get('/for-rent', [FrontendHubController::class, 'rent'])->name('api.front
 Route::get('/sell', [FrontendHubController::class, 'sell'])->name('api.frontend.sell');
 Route::get('/calculator', [CalculatorController::class, 'api'])->name('api.frontend.calculator');
 Route::get('/real-estate-agents', [AgentController::class, 'apiIndex'])->name('api.frontend.agents.index');
+Route::get('/about', [AboutController::class, 'api'])->name('api.frontend.about');
+Route::get('/contact', [ContactController::class, 'api'])->name('api.frontend.contact');
 Route::get('/open-houses', [FrontendHubController::class, 'openHouses'])->name('api.frontend.open-houses');
 Route::get('/early-access', [FrontendHubController::class, 'earlyAccess'])->name('api.frontend.early-access');
 Route::get('/blog', [BlogController::class, 'apiIndex'])->name('api.frontend.blog.index');

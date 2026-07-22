@@ -18,13 +18,13 @@
         </div>
         <div>
           <h2>Company</h2>
-          <a href="#">About Us</a>
+          <a href="{{ route('frontend.about.index') }}">About Us</a>
           <a href="{{ route('frontend.agents.index') }}">Agents</a>
           <a href="{{ route('frontend.blog.index') }}">Blog</a>
         </div>
         <div>
           <h2>Find Us</h2>
-          <a href="#">Contact</a>
+          <a href="{{ route('frontend.contact.index') }}">Contact</a>
           <a href="#">Help Center</a>
           <div class="footer-social">
             <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
