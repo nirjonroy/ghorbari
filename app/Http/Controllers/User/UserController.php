@@ -6,8 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use App\Models\Property;
 use App\Models\PropertyView;
+use App\Models\SubscriptionPackage;
+use App\Models\SubscriptionPayment;
+use App\Models\UserSubscription;
+use App\Services\SslCommerzService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -32,6 +38,118 @@ class UserController extends Controller
         return view('User.edit', [
             'dashboardData' => $this->dashboardData($request),
         ]);
+    }
+
+    public function subscriptions(Request $request): View
+    {
+        return view('User.subscriptions.index', [
+            'dashboardData' => $this->dashboardData($request),
+            'packages' => $this->tableExists(SubscriptionPackage::class)
+                ? SubscriptionPackage::query()->where('is_active', true)->orderBy('sort_order')->orderBy('price')->get()
+                : collect(),
+            'activeSubscription' => $this->activeSubscription($request->user()->id),
+            'payments' => $this->tableExists(SubscriptionPayment::class)
+                ? SubscriptionPayment::query()->where('user_id', $request->user()->id)->latest()->take(10)->get()
+                : collect(),
+        ]);
+    }
+
+    public function checkout(Request $request, SubscriptionPackage $package, SslCommerzService $sslCommerz): RedirectResponse
+    {
+        abort_unless($package->is_active, 404);
+
+        $user = $request->user();
+        $transactionId = 'SUB-'.$user->id.'-'.now()->format('YmdHis').'-'.Str::upper(Str::random(6));
+
+        $subscription = UserSubscription::create([
+            'user_id' => $user->id,
+            'subscription_package_id' => $package->id,
+            'package_name' => $package->name,
+            'price' => $package->price,
+            'currency' => $package->currency,
+            'duration_days' => $package->duration_days,
+            'property_limit' => $package->property_limit,
+            'featured_property_limit' => $package->featured_property_limit,
+            'status' => 'pending',
+        ]);
+
+        $payment = SubscriptionPayment::create([
+            'user_id' => $user->id,
+            'subscription_package_id' => $package->id,
+            'user_subscription_id' => $subscription->id,
+            'transaction_id' => $transactionId,
+            'amount' => $package->price,
+            'currency' => $package->currency,
+            'status' => 'pending',
+        ]);
+
+        try {
+            $gateway = $sslCommerz->initiate([
+                'total_amount' => $payment->amount,
+                'currency' => $payment->currency,
+                'tran_id' => $payment->transaction_id,
+                'success_url' => route('user.subscriptions.payment.success'),
+                'fail_url' => route('user.subscriptions.payment.fail'),
+                'cancel_url' => route('user.subscriptions.payment.cancel'),
+                'ipn_url' => route('user.subscriptions.payment.ipn'),
+                'cus_name' => $user->name,
+                'cus_email' => $user->email,
+                'cus_add1' => $user->present_address ?: 'Bangladesh',
+                'cus_city' => $user->district ?: 'Dhaka',
+                'cus_country' => $user->country ?: 'Bangladesh',
+                'cus_phone' => $user->phone ?: '01700000000',
+                'product_name' => $package->name,
+                'product_category' => 'Subscription',
+            ]);
+        } catch (\Throwable $exception) {
+            $payment->update([
+                'status' => 'failed',
+                'gateway_response' => ['error' => $exception->getMessage()],
+            ]);
+            $subscription->update(['status' => 'failed']);
+
+            return redirect()
+                ->route('user.subscriptions.index')
+                ->with('error', $exception->getMessage());
+        }
+
+        $payment->update(['gateway_response' => $gateway]);
+
+        return redirect()->away($gateway['GatewayPageURL']);
+    }
+
+    public function paymentSuccess(Request $request, SslCommerzService $sslCommerz): RedirectResponse
+    {
+        $paid = $this->markPayment($request, 'paid', $sslCommerz);
+
+        return redirect()
+            ->route('user.subscriptions.index')
+            ->with($paid ? 'status' : 'error', $paid ? 'Subscription payment completed successfully.' : 'Payment validation failed.');
+    }
+
+    public function paymentFail(Request $request): RedirectResponse
+    {
+        $this->markPayment($request, 'failed');
+
+        return redirect()
+            ->route('user.subscriptions.index')
+            ->with('error', 'Subscription payment failed.');
+    }
+
+    public function paymentCancel(Request $request): RedirectResponse
+    {
+        $this->markPayment($request, 'cancelled');
+
+        return redirect()
+            ->route('user.subscriptions.index')
+            ->with('error', 'Subscription payment was cancelled.');
+    }
+
+    public function paymentIpn(Request $request, SslCommerzService $sslCommerz)
+    {
+        $this->markPayment($request, in_array($request->input('status'), ['VALID', 'VALIDATED'], true) ? 'paid' : 'failed', $sslCommerz);
+
+        return response('OK');
     }
 
     public function update(Request $request)
@@ -145,6 +263,7 @@ class UserController extends Controller
             ],
             'recent_properties' => $recentProperties,
             'recent_messages' => $this->recentMessages($user->id),
+            'active_subscription' => $this->activeSubscription($user->id),
         ];
     }
 
@@ -205,6 +324,92 @@ class UserController extends Controller
     private function tableExists(string $model): bool
     {
         return Schema::hasTable((new $model())->getTable());
+    }
+
+    private function activeSubscription(int $userId): ?UserSubscription
+    {
+        if (! $this->tableExists(UserSubscription::class)) {
+            return null;
+        }
+
+        return UserSubscription::query()
+            ->where('user_id', $userId)
+            ->where('status', 'active')
+            ->where(function ($query) {
+                $query->whereNull('ends_at')->orWhere('ends_at', '>=', now());
+            })
+            ->latest('ends_at')
+            ->first();
+    }
+
+    private function markPayment(Request $request, string $status, ?SslCommerzService $sslCommerz = null): bool
+    {
+        $transactionId = $request->input('tran_id');
+
+        if (! $transactionId || ! $this->tableExists(SubscriptionPayment::class)) {
+            return false;
+        }
+
+        $payment = SubscriptionPayment::query()
+            ->where('transaction_id', $transactionId)
+            ->with('subscription')
+            ->first();
+
+        if (! $payment) {
+            return false;
+        }
+
+        $validation = null;
+
+        if ($status === 'paid') {
+            try {
+                $validation = $sslCommerz && $request->filled('val_id')
+                    ? $sslCommerz->validate($request->input('val_id'))
+                    : null;
+            } catch (\Throwable $exception) {
+                $validation = ['status' => 'FAILED', 'error' => $exception->getMessage()];
+            }
+
+            if (! in_array($validation['status'] ?? null, ['VALID', 'VALIDATED'], true)) {
+                $status = 'failed';
+            }
+        }
+
+        $payment->update([
+            'status' => $status,
+            'ssl_transaction_id' => $request->input('val_id') ?: $request->input('bank_tran_id'),
+            'payment_method' => $request->input('card_issuer') ?: $request->input('card_type'),
+            'gateway_response' => array_merge($payment->gateway_response ?? [], [
+                'callback' => $request->all(),
+                'validation' => $validation,
+            ]),
+            'paid_at' => $status === 'paid' ? now() : $payment->paid_at,
+        ]);
+
+        if (! $payment->subscription) {
+            return $status === 'paid';
+        }
+
+        if ($status === 'paid') {
+            $startsAt = now();
+            $payment->subscription->update([
+                'starts_at' => $startsAt,
+                'ends_at' => $startsAt->copy()->addDays($payment->subscription->duration_days),
+                'status' => 'active',
+            ]);
+
+            UserSubscription::query()
+                ->where('user_id', $payment->user_id)
+                ->where('id', '!=', $payment->subscription->id)
+                ->where('status', 'active')
+                ->update(['status' => 'expired']);
+
+            return true;
+        }
+
+        $payment->subscription->update(['status' => $status]);
+
+        return false;
     }
 
     private function storeUserFile($file, string $prefix): string

@@ -30,4 +30,14 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'sslcommerz' => [
+        'store_id' => env('SSLCZ_STORE_ID'),
+        'store_password' => env('SSLCZ_STORE_PASSWORD'),
+        'testmode' => env('SSLCZ_TESTMODE', true),
+        'sandbox_url' => 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php',
+        'live_url' => 'https://securepay.sslcommerz.com/gwprocess/v4/api.php',
+        'sandbox_validation_url' => 'https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php',
+        'live_validation_url' => 'https://securepay.sslcommerz.com/validator/api/validationserverAPI.php',
+    ],
+
 ];

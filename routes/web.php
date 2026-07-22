@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\PropertyTypeController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\SubscriptionPackageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Frontend\BuyController;
 use App\Http\Controllers\Frontend\BlogController;
@@ -97,6 +98,20 @@ Route::get('/dashboard/account/', [FrontendUserController::class, 'edit'])
 Route::put('/dashboard/account/', [FrontendUserController::class, 'update'])
     ->middleware(['auth', 'verified'])
     ->name('user.profile.update');
+Route::get('/dashboard/subscription/', [FrontendUserController::class, 'subscriptions'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.subscriptions.index');
+Route::post('/dashboard/subscription/{package}/checkout/', [FrontendUserController::class, 'checkout'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.subscriptions.checkout');
+Route::post('/dashboard/subscription/payment/success/', [FrontendUserController::class, 'paymentSuccess'])
+    ->name('user.subscriptions.payment.success');
+Route::post('/dashboard/subscription/payment/fail/', [FrontendUserController::class, 'paymentFail'])
+    ->name('user.subscriptions.payment.fail');
+Route::post('/dashboard/subscription/payment/cancel/', [FrontendUserController::class, 'paymentCancel'])
+    ->name('user.subscriptions.payment.cancel');
+Route::post('/dashboard/subscription/payment/ipn/', [FrontendUserController::class, 'paymentIpn'])
+    ->name('user.subscriptions.payment.ipn');
 Route::get('/user/dashboard', [FrontendUserController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('user.dashboard');
@@ -127,6 +142,11 @@ Route::resource('/admin/sliders', SliderController::class)
     ->except('show')
     ->middleware(['auth:admin', 'permission:manage sliders,admin'])
     ->names('admin.sliders');
+
+Route::resource('/admin/subscription-packages', SubscriptionPackageController::class)
+    ->except('show')
+    ->middleware(['auth:admin', 'permission:manage subscriptions,admin'])
+    ->names('admin.subscription-packages');
 
 Route::resource('/admin/contacts', ContactMessageController::class)
     ->only(['index', 'edit', 'update', 'destroy'])

@@ -19,6 +19,7 @@ class AdminRolePermissionSeeder extends Seeder
             'manage site info',
             'manage about',
             'manage sliders',
+            'manage subscriptions',
             'manage contacts',
             'manage users',
             'manage agencies',

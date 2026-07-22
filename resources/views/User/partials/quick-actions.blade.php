@@ -3,8 +3,8 @@
     <section class="dashboard-card action-card" id="subscription">
       <i class="bi bi-gem"></i>
       <h2>Subscription</h2>
-      <p>Your property workspace is active. Subscription details can be connected here.</p>
-      <a class="btn btn-outline-dark" href="#payments">Manage Plan</a>
+      <p>{{ $dashboardData['active_subscription'] ? 'Your '.$dashboardData['active_subscription']->package_name.' plan is active.' : 'Choose a plan to unlock property workspace features.' }}</p>
+      <a class="btn btn-outline-dark" href="{{ route('user.subscriptions.index') }}">Manage Plan</a>
     </section>
   </div>
   <div class="col-lg-4">

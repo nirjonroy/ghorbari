@@ -50,6 +50,13 @@
               </li>
 
               <li class="nav-item">
+                <a href="{{ route('admin.subscription-packages.index') }}" class="nav-link {{ request()->routeIs('admin.subscription-packages.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-gem"></i>
+                  <p>Subscriptions</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
                 <a href="{{ route('admin.contacts.index') }}" class="nav-link {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-envelope-fill"></i>
                   <p>Contacts</p>
