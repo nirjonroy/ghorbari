@@ -152,8 +152,7 @@
               <div class="result-price-row">
                 <h2>{{ $propertyPrice($property) }}</h2>
                 <div>
-                  <button type="button" aria-label="Share"><i class="bi bi-share"></i></button>
-                  <button type="button" aria-label="Save"><i class="bi bi-heart"></i></button>
+                  @include('Frontend.partials.property-action-buttons', ['property' => $property])
                 </div>
               </div>
               <p class="result-facts">

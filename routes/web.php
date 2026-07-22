@@ -28,6 +28,7 @@ use App\Http\Controllers\Frontend\AgentController;
 use App\Http\Controllers\Frontend\BuyController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\EarlyAccessController;
+use App\Http\Controllers\Frontend\FavoriteController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\OpenHouseController;
 use App\Http\Controllers\Frontend\PropertyDirectoryController;
@@ -92,6 +93,9 @@ Route::get('/property/{district}/{city}/', [PropertyDirectoryController::class, 
     ->name('frontend.property.city');
 Route::get('/property/{district}/', [PropertyDirectoryController::class, 'district'])
     ->name('frontend.property.district');
+Route::post('/favorites/{property}/toggle', [FavoriteController::class, 'toggle'])
+    ->middleware(['auth', 'verified'])
+    ->name('frontend.favorites.toggle');
 
 Route::get('/dashboard', [FrontendUserController::class, 'profile'])
     ->middleware(['auth', 'verified'])

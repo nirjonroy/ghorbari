@@ -695,6 +695,21 @@ html[data-theme="dark"] .theme-toggle:focus {
   background: #f7f7f7;
 }
 
+.js-favorite-property.is-favorite,
+.js-favorite-property.is-favorite:hover,
+.favorite-btn.is-favorite,
+.favorite-btn.is-favorite:hover {
+  color: #ffffff;
+  background: var(--brand);
+  border-color: var(--brand);
+}
+
+.property-actions .js-favorite-property.is-favorite,
+.result-price-row .js-favorite-property.is-favorite {
+  color: var(--brand);
+  background: #fff1f3;
+}
+
 .journey-section {
   position: relative;
   padding: 84px 0;

@@ -532,3 +532,92 @@ document.addEventListener("DOMContentLoaded", function () {
     panel.style.removeProperty("--active-search-height");
   });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  var csrfToken = document.querySelector('meta[name="csrf-token"]');
+  var token = csrfToken ? csrfToken.getAttribute("content") : "";
+
+  document.querySelectorAll(".js-share-property").forEach(function (button) {
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var shareUrl = button.getAttribute("data-share-url") || window.location.href;
+      var shareTitle = button.getAttribute("data-share-title") || document.title;
+
+      if (navigator.share) {
+        navigator.share({ title: shareTitle, url: shareUrl }).catch(function () {});
+        return;
+      }
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareUrl).then(function () {
+          var originalLabel = button.getAttribute("aria-label") || "Share";
+          button.setAttribute("aria-label", "Link copied");
+          button.classList.add("is-shared");
+          setTimeout(function () {
+            button.setAttribute("aria-label", originalLabel);
+            button.classList.remove("is-shared");
+          }, 1600);
+        });
+      }
+    });
+  });
+
+  document.querySelectorAll(".js-favorite-property").forEach(function (button) {
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var favoriteUrl = button.getAttribute("data-favorite-url");
+      var loginUrl = button.getAttribute("data-login-url");
+
+      if (!favoriteUrl || button.disabled) {
+        return;
+      }
+
+      button.disabled = true;
+
+      fetch(favoriteUrl, {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "X-CSRF-TOKEN": token
+        }
+      })
+        .then(function (response) {
+          if (response.status === 401 || response.status === 419) {
+            window.location.href = loginUrl || "/login";
+            return null;
+          }
+
+          return response.json();
+        })
+        .then(function (data) {
+          if (!data) {
+            return;
+          }
+
+          var active = !!data.favorited;
+          var icon = button.querySelector("i");
+          var label = button.querySelector("span");
+
+          button.classList.toggle("is-favorite", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+          button.setAttribute("aria-label", active ? "Remove from favorites" : "Save listing");
+
+          if (icon) {
+            icon.classList.toggle("bi-heart", !active);
+            icon.classList.toggle("bi-heart-fill", active);
+          }
+
+          if (label) {
+            label.textContent = active ? "Saved" : "Save";
+          }
+        })
+        .finally(function () {
+          button.disabled = false;
+        });
+    });
+  });
+});

@@ -62,9 +62,9 @@
         <a href="#payment">Payment</a>
         <a href="#contactAgent">Contact</a>
         <span class="detail-subnav-actions">
-          <button type="button"><i class="bi bi-heart"></i> Favorite</button>
+          @include('Frontend.partials.property-action-buttons', ['property' => $property, 'labels' => true, 'only' => 'favorite'])
           <button type="button"><i class="bi bi-eye-slash"></i> Hide</button>
-          <button type="button"><i class="bi bi-share"></i> Share</button>
+          @include('Frontend.partials.property-action-buttons', ['property' => $property, 'labels' => true, 'only' => 'share'])
         </span>
       </div>
     </nav>
@@ -116,8 +116,7 @@
                 </div>
               </div>
               <div class="detail-actions">
-                <button class="btn btn-outline-dark"><i class="bi bi-share"></i> Share</button>
-                <button class="btn btn-outline-dark"><i class="bi bi-heart"></i> Save</button>
+                @include('Frontend.partials.property-action-buttons', ['property' => $property, 'labels' => true, 'shareClass' => 'btn btn-outline-dark', 'favoriteClass' => 'btn btn-outline-dark'])
               </div>
             </article>
 
@@ -297,8 +296,7 @@
             </nav>
           </div>
           <div class="photo-modal-actions">
-            <button type="button"><i class="bi bi-heart"></i> Favorite</button>
-            <button type="button"><i class="bi bi-share"></i> Share</button>
+            @include('Frontend.partials.property-action-buttons', ['property' => $property, 'labels' => true])
           </div>
         </div>
         <div class="photo-modal-body">

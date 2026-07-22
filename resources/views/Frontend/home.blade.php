@@ -232,15 +232,14 @@
                     </button>
                     <span class="badge bg-dark">Early access</span>
                     <span class="photo-count">1/{{ $images->count() }}</span>
-                    <button class="favorite-btn" aria-label="Save listing"><i class="bi bi-heart"></i></button>
+                    @include('Frontend.partials.property-action-buttons', ['property' => $property, 'favoriteClass' => 'favorite-btn', 'only' => 'favorite'])
                   </div>
                 </div>
                 <div class="property-body">
                   <div class="d-flex justify-content-between align-items-start gap-3">
                     <span class="property-price">{{ $price }}</span>
                     <div class="property-actions">
-                      <button aria-label="Share listing"><i class="bi bi-share"></i></button>
-                      <button aria-label="Save listing"><i class="bi bi-heart"></i></button>
+                      @include('Frontend.partials.property-action-buttons', ['property' => $property])
                     </div>
                   </div>
                   <p class="property-meta">{{ $meta ?: optional($property->type)->name ?? ucfirst($property->listing_type) }}</p>
