@@ -42,6 +42,7 @@ class Property extends Model
         'is_open_house',
         'is_published',
         'published_at',
+        'expires_at',
     ];
 
     protected $casts = [
@@ -53,6 +54,7 @@ class Property extends Model
         'is_open_house' => 'boolean',
         'is_published' => 'boolean',
         'published_at' => 'datetime',
+        'expires_at' => 'datetime',
     ];
 
     public function owner()

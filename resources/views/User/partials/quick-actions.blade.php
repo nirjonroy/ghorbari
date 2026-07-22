@@ -12,7 +12,7 @@
       <i class="bi bi-plus-circle"></i>
       <h2>Add New Property</h2>
       <p>Create a new listing with price, images, location, and availability.</p>
-      <a class="btn btn-success" href="#">Add Property</a>
+      <a class="btn btn-success" href="{{ route('user.properties.create') }}">Add Property</a>
     </section>
   </div>
   <div class="col-lg-4">

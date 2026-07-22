@@ -33,7 +33,9 @@ use App\Http\Controllers\Frontend\PropertyDirectoryController;
 use App\Http\Controllers\Frontend\RentController;
 use App\Http\Controllers\Frontend\SellController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\User\PropertyController as UserPropertyController;
 use App\Http\Controllers\User\UserController as FrontendUserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -112,6 +114,27 @@ Route::post('/dashboard/subscription/payment/cancel/', [FrontendUserController::
     ->name('user.subscriptions.payment.cancel');
 Route::post('/dashboard/subscription/payment/ipn/', [FrontendUserController::class, 'paymentIpn'])
     ->name('user.subscriptions.payment.ipn');
+Route::get('/dashboard/properties/add-property', [UserPropertyController::class, 'create'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.properties.create');
+Route::post('/dashboard/properties/add-property', [UserPropertyController::class, 'store'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.properties.store');
+Route::get('/dashboard/properties/', [UserPropertyController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.properties.index');
+Route::get('/dashboard/properties/active-properties', fn (Request $request, UserPropertyController $controller) => $controller->index($request, 'active'))
+    ->middleware(['auth', 'verified'])
+    ->name('user.properties.active');
+Route::get('/dashboard/properties/pending-properties', fn (Request $request, UserPropertyController $controller) => $controller->index($request, 'pending'))
+    ->middleware(['auth', 'verified'])
+    ->name('user.properties.pending');
+Route::get('/dashboard/properties/rejected-properties', fn (Request $request, UserPropertyController $controller) => $controller->index($request, 'rejected'))
+    ->middleware(['auth', 'verified'])
+    ->name('user.properties.rejected');
+Route::get('/dashboard/properties/expired-properties', fn (Request $request, UserPropertyController $controller) => $controller->index($request, 'expired'))
+    ->middleware(['auth', 'verified'])
+    ->name('user.properties.expired');
 Route::get('/user/dashboard', [FrontendUserController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('user.dashboard');

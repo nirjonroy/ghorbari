@@ -6,7 +6,7 @@
           <h2>My Property</h2>
           <p>Properties you listed from this account.</p>
         </div>
-        <a href="#my-property">View All</a>
+        <a href="{{ route('user.properties.index') }}">View All</a>
       </div>
       <div class="saved-property-list">
         @forelse($dashboardData['recent_properties'] as $property)
@@ -23,7 +23,7 @@
               <p>{{ optional($property->type)->name ?? ucwords($property->listing_type) }}</p>
               <span>{{ $price }}</span>
             </div>
-            <a href="#" aria-label="View property"><i class="bi bi-arrow-right"></i></a>
+            <a href="{{ $property->is_published ? $property->detailUrl() : route('user.properties.index') }}" aria-label="View property"><i class="bi bi-arrow-right"></i></a>
           </article>
         @empty
           <article class="saved-property">
@@ -33,7 +33,7 @@
               <p>Add your first property to start managing it here.</p>
               <span>Ready to publish</span>
             </div>
-            <a href="#add-property" aria-label="Add property"><i class="bi bi-plus"></i></a>
+            <a href="{{ route('user.properties.create') }}" aria-label="Add property"><i class="bi bi-plus"></i></a>
           </article>
         @endforelse
       </div>
@@ -46,7 +46,7 @@
         <div class="completion-ring">{{ $profileCompletion }}%</div>
         <h2>Profile Completion</h2>
         <p>Add phone, NID, address, and profile photo to improve account verification.</p>
-        <a class="btn btn-dark w-100" href="{{ route('profile.edit') }}">Update Profile</a>
+        <a class="btn btn-dark w-100" href="{{ route('user.profile.edit') }}">Update Profile</a>
       </div>
     </section>
   </div>
