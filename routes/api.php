@@ -28,6 +28,9 @@ Route::get('/for-rent', [FrontendHubController::class, 'rent'])->name('api.front
 Route::get('/sell', [FrontendHubController::class, 'sell'])->name('api.frontend.sell');
 Route::get('/open-houses', [FrontendHubController::class, 'openHouses'])->name('api.frontend.open-houses');
 Route::get('/early-access', [FrontendHubController::class, 'earlyAccess'])->name('api.frontend.early-access');
+Route::get('/property-details/{property}', [FrontendHubController::class, 'propertyDetail'])
+    ->where('property', '.+-[0-9]+')
+    ->name('api.frontend.property.show');
 Route::get('/property/{purpose}/{type}/{district}/{city}/{localArea}', [FrontendHubController::class, 'purposeTypeLocalArea'])
     ->where('purpose', 'for-sale|for-rent|sell')
     ->where('type', '(?!residential$|commercial$|land$|industrial$)[A-Za-z0-9-]+')

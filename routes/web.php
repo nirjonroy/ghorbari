@@ -71,6 +71,9 @@ Route::get('/property/{purpose}/{category}/', [PropertyDirectoryController::clas
     ->where('purpose', 'for-sale|for-rent|sell')
     ->where('category', 'residential|commercial|land|industrial')
     ->name('frontend.property.category');
+Route::get('/property/{property}/', [PropertyDirectoryController::class, 'show'])
+    ->where('property', '.+-[0-9]+')
+    ->name('frontend.property.show');
 Route::get('/property/{district}/{city}/{localArea}/', [PropertyDirectoryController::class, 'localArea'])
     ->name('frontend.property.local-area');
 Route::get('/property/{district}/{city}/', [PropertyDirectoryController::class, 'city'])

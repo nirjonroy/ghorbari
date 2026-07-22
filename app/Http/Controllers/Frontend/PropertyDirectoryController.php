@@ -9,6 +9,11 @@ use Illuminate\View\View;
 
 class PropertyDirectoryController extends Controller
 {
+    public function show(Request $request, FrontendHubData $hubData, string $property): View
+    {
+        return view('Frontend.properties.show', $hubData->propertyDetail($request, $property));
+    }
+
     public function district(Request $request, FrontendHubData $hubData, string $district): View
     {
         return view('Frontend.buy.index', $hubData->districtPage($request, $district));

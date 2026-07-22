@@ -110,6 +110,9 @@ class HomeController extends Controller
                 'property_type_id',
                 'agent_profile_id',
                 'agency_id',
+                'district_id',
+                'city_id',
+                'area_id',
                 'title',
                 'slug',
                 'listing_type',
@@ -131,6 +134,9 @@ class HomeController extends Controller
             ->where('is_published', true)
             ->with([
                 'type:id,name,slug,icon',
+                'district:id,name,slug',
+                'city:id,name,slug,district_id',
+                'area:id,name,slug,city_id,district_id',
                 'media:id,property_id,media_type,space_name,file_path,alt_text,is_primary,sort_order',
                 'agent.user:id,name,email,phone,profile_photo_path',
                 'agency:id,name,slug,logo',

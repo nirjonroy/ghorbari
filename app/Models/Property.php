@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Property extends Model
 {
@@ -107,5 +108,21 @@ class Property extends Model
     public function views()
     {
         return $this->hasMany(PropertyView::class);
+    }
+
+    public function detailSlug(): string
+    {
+        return collect([
+            $this->slug ?: Str::slug($this->title),
+            optional($this->area)->slug,
+            optional($this->city)->slug,
+            optional($this->district)->slug,
+            $this->id,
+        ])->filter()->unique()->join('-');
+    }
+
+    public function detailUrl(): string
+    {
+        return route('frontend.property.show', ['property' => $this->detailSlug()]);
     }
 }

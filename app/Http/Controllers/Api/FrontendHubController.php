@@ -34,6 +34,11 @@ class FrontendHubController extends Controller
         return response()->json(['data' => $hubData->earlyAccess($request)]);
     }
 
+    public function propertyDetail(Request $request, FrontendHubData $hubData, string $property): JsonResponse
+    {
+        return response()->json(['data' => $hubData->propertyDetail($request, $property)]);
+    }
+
     public function district(Request $request, FrontendHubData $hubData, string $district): JsonResponse
     {
         return response()->json(['data' => $hubData->districtPage($request, $district)]);

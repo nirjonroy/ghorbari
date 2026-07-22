@@ -197,7 +197,7 @@
                   ])->filter()->join(' | ');
               @endphp
               <div class="property-card" role="link" tabindex="0" aria-label="View {{ $property->title }} details">
-                <a href="#" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
+                <a href="{{ $property->detailUrl() }}" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
                 <div class="property-media">
                   <div id="{{ $galleryId }}" class="carousel slide listing-gallery" data-bs-touch="false">
                     <div class="carousel-inner">
@@ -478,7 +478,7 @@
                 @foreach($rentProperties as $property)
                   <div class="col-md-6 col-xl-4">
                     <div class="listing-card">
-                      <a href="#" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
+                      <a href="{{ $property->detailUrl() }}" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
                       <img src="{{ $propertyImage($property, 'property_img_1.jpg') }}" alt="{{ $property->title }}">
                       <div class="listing-card-body">
                         <h3>{{ $property->title }}</h3>
@@ -536,7 +536,7 @@
                 @foreach($saleProperties as $property)
                   <div class="col-md-6 col-xl-4">
                     <div class="listing-card">
-                      <a href="#" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
+                      <a href="{{ $property->detailUrl() }}" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
                       <img src="{{ $propertyImage($property, 'single_property_1.jpg') }}" alt="{{ $property->title }}">
                       <div class="listing-card-body">
                         <h3>{{ $property->title }}</h3>
@@ -614,7 +614,7 @@
           @if($featuredProperties->isNotEmpty())
             @foreach($featuredProperties as $property)
               <div class="featured-card">
-                <a href="#" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
+                <a href="{{ $property->detailUrl() }}" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
                 <div class="featured-media">
                   <img src="{{ $propertyImage($property, 'card_img_23.jpg') }}" alt="{{ $property->title }}">
                   <span class="featured-badge">Featured</span>

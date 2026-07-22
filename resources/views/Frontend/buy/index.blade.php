@@ -136,7 +136,7 @@
             $fallbackImage = $loop->iteration % 4 === 0 ? 'card_img_12.jpg' : ($loop->iteration % 3 === 0 ? 'card_img_21.jpg' : ($loop->iteration % 2 === 0 ? 'card_img_23.jpg' : 'card_img_1.jpg'));
           @endphp
           <article class="result-card">
-            <a href="property-details.html" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
+            <a href="{{ $property->detailUrl() }}" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
             <div class="result-media">
               <img src="{{ $propertyImage($property, $fallbackImage) }}" alt="{{ $property->title }}">
               <span>{{ $badgeText($property) }}</span>

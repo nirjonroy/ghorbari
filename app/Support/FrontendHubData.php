@@ -7,6 +7,7 @@ use App\Models\Area;
 use App\Models\City;
 use App\Models\District;
 use App\Models\Property;
+use App\Models\PropertyView;
 use App\Models\PropertyType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
@@ -291,6 +292,40 @@ class FrontendHubData
         ]);
     }
 
+    public function propertyDetail(Request $request, string $propertySlug): array
+    {
+        $property = $this->findPublishedProperty($propertySlug);
+
+        abort_if(! $property, 404);
+
+        if ($this->tableExists(PropertyView::class)) {
+            $property->views()->create([
+                'user_id' => $request->user()?->id,
+                'ip_address' => $request->ip(),
+                'device' => (string) str($request->userAgent() ?: '')->limit(150, ''),
+                'viewed_at' => now(),
+            ]);
+        }
+
+        $related = $this->publishedProperties()
+            ->whereKeyNot($property->id)
+            ->where(function ($query) use ($property) {
+                $query->where('property_type_id', $property->property_type_id)
+                    ->orWhere('district_id', $property->district_id);
+            })
+            ->take(3)
+            ->get();
+
+        return [
+            'property' => $property,
+            'relatedProperties' => $related,
+            'page' => [
+                'title' => $property->title.' | Land Site',
+                'api_url' => route('api.frontend.property.show', ['property' => $property->detailSlug()]),
+            ],
+        ];
+    }
+
     private function propertyResults(Request $request, array $page): array
     {
         $propertyTypes = $this->propertyTypes();
@@ -428,6 +463,31 @@ class FrontendHubData
                 'area:id,name,slug,city_id,district_id',
                 'media:id,property_id,media_type,file_path,alt_text,is_primary,sort_order',
             ]);
+    }
+
+    private function findPublishedProperty(string $propertySlug): ?Property
+    {
+        preg_match('/-(\d+)$/', $propertySlug, $matches);
+        $propertyId = isset($matches[1]) ? (int) $matches[1] : null;
+        $plainSlug = $propertyId
+            ? (string) str($propertySlug)->replaceLast('-'.$propertyId, '')
+            : $propertySlug;
+
+        return Property::query()
+            ->where('is_published', true)
+            ->when($propertyId, fn ($query) => $query->whereKey($propertyId), fn ($query) => $query->where('slug', $plainSlug))
+            ->with([
+                'type:id,name,slug,icon',
+                'district:id,name,slug',
+                'city:id,name,slug,district_id',
+                'area:id,name,slug,city_id,district_id,post_office,postal_code',
+                'media:id,property_id,media_type,space_name,file_path,alt_text,is_primary,sort_order',
+                'amenities:id,name,slug,icon',
+                'agent.user:id,name,email,phone,profile_photo_path',
+                'agency:id,name,slug,email,phone,logo,website,description',
+                'views:id,property_id,viewed_at',
+            ])
+            ->first();
     }
 
     private function propertyTypes()
