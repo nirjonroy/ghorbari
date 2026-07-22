@@ -15,7 +15,7 @@
           <h2>Company</h2>
           <a href="#">About Us</a>
           <a href="agents.html">Agents</a>
-          <a href="#">Blog</a>
+          <a href="{{ route('frontend.blog.index') }}">Blog</a>
         </div>
         <div>
           <h2>Find Us</h2>

@@ -17,6 +17,7 @@
     $featuredProperties = collect($homeData['featured_properties'] ?? []);
     $rentProperties = collect($homeData['rent_properties'] ?? []);
     $saleProperties = collect($homeData['sale_properties'] ?? []);
+    $blogPosts = collect($homeData['blog_posts'] ?? []);
     $propertyImage = function ($property, $fallback = 'property_img_1.jpg') {
         $media = $property->media->firstWhere('is_primary', true) ?: $property->media->first();
 
@@ -42,6 +43,9 @@
         ])->filter()->join(' | ');
     };
     $propertyLocation = fn ($property) => $property->description ?: (optional($property->type)->name ?? 'Bangladesh property');
+    $blogImage = fn ($blog, $fallback = 'post_img_1.jpg') => $blog?->featured_image_path
+        ? asset($blog->featured_image_path)
+        : asset('frontend/assets/images/'.$fallback);
 @endphp
 <main>
     <section id="heroCarousel" class="hero-section carousel slide carousel-fade" data-bs-ride="carousel">
@@ -781,49 +785,45 @@
             <h2 class="section-title">Latest Real Estate Articles</h2>
             <p class="text-secondary mb-0">Fresh blogs, market guides, buying tips, and Bangladesh real estate updates.</p>
           </div>
-          <a href="blog-details.html" class="btn btn-outline-dark">All Articles</a>
+          <a href="{{ route('frontend.blog.index') }}" class="btn btn-outline-dark">All Articles</a>
         </div>
 
         <div class="row g-4">
-          <div class="col-md-6 col-xl-4">
-            <div class="blog-card">
-              <a href="blog-details.html" class="blog-image-link" aria-label="Read Dhaka Apartment Prices: What Buyers Should Watch This Year">
-                <img src="{{ asset('frontend/assets') }}/images/post_img_1.jpg" alt="Dhaka apartment market">
-              </a>
-              <div class="blog-body">
-                <span>Market update</span>
-                <h3><a href="blog-details.html">Dhaka Apartment Prices: What Buyers Should Watch This Year</a></h3>
-                <p>Understand demand, location premiums, and practical signals before you make an offer.</p>
-                <a href="blog-details.html">Read Article <i class="bi bi-arrow-right"></i></a>
+          @forelse($blogPosts as $blog)
+            <div class="col-md-6 col-xl-4">
+              <div class="blog-card">
+                <a href="{{ route('frontend.blog.show', ['slug' => $blog->slug]) }}" class="blog-image-link" aria-label="Read {{ $blog->title }}">
+                  <img src="{{ $blogImage($blog, 'post_img_'.(($loop->iteration % 3) + 1).'.jpg') }}" alt="{{ $blog->title }}">
+                </a>
+                <div class="blog-body">
+                  <span>{{ optional($blog->category)->name ?: 'Real Estate' }}</span>
+                  <h3><a href="{{ route('frontend.blog.show', ['slug' => $blog->slug]) }}">{{ $blog->title }}</a></h3>
+                  <p>{{ $blog->excerpt ?: str($blog->title)->limit(120) }}</p>
+                  <a href="{{ route('frontend.blog.show', ['slug' => $blog->slug]) }}">Read Article <i class="bi bi-arrow-right"></i></a>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-6 col-xl-4">
-            <div class="blog-card">
-              <a href="blog-details.html" class="blog-image-link" aria-label="Read How To Plan Your Home Loan Budget In BDT">
-                <img src="{{ asset('frontend/assets') }}/images/post_img_2.jpg" alt="Home loan planning">
-              </a>
-              <div class="blog-body">
-                <span>Finance</span>
-                <h3><a href="blog-details.html">How To Plan Your Home Loan Budget In BDT</a></h3>
-                <p>Compare down payment, monthly costs, fees, and safety margins before shortlisting homes.</p>
-                <a href="blog-details.html">Read Article <i class="bi bi-arrow-right"></i></a>
+          @empty
+            @foreach([
+                ['image' => 'post_img_1.jpg', 'tag' => 'Market update', 'title' => 'Dhaka Apartment Prices: What Buyers Should Watch This Year', 'text' => 'Understand demand, location premiums, and practical signals before you make an offer.'],
+                ['image' => 'post_img_2.jpg', 'tag' => 'Finance', 'title' => 'How To Plan Your Home Loan Budget In BDT', 'text' => 'Compare down payment, monthly costs, fees, and safety margins before shortlisting homes.'],
+                ['image' => 'post_img_3.jpg', 'tag' => 'Buying guide', 'title' => 'Documents To Verify Before Buying Property In Bangladesh', 'text' => 'A simple checklist for ownership, mutation, utility connections, and handover readiness.'],
+            ] as $blog)
+              <div class="col-md-6 col-xl-4">
+                <div class="blog-card">
+                  <a href="{{ route('frontend.blog.index') }}" class="blog-image-link" aria-label="Read {{ $blog['title'] }}">
+                    <img src="{{ asset('frontend/assets/images/'.$blog['image']) }}" alt="{{ $blog['title'] }}">
+                  </a>
+                  <div class="blog-body">
+                    <span>{{ $blog['tag'] }}</span>
+                    <h3><a href="{{ route('frontend.blog.index') }}">{{ $blog['title'] }}</a></h3>
+                    <p>{{ $blog['text'] }}</p>
+                    <a href="{{ route('frontend.blog.index') }}">Read Article <i class="bi bi-arrow-right"></i></a>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-xl-4">
-            <div class="blog-card">
-              <a href="blog-details.html" class="blog-image-link" aria-label="Read Documents To Verify Before Buying Property In Bangladesh">
-                <img src="{{ asset('frontend/assets') }}/images/post_img_3.jpg" alt="Property document checklist">
-              </a>
-              <div class="blog-body">
-                <span>Buying guide</span>
-                <h3><a href="blog-details.html">Documents To Verify Before Buying Property In Bangladesh</a></h3>
-                <p>A simple checklist for ownership, mutation, utility connections, and handover readiness.</p>
-                <a href="blog-details.html">Read Article <i class="bi bi-arrow-right"></i></a>
-              </div>
-            </div>
-          </div>
+            @endforeach
+          @endforelse
         </div>
       </div>
     </section>

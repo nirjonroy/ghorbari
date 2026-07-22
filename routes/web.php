@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Frontend\BuyController;
+use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\EarlyAccessController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\OpenHouseController;
@@ -51,6 +52,8 @@ Route::get('/for-rent/', [RentController::class, 'index'])->name('frontend.rent.
 Route::get('/sell/', [SellController::class, 'index'])->name('frontend.sell.index');
 Route::get('/open-houses/', [OpenHouseController::class, 'index'])->name('frontend.open-houses.index');
 Route::get('/early-access/', [EarlyAccessController::class, 'index'])->name('frontend.early-access.index');
+Route::get('/blog/', [BlogController::class, 'index'])->name('frontend.blog.index');
+Route::get('/blog/{slug}/', [BlogController::class, 'show'])->name('frontend.blog.show');
 Route::get('/property/for-sale/', [PropertyDirectoryController::class, 'buySearch'])
     ->name('frontend.property.buy-search');
 Route::get('/property/for-sale/residential/land-plot/{city}/', [PropertyDirectoryController::class, 'landSaleCity'])

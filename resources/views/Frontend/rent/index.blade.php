@@ -149,21 +149,21 @@
             <h2 class="section-title">Latest Real Estate Articles</h2>
             <p class="text-secondary mb-0">Rental guides, market updates, and Bangladesh housing tips.</p>
           </div>
-          <a href="blog-details.html" class="btn btn-outline-dark">All Articles</a>
+          <a href="{{ route('frontend.blog.index') }}" class="btn btn-outline-dark">All Articles</a>
         </div>
 
         <div class="row g-4">
           @forelse($blogs as $blog)
             <div class="col-md-6 col-xl-4">
               <div class="blog-card">
-                <a href="blog-details.html" class="blog-image-link" aria-label="Read {{ $blog->title }}">
+                <a href="{{ route('frontend.blog.show', ['slug' => $blog->slug]) }}" class="blog-image-link" aria-label="Read {{ $blog->title }}">
                   <img src="{{ $blog->featured_image_path ? asset($blog->featured_image_path) : asset('frontend/assets/images/post_img_'.(($loop->iteration % 3) + 1).'.jpg') }}" alt="{{ $blog->title }}">
                 </a>
                 <div class="blog-body">
                   <span>{{ optional($blog->category)->name ?: 'Real estate' }}</span>
-                  <h3><a href="blog-details.html">{{ $blog->title }}</a></h3>
+                  <h3><a href="{{ route('frontend.blog.show', ['slug' => $blog->slug]) }}">{{ $blog->title }}</a></h3>
                   <p>{{ $blog->excerpt ?: str($blog->title)->limit(120) }}</p>
-                  <a href="blog-details.html">Read Article <i class="bi bi-arrow-right"></i></a>
+                  <a href="{{ route('frontend.blog.show', ['slug' => $blog->slug]) }}">Read Article <i class="bi bi-arrow-right"></i></a>
                 </div>
               </div>
             </div>
@@ -175,14 +175,14 @@
             ] as $blog)
               <div class="col-md-6 col-xl-4">
                 <div class="blog-card">
-                  <a href="blog-details.html" class="blog-image-link" aria-label="Read {{ $blog['title'] }}">
+                  <a href="{{ route('frontend.blog.index') }}" class="blog-image-link" aria-label="Read {{ $blog['title'] }}">
                     <img src="{{ asset('frontend/assets/images/'.$blog['image']) }}" alt="{{ $blog['title'] }}">
                   </a>
                   <div class="blog-body">
                     <span>{{ $blog['tag'] }}</span>
-                    <h3><a href="blog-details.html">{{ $blog['title'] }}</a></h3>
+                    <h3><a href="{{ route('frontend.blog.index') }}">{{ $blog['title'] }}</a></h3>
                     <p>{{ $blog['text'] }}</p>
-                    <a href="blog-details.html">Read Article <i class="bi bi-arrow-right"></i></a>
+                    <a href="{{ route('frontend.blog.index') }}">Read Article <i class="bi bi-arrow-right"></i></a>
                   </div>
                 </div>
               </div>

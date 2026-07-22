@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdminAuthController;
 use App\Http\Controllers\Api\AdminFeatureApiController;
 use App\Http\Controllers\Api\FrontendHubController;
+use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\HomeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,8 @@ Route::get('/for-rent', [FrontendHubController::class, 'rent'])->name('api.front
 Route::get('/sell', [FrontendHubController::class, 'sell'])->name('api.frontend.sell');
 Route::get('/open-houses', [FrontendHubController::class, 'openHouses'])->name('api.frontend.open-houses');
 Route::get('/early-access', [FrontendHubController::class, 'earlyAccess'])->name('api.frontend.early-access');
+Route::get('/blog', [BlogController::class, 'apiIndex'])->name('api.frontend.blog.index');
+Route::get('/blog/{slug}', [BlogController::class, 'apiShow'])->name('api.frontend.blog.show');
 Route::get('/property/for-sale', [FrontendHubController::class, 'buySearch'])
     ->name('api.frontend.property.buy-search');
 Route::get('/property-details/{property}', [FrontendHubController::class, 'propertyDetail'])
