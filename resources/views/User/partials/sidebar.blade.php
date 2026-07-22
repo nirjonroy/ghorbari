@@ -24,6 +24,12 @@
     <a class="{{ request()->routeIs('user.billings.index') ? 'active' : '' }}" href="{{ route('user.billings.index') }}"><i class="bi bi-receipt"></i> Billings</a>
     <a class="{{ request()->routeIs('user.billings.add-payment') ? 'active' : '' }}" href="{{ route('user.billings.add-payment') }}"><i class="bi bi-wallet2"></i> Add Payment</a>
     <a class="{{ request()->routeIs('user.activity-logs.*') ? 'active' : '' }}" href="{{ route('user.activity-logs.index') }}"><i class="bi bi-clock-history"></i> Activity Logs</a>
+    <a class="{{ request()->routeIs('user.appointments.*') ? 'active' : '' }}" href="{{ route('user.appointments.index') }}"><i class="bi bi-calendar-check"></i> Appointments</a>
+    <a class="{{ request()->routeIs('user.favorites.*') ? 'active' : '' }}" href="{{ route('user.favorites.index') }}"><i class="bi bi-heart"></i> Favorites</a>
+    <a class="{{ request()->routeIs('user.saved-searches.*') ? 'active' : '' }}" href="{{ route('user.saved-searches.index') }}"><i class="bi bi-search-heart"></i> Saved Search</a>
+    <a class="{{ request()->routeIs('user.notifications.*') ? 'active' : '' }}" href="{{ route('user.notifications.index') }}"><i class="bi bi-bell"></i> Notifications</a>
+    <a class="{{ request()->routeIs('user.open-house.*') ? 'active' : '' }}" href="{{ route('user.open-house.index') }}"><i class="bi bi-door-open"></i> Open House</a>
+    <a class="{{ request()->routeIs('user.feed.*') ? 'active' : '' }}" href="{{ route('user.feed.index') }}"><i class="bi bi-newspaper"></i> Feed</a>
     <span class="dashboard-menu-label">Account</span>
     <a class="{{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="bi bi-person-lines-fill"></i> Profile Details</a>
     <a href="#verification"><i class="bi bi-patch-check"></i> Verification</a>

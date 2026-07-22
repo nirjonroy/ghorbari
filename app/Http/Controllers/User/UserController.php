@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Appointment;
 use App\Models\ContactMessage;
+use App\Models\Favorite;
+use App\Models\OpenHouseSchedule;
 use App\Models\Property;
 use App\Models\PropertyView;
+use App\Models\SavedSearch;
 use App\Models\SubscriptionPackage;
 use App\Models\SubscriptionPayment;
+use App\Models\UserNotification;
 use App\Models\UserSubscription;
 use App\Services\SslCommerzService;
 use Illuminate\Http\RedirectResponse;
@@ -153,6 +158,94 @@ class UserController extends Controller
                 ->sortByDesc('time')
                 ->take(50)
                 ->values(),
+        ]);
+    }
+
+    public function appointments(Request $request): View
+    {
+        return view('User.appointments.index', [
+            'dashboardData' => $this->dashboardData($request),
+            'appointments' => $this->tableExists(Appointment::class)
+                ? Appointment::query()
+                    ->where('user_id', $request->user()->id)
+                    ->with(['property:id,title,slug,price,listing_type'])
+                    ->latest('scheduled_at')
+                    ->paginate(12)
+                : collect(),
+        ]);
+    }
+
+    public function favorites(Request $request): View
+    {
+        return view('User.favorites.index', [
+            'dashboardData' => $this->dashboardData($request),
+            'favorites' => $this->tableExists(Favorite::class)
+                ? Favorite::query()
+                    ->where('user_id', $request->user()->id)
+                    ->with(['property.media', 'property.district:id,name', 'property.city:id,name', 'property.area:id,name'])
+                    ->latest()
+                    ->paginate(12)
+                : collect(),
+        ]);
+    }
+
+    public function savedSearches(Request $request): View
+    {
+        return view('User.saved-searches.index', [
+            'dashboardData' => $this->dashboardData($request),
+            'savedSearches' => $this->tableExists(SavedSearch::class)
+                ? SavedSearch::query()->where('user_id', $request->user()->id)->latest()->paginate(12)
+                : collect(),
+        ]);
+    }
+
+    public function notifications(Request $request): View
+    {
+        return view('User.notifications.index', [
+            'dashboardData' => $this->dashboardData($request),
+            'notifications' => $this->tableExists(UserNotification::class)
+                ? UserNotification::query()->where('user_id', $request->user()->id)->latest()->paginate(15)
+                : collect(),
+        ]);
+    }
+
+    public function openHouse(Request $request): View
+    {
+        $propertyQuery = $this->tableExists(Property::class)
+            ? Property::query()
+                ->where('owner_user_id', $request->user()->id)
+                ->where('is_open_house', true)
+                ->with(['district:id,name', 'city:id,name', 'area:id,name'])
+                ->latest()
+            : null;
+
+        return view('User.open-house.index', [
+            'dashboardData' => $this->dashboardData($request),
+            'openHouseProperties' => $propertyQuery ? $propertyQuery->paginate(12) : collect(),
+            'schedules' => $this->tableExists(OpenHouseSchedule::class)
+                ? OpenHouseSchedule::query()
+                    ->whereHas('property', fn ($query) => $query->where('owner_user_id', $request->user()->id))
+                    ->with('property:id,title,slug')
+                    ->latest('starts_at')
+                    ->take(10)
+                    ->get()
+                : collect(),
+        ]);
+    }
+
+    public function feed(Request $request): View
+    {
+        return view('User.feed.index', [
+            'dashboardData' => $this->dashboardData($request),
+            'properties' => $this->tableExists(Property::class)
+                ? Property::query()
+                    ->where('is_published', true)
+                    ->where('verification_status', 'approved')
+                    ->with(['type:id,name,slug', 'media', 'district:id,name', 'city:id,name', 'area:id,name'])
+                    ->latest('published_at')
+                    ->take(20)
+                    ->get()
+                : collect(),
         ]);
     }
 

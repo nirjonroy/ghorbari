@@ -123,6 +123,24 @@ Route::get('/dashboard/billings/add-payment', [FrontendUserController::class, 'a
 Route::get('/dashboard/activity-logs', [FrontendUserController::class, 'activityLogs'])
     ->middleware(['auth', 'verified'])
     ->name('user.activity-logs.index');
+Route::get('/dashboard/appointments/', [FrontendUserController::class, 'appointments'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.appointments.index');
+Route::get('/dashboard/favorites/', [FrontendUserController::class, 'favorites'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.favorites.index');
+Route::get('/dashboard/saved-searches/', [FrontendUserController::class, 'savedSearches'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.saved-searches.index');
+Route::get('/dashboard/notifications/', [FrontendUserController::class, 'notifications'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.notifications.index');
+Route::get('/dashboard/open-house/', [FrontendUserController::class, 'openHouse'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.open-house.index');
+Route::get('/dashboard/feed/', [FrontendUserController::class, 'feed'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.feed.index');
 Route::get('/dashboard/properties/add-property', [UserPropertyController::class, 'create'])
     ->middleware(['auth', 'verified'])
     ->name('user.properties.create');
