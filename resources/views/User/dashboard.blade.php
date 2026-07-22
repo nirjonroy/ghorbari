@@ -18,8 +18,8 @@
     <section class="dashboard-main">
       @include('User.partials.topbar')
       @include('User.partials.stats')
-      @include('User.partials.quick-actions')
       @include('User.partials.properties')
+      @include('User.partials.quick-actions')
       @include('User.partials.activity')
       @include('User.partials.account-panels')
     </section>

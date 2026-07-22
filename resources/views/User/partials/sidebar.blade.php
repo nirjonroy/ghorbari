@@ -1,10 +1,19 @@
 <aside class="dashboard-sidebar">
-  <div class="dashboard-user">
-    <img src="{{ $avatar }}" alt="{{ $user->name }}">
-    <div>
-      <h1>{{ $user->name }}</h1>
-      <p>{{ $dashboardData['account_type'] }}</p>
+  <div class="dashboard-sidebar-header">
+    <div class="dashboard-user">
+      <img src="{{ $avatar }}" alt="{{ $user->name }}">
+      <div>
+        <span class="dashboard-user-status">Verified workspace</span>
+        <h1>{{ $user->name }}</h1>
+        <p>{{ $dashboardData['account_type'] }}</p>
+      </div>
     </div>
+
+    <a class="dashboard-sidebar-progress" href="{{ route('dashboard') }}">
+      <span>Profile Strength</span>
+      <strong>{{ $profileCompletion }}%</strong>
+      <em><i style="width: {{ $profileCompletion }}%"></i></em>
+    </a>
   </div>
 
   <div class="dashboard-sidebar-actions">
@@ -38,10 +47,4 @@
     <a href="{{ route('profile.edit') }}"><i class="bi bi-key"></i> Change Password</a>
     <a class="{{ request()->routeIs('user.profile.edit') ? 'active' : '' }}" href="{{ route('user.profile.edit') }}"><i class="bi bi-shield-lock"></i> Account Security</a>
   </nav>
-
-  <a class="dashboard-sidebar-progress" href="{{ route('dashboard') }}">
-    <span>Profile Completion</span>
-    <strong>{{ $profileCompletion }}%</strong>
-    <em><i style="width: {{ $profileCompletion }}%"></i></em>
-  </a>
 </aside>

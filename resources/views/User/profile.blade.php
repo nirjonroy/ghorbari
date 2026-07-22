@@ -45,10 +45,28 @@
         <div class="alert alert-success">{{ session('status') }}</div>
       @endif
 
-      <div class="dashboard-topbar">
-        <div>
-          <p>User Profile</p>
-          <h2>{{ $user->name }}</h2>
+      <div class="dashboard-profile-hero">
+        <div class="dashboard-profile-identity">
+          <img src="{{ $avatar }}" alt="{{ $user->name }}">
+          <div>
+            <p>User Profile</p>
+            <h2>{{ $user->name }}</h2>
+            <span>{{ $dashboardData['account_type'] }}{{ $user->district ? ' in '.$user->district : '' }}</span>
+          </div>
+        </div>
+        <div class="dashboard-profile-meta">
+          <div>
+            <strong>{{ $profileCompletion }}%</strong>
+            <span>Profile Strength</span>
+          </div>
+          <div>
+            <strong>{{ $stats['properties'] }}</strong>
+            <span>Properties</span>
+          </div>
+          <div>
+            <strong>{{ $stats['published'] }}</strong>
+            <span>Published</span>
+          </div>
         </div>
         <div class="dashboard-actions">
           <a class="btn btn-outline-dark" href="{{ route('user.dashboard') }}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
@@ -57,26 +75,37 @@
       </div>
 
       <div class="row g-4">
-        <div class="col-lg-4">
-          <section class="dashboard-card mini-panel h-100">
-            <img src="{{ $avatar }}" alt="{{ $user->name }}" class="rounded-circle mb-3" style="width: 96px; height: 96px; object-fit: cover;">
-            <h2>{{ $user->name }}</h2>
-            <p>{{ $dashboardData['account_type'] }}</p>
-            <div class="dashboard-sidebar-progress mt-3">
-              <span>Profile Completion</span>
-              <strong>{{ $profileCompletion }}%</strong>
-              <em><i style="width: {{ $profileCompletion }}%"></i></em>
+        <div class="col-xl-4">
+          <section class="dashboard-card dashboard-profile-card h-100">
+            <div class="profile-completion-ring" style="--progress: {{ $profileCompletion * 3.6 }}deg">
+              <span>{{ $profileCompletion }}%</span>
+            </div>
+            <h2>Account Readiness</h2>
+            <p>Complete identity, home, address, and ownership details to speed up verification and listing approval.</p>
+            <div class="profile-checklist">
+              <span class="{{ $user->profile_photo_path ? 'done' : '' }}"><i class="bi bi-person-square"></i> Profile photo</span>
+              <span class="{{ $user->phone ? 'done' : '' }}"><i class="bi bi-telephone"></i> Phone number</span>
+              <span class="{{ $user->nid_number ? 'done' : '' }}"><i class="bi bi-card-checklist"></i> NID details</span>
+              <span class="{{ $user->ownership_proof_path ? 'done' : '' }}"><i class="bi bi-file-earmark-check"></i> Ownership proof</span>
             </div>
           </section>
         </div>
-        <div class="col-lg-8">
+        <div class="col-xl-8">
           <section class="dashboard-card h-100" id="profile-details">
-            <h2>Profile Details</h2>
+            <div class="dashboard-card-head">
+              <div>
+                <h2>Profile Details</h2>
+                <p>Core identity and account information.</p>
+              </div>
+              <a href="{{ route('user.profile.edit') }}"><i class="bi bi-pencil"></i> Edit</a>
+            </div>
             <div class="row g-3 mt-1">
               @foreach($rows as $label => $value)
                 <div class="col-md-6">
-                  <small class="text-secondary d-block">{{ $label }}</small>
-                  <strong>{{ $field($value) }}</strong>
+                  <div class="profile-data-tile">
+                    <small>{{ $label }}</small>
+                    <strong>{{ $field($value) }}</strong>
+                  </div>
                 </div>
               @endforeach
             </div>
@@ -87,12 +116,19 @@
       <div class="row g-4 mt-1">
         <div class="col-lg-7">
           <section class="dashboard-card h-100" id="home-info">
-            <h2>Home Info</h2>
+            <div class="dashboard-card-head">
+              <div>
+                <h2>Home Info</h2>
+                <p>Address and ownership context for your profile.</p>
+              </div>
+            </div>
             <div class="row g-3 mt-1">
               @foreach($addressRows as $label => $value)
                 <div class="col-md-6">
-                  <small class="text-secondary d-block">{{ $label }}</small>
-                  <strong>{{ $field($value) }}</strong>
+                  <div class="profile-data-tile">
+                    <small>{{ $label }}</small>
+                    <strong>{{ $field($value) }}</strong>
+                  </div>
                 </div>
               @endforeach
             </div>
@@ -102,10 +138,10 @@
           <section class="dashboard-card h-100" id="verification">
             <h2>Verification</h2>
             <p class="mb-3">{{ $user->bio ?: 'Add a bio and verification documents to make your profile stronger.' }}</p>
-            <div class="d-grid gap-2">
-              <span class="badge text-bg-{{ $user->nid_number ? 'success' : 'secondary' }} text-start p-2">NID: {{ $field($user->nid_number) }}</span>
-              <span class="badge text-bg-{{ $user->passport_number ? 'success' : 'secondary' }} text-start p-2">Passport: {{ $field($user->passport_number) }}</span>
-              <span class="badge text-bg-{{ $user->ownership_proof_path ? 'success' : 'secondary' }} text-start p-2">Ownership Proof: {{ $user->ownership_proof_path ? 'Uploaded' : 'Not uploaded' }}</span>
+            <div class="verification-stack">
+              <span class="{{ $user->nid_number ? 'done' : '' }}"><i class="bi bi-person-vcard"></i> NID <strong>{{ $field($user->nid_number) }}</strong></span>
+              <span class="{{ $user->passport_number ? 'done' : '' }}"><i class="bi bi-passport"></i> Passport <strong>{{ $field($user->passport_number) }}</strong></span>
+              <span class="{{ $user->ownership_proof_path ? 'done' : '' }}"><i class="bi bi-file-lock"></i> Ownership Proof <strong>{{ $user->ownership_proof_path ? 'Uploaded' : 'Not uploaded' }}</strong></span>
             </div>
           </section>
         </div>
