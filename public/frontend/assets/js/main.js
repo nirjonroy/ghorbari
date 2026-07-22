@@ -314,15 +314,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  var properties = window.landsiteResultsMapProperties || [
-    { title: "Banani Modern Residence", price: "7.35 Cr", lat: 23.7948, lng: 90.4043, active: true },
-    { title: "Gulshan Luxury Apartment", price: "8.2 Cr", lat: 23.7925, lng: 90.4143 },
-    { title: "Bashundhara Ready Flat", price: "4.89 Cr", lat: 23.8196, lng: 90.4520 },
-    { title: "Dhanmondi Family Home", price: "2.4 Cr", lat: 23.7465, lng: 90.3760 },
-    { title: "Uttara Ready Apartment", price: "1.65 Cr", lat: 23.8759, lng: 90.3795 },
-    { title: "Mirpur Lake View", price: "3.25 Cr", lat: 23.8041, lng: 90.3667 },
-    { title: "Bashundhara Plot", price: "5.9 Cr", lat: 23.8132, lng: 90.4312 }
-  ];
+  var properties = window.landsiteResultsMapProperties || [];
 
   var map = L.map(mapElement, {
     center: [23.7937, 90.4066],
@@ -350,9 +342,10 @@ document.addEventListener("DOMContentLoaded", function () {
   var markerBounds = [];
 
   properties.forEach(function (property) {
+    var label = property.is_search_location ? property.price : "BDT " + property.price;
     var icon = L.divIcon({
       className: "leaflet-price-marker" + (property.active ? " is-active" : ""),
-      html: "BDT " + property.price,
+      html: label,
       iconSize: null,
       iconAnchor: [34, 14]
     });
@@ -361,22 +354,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     L.marker([property.lat, property.lng], { icon: icon })
       .addTo(map)
-      .bindPopup(property.title + "<br>BDT " + property.price);
-  });
-
-  [
-    [23.7819, 90.4005],
-    [23.8067, 90.4156],
-    [23.7722, 90.3654],
-    [23.8376, 90.3847]
-  ].forEach(function (coords) {
-    L.marker(coords, {
-      icon: L.divIcon({
-        className: "leaflet-dot-marker",
-        iconSize: [16, 16],
-        iconAnchor: [8, 8]
-      })
-    }).addTo(map);
+      .bindPopup(property.title + "<br>" + label);
   });
 
   if (markerBounds.length) {

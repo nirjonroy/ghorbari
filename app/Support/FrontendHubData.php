@@ -413,14 +413,22 @@ class FrontendHubData
         $totalProperties = $baseQuery ? (clone $baseQuery)->count() : 0;
         $earlyAccessCount = $baseQuery ? (clone $baseQuery)->where('is_early_access', true)->count() : 0;
         $mapMarkers = method_exists($properties, 'items')
-            ? collect($properties->items())->values()->map(fn (Property $property, int $index) => [
-                'title' => $property->title,
-                'price' => $this->shortPrice($property),
-                'lat' => $this->mapCoordinate($property, $index, 'lat'),
-                'lng' => $this->mapCoordinate($property, $index, 'lng'),
-                'active' => $index === 0,
-            ])
+            ? collect($properties->items())->values()->map(function (Property $property, int $index) {
+                $coordinates = $this->propertyMapCoordinates($property, $index);
+
+                return [
+                    'title' => $property->title,
+                    'price' => $this->shortPrice($property),
+                    'lat' => $coordinates['lat'],
+                    'lng' => $coordinates['lng'],
+                    'active' => $index === 0,
+                ];
+            })
             : collect();
+
+        if ($mapMarkers->isEmpty() && ($searchMarker = $this->searchMapMarker($request))) {
+            $mapMarkers = collect([$searchMarker]);
+        }
 
         return [
             'properties' => $properties,
@@ -523,7 +531,7 @@ class FrontendHubData
                 'type:id,name,slug',
                 'district:id,name,slug',
                 'city:id,name,slug,district_id',
-                'area:id,name,slug,city_id,district_id',
+                'area:id,name,slug,city_id,district_id,post_office,postal_code',
                 'media:id,property_id,media_type,file_path,alt_text,is_primary,sort_order',
             ]);
     }
@@ -607,6 +615,119 @@ class FrontendHubData
         ];
 
         return $points[($property->id + $index) % count($points)][$axis];
+    }
+
+    private function propertyMapCoordinates(Property $property, int $index): array
+    {
+        $locationText = $this->normaliseMapText(collect([
+            optional($property->area)->postal_code,
+            optional($property->area)->post_office,
+            optional($property->area)->name,
+            optional($property->city)->name,
+            optional($property->district)->name,
+            $property->title,
+            $property->description,
+        ])->filter()->join(' '));
+
+        $coordinates = $this->coordinatesForText($locationText);
+
+        if (! $coordinates) {
+            return [
+                'lat' => $this->mapCoordinate($property, $index, 'lat'),
+                'lng' => $this->mapCoordinate($property, $index, 'lng'),
+            ];
+        }
+
+        return $this->jitterCoordinates($coordinates, $index);
+    }
+
+    private function searchMapMarker(Request $request): ?array
+    {
+        $searchText = $this->normaliseMapText(collect([
+            $request->query('q'),
+            $request->query('postcode'),
+        ])->filter()->join(' '));
+
+        $coordinates = $this->coordinatesForText($searchText);
+
+        if (! $coordinates) {
+            return null;
+        }
+
+        return [
+            'title' => trim((string) ($request->query('q') ?: $request->query('postcode') ?: 'Search location')),
+            'price' => 'Search Area',
+            'lat' => $coordinates['lat'],
+            'lng' => $coordinates['lng'],
+            'active' => true,
+            'is_search_location' => true,
+        ];
+    }
+
+    private function coordinatesForText(string $text): ?array
+    {
+        if ($text === '') {
+            return null;
+        }
+
+        foreach ($this->locationCoordinateMap() as $location) {
+            foreach ($location['terms'] as $term) {
+                if (str_contains($text, $term)) {
+                    return ['lat' => $location['lat'], 'lng' => $location['lng']];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function normaliseMapText(string $text): string
+    {
+        $text = strtolower($text);
+        $text = str_replace(['.', ',', '-', '_', '/', '\\'], ' ', $text);
+
+        return trim(preg_replace('/\s+/', ' ', $text) ?: '');
+    }
+
+    private function jitterCoordinates(array $coordinates, int $index): array
+    {
+        $latOffset = (($index % 5) - 2) * 0.0011;
+        $lngOffset = (((int) floor($index / 5) % 5) - 2) * 0.0011;
+
+        return [
+            'lat' => round($coordinates['lat'] + $latOffset, 6),
+            'lng' => round($coordinates['lng'] + $lngOffset, 6),
+        ];
+    }
+
+    private function locationCoordinateMap(): array
+    {
+        return [
+            ['terms' => ['1205', 'dhanmondi', 'west dhanmondi', 'satmasjid', 'jigatola', 'jigatala', 'staff quarter', 'modhubazar'], 'lat' => 23.7461, 'lng' => 90.3742],
+            ['terms' => ['banani'], 'lat' => 23.7937, 'lng' => 90.4066],
+            ['terms' => ['gulshan'], 'lat' => 23.7925, 'lng' => 90.4078],
+            ['terms' => ['bashundhara', 'bashundhara r a'], 'lat' => 23.8196, 'lng' => 90.4520],
+            ['terms' => ['uttara', 'sector 11', 'sector 13'], 'lat' => 23.8759, 'lng' => 90.3795],
+            ['terms' => ['mirpur'], 'lat' => 23.8223, 'lng' => 90.3654],
+            ['terms' => ['mohammadpur'], 'lat' => 23.7658, 'lng' => 90.3588],
+            ['terms' => ['motijheel'], 'lat' => 23.7330, 'lng' => 90.4172],
+            ['terms' => ['wari'], 'lat' => 23.7116, 'lng' => 90.4175],
+            ['terms' => ['narayanganj', 'fatullah'], 'lat' => 23.6238, 'lng' => 90.5000],
+            ['terms' => ['gazipur', 'joydebpur'], 'lat' => 24.0023, 'lng' => 90.4264],
+            ['terms' => ['dhaka'], 'lat' => 23.8103, 'lng' => 90.4125],
+            ['terms' => ['chattogram', 'chittagong', 'halishahar', 'khulshi', 'nasirabad'], 'lat' => 22.3569, 'lng' => 91.7832],
+            ['terms' => ['cox s bazar', 'cox bazar', 'kolatoli'], 'lat' => 21.4272, 'lng' => 92.0058],
+            ['terms' => ['sylhet', 'uposhahar', 'shahjalal'], 'lat' => 24.8949, 'lng' => 91.8687],
+            ['terms' => ['rajshahi'], 'lat' => 24.3745, 'lng' => 88.6042],
+            ['terms' => ['khulna'], 'lat' => 22.8456, 'lng' => 89.5403],
+            ['terms' => ['barishal', 'barisal'], 'lat' => 22.7010, 'lng' => 90.3535],
+            ['terms' => ['rangpur'], 'lat' => 25.7439, 'lng' => 89.2752],
+            ['terms' => ['mymensingh'], 'lat' => 24.7471, 'lng' => 90.4203],
+            ['terms' => ['bogura', 'bogra'], 'lat' => 24.8481, 'lng' => 89.3729],
+            ['terms' => ['jashore', 'jasore', 'chowgacha'], 'lat' => 23.1667, 'lng' => 89.2167],
+            ['terms' => ['dinajpur'], 'lat' => 25.6279, 'lng' => 88.6332],
+            ['terms' => ['jamalpur'], 'lat' => 24.9375, 'lng' => 89.9370],
+        ];
     }
 
     private function listingTypesForPurpose(string $purpose): array
