@@ -428,7 +428,7 @@ class FrontendHubData
             'totalProperties' => $totalProperties,
             'earlyAccessCount' => $earlyAccessCount,
             'mapMarkers' => $mapMarkers,
-            'filters' => $request->only(['q', 'property_type', 'property_status', 'min_price', 'max_price', 'beds', 'baths', 'sort']),
+            'filters' => $request->only(['q', 'postcode', 'property_type', 'property_status', 'min_price', 'max_price', 'beds', 'baths', 'sort']),
             'page' => $this->withPageUrls($page),
         ];
     }
@@ -440,8 +440,22 @@ class FrontendHubData
             $query->where(function ($builder) use ($search) {
                 $builder->where('title', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhereHas('type', fn ($typeQuery) => $typeQuery->where('name', 'like', "%{$search}%"));
+                    ->orWhereHas('type', fn ($typeQuery) => $typeQuery->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas('district', fn ($districtQuery) => $districtQuery->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas('city', fn ($cityQuery) => $cityQuery->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas('area', function ($areaQuery) use ($search) {
+                        $areaQuery->where('name', 'like', "%{$search}%")
+                            ->orWhere('post_office', 'like', "%{$search}%")
+                            ->orWhere('postal_code', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('owner', fn ($ownerQuery) => $ownerQuery->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas('agent.user', fn ($agentUserQuery) => $agentUserQuery->where('name', 'like', "%{$search}%"));
             });
+        }
+
+        if ($request->filled('postcode')) {
+            $postcode = trim((string) $request->query('postcode'));
+            $query->whereHas('area', fn ($areaQuery) => $areaQuery->where('postal_code', 'like', "%{$postcode}%"));
         }
 
         if ($request->filled('property_type')) {

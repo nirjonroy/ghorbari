@@ -20,6 +20,17 @@
     $blogPosts = collect($homeData['blog_posts'] ?? []);
     $agents = collect($homeData['agents'] ?? []);
     $siteInfo = $homeData['site_info'] ?? null;
+    $menuTypes = collect($frontendMenuData['types'] ?? []);
+    $menuDistricts = collect($frontendMenuData['districts'] ?? []);
+    $menuCities = collect($frontendMenuData['cities'] ?? []);
+    $menuAreas = collect($frontendMenuData['areas'] ?? []);
+    $locationOptions = $menuDistricts->pluck('name')
+        ->merge($menuCities->pluck('name'))
+        ->merge($menuAreas->pluck('name'))
+        ->filter()
+        ->unique()
+        ->values();
+    $postcodeOptions = $menuAreas->pluck('postal_code')->filter()->unique()->values();
     $serviceIcon = fn ($field, $fallback) => filled($siteInfo?->{$field})
         ? asset($siteInfo->{$field})
         : asset('frontend/assets/images/icons/'.$fallback);
@@ -95,8 +106,8 @@
               </ul>
               <div class="tab-content">
                 <div class="tab-pane fade show active" id="buy-tab-pane" role="tabpanel" tabindex="0">
-                  <form class="home-search">
-                    <input type="search" class="form-control" placeholder="City, Area, Road, Agent, Postcode" aria-label="Search location">
+                  <form class="home-search js-home-search-form" method="GET" action="{{ route('frontend.property.buy-search') }}" data-search-purpose="buy">
+                    <input type="search" name="q" class="form-control js-home-search-input" placeholder="City, Area, Road, Agent, Postcode" aria-label="Search location" list="home-location-options">
                     <button class="btn btn-danger" type="submit" aria-label="Search"><i class="bi bi-search"></i></button>
                     <button class="btn btn-success advanced-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
                       <i class="bi bi-sliders"></i>
@@ -104,8 +115,8 @@
                   </form>
                 </div>
                 <div class="tab-pane fade" id="sell-tab-pane" role="tabpanel" tabindex="0">
-                  <form class="home-search">
-                    <input type="search" class="form-control" placeholder="Enter your address" aria-label="Search property value">
+                  <form class="home-search js-home-search-form" method="GET" action="{{ route('frontend.sell.index') }}" data-search-purpose="sell">
+                    <input type="search" name="address" class="form-control js-home-search-input" placeholder="Enter your address" aria-label="Search property value" list="home-location-options">
                     <button class="btn btn-danger" type="submit" aria-label="Search"><i class="bi bi-house-check"></i></button>
                     <button class="btn btn-success advanced-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
                       <i class="bi bi-sliders"></i>
@@ -113,8 +124,8 @@
                   </form>
                 </div>
                 <div class="tab-pane fade" id="rent-tab-pane" role="tabpanel" tabindex="0">
-                  <form class="home-search">
-                    <input type="search" class="form-control" placeholder="City, Area, Postcode" aria-label="Search rentals">
+                  <form class="home-search js-home-search-form" method="GET" action="{{ route('frontend.rent.index') }}" data-search-purpose="rent">
+                    <input type="search" name="q" class="form-control js-home-search-input" placeholder="City, Area, Postcode" aria-label="Search rentals" list="home-location-options">
                     <button class="btn btn-danger" type="submit" aria-label="Search"><i class="bi bi-search"></i></button>
                     <button class="btn btn-success advanced-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
                       <i class="bi bi-sliders"></i>
@@ -122,40 +133,48 @@
                   </form>
                 </div>
               </div>
+              <datalist id="home-location-options">
+                @foreach($locationOptions as $locationOption)
+                  <option value="{{ $locationOption }}"></option>
+                @endforeach
+              </datalist>
+              <datalist id="home-postcode-options">
+                @foreach($postcodeOptions as $postcodeOption)
+                  <option value="{{ $postcodeOption }}"></option>
+                @endforeach
+              </datalist>
               <div class="collapse" id="advancedSearch">
-                <form class="advanced-panel">
+                <form class="advanced-panel js-advanced-search-form" method="GET" action="{{ route('frontend.property.buy-search') }}" data-buy-action="{{ route('frontend.property.buy-search') }}" data-sell-action="{{ route('frontend.sell.index') }}" data-rent-action="{{ route('frontend.rent.index') }}">
                   <p class="advanced-help">Search by road, neighbourhood, city, district, or postal area across Bangladesh.</p>
                   <div class="row g-3">
                     <div class="col-md-4">
                       <label for="propertyType" class="form-label">Type</label>
-                      <select id="propertyType" class="form-select">
-                        <option selected>Any Property</option>
-                        <option>Apartment</option>
-                        <option>House</option>
-                        <option>Duplex</option>
-                        <option>Commercial</option>
-                        <option>Land</option>
+                      <select id="propertyType" name="property_type" class="form-select">
+                        <option value="">Any Property</option>
+                        @foreach($menuTypes as $type)
+                          <option value="{{ $type->id }}">{{ $type->name }}</option>
+                        @endforeach
                       </select>
                     </div>
                     <div class="col-md-4">
                       <label for="advancedLocation" class="form-label">Location</label>
-                      <input id="advancedLocation" type="text" class="form-control" placeholder="City or neighbourhood">
+                      <input id="advancedLocation" name="q" type="text" class="form-control js-advanced-location-input" placeholder="City or neighbourhood" list="home-location-options">
                     </div>
                     <div class="col-md-4">
                       <label for="zipCode" class="form-label">Postcode</label>
-                      <input id="zipCode" type="text" class="form-control" placeholder="1209">
+                      <input id="zipCode" name="postcode" type="text" class="form-control" placeholder="1209" list="home-postcode-options">
                     </div>
                     <div class="col-md-6">
                       <label for="minPrice" class="form-label">Min Price</label>
-                      <input id="minPrice" type="text" class="form-control" placeholder="Min Price (BDT)">
+                      <input id="minPrice" name="min_price" type="number" min="0" class="form-control" placeholder="Min Price (BDT)">
                     </div>
                     <div class="col-md-6">
                       <label for="maxPrice" class="form-label">Max Price</label>
-                      <input id="maxPrice" type="text" class="form-control" placeholder="Max Price (BDT)">
+                      <input id="maxPrice" name="max_price" type="number" min="0" class="form-control" placeholder="Max Price (BDT)">
                     </div>
                   </div>
                   <div class="advanced-actions">
-                    <button class="btn btn-outline-success" type="button">
+                    <button class="btn btn-outline-success js-current-location" type="button">
                       <i class="bi bi-crosshair"></i>
                       <span>Current Location</span>
                     </button>

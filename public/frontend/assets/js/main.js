@@ -534,6 +534,145 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
+  var searchTabs = document.getElementById("searchTabs");
+  var advancedForm = document.querySelector(".js-advanced-search-form");
+  var advancedLocationInput = document.querySelector(".js-advanced-location-input");
+  var postcodeInput = document.getElementById("zipCode");
+  var currentLocationButton = document.querySelector(".js-current-location");
+
+  if (!searchTabs || !advancedForm) {
+    return;
+  }
+
+  var activePurpose = function () {
+    var activePane = document.querySelector(".tab-pane.active .js-home-search-form");
+    return activePane ? activePane.getAttribute("data-search-purpose") : "buy";
+  };
+
+  var syncAdvancedForm = function () {
+    var purpose = activePurpose();
+    var action = advancedForm.getAttribute("data-" + purpose + "-action");
+    var activeInput = document.querySelector(".tab-pane.active .js-home-search-input");
+
+    if (action) {
+      advancedForm.setAttribute("action", action);
+    }
+
+    if (advancedLocationInput && activeInput && !advancedLocationInput.value) {
+      advancedLocationInput.value = activeInput.value;
+    }
+  };
+
+  searchTabs.addEventListener("shown.bs.tab", syncAdvancedForm);
+
+  document.querySelectorAll(".js-home-search-input").forEach(function (input) {
+    input.addEventListener("input", function () {
+      if (input.closest(".tab-pane.active") && advancedLocationInput) {
+        advancedLocationInput.value = input.value;
+      }
+    });
+  });
+
+  var submitAdvancedSearch = function () {
+    syncAdvancedForm();
+
+    if (advancedForm.requestSubmit) {
+      advancedForm.requestSubmit();
+      return;
+    }
+
+    advancedForm.submit();
+  };
+
+  var compactParts = function (parts) {
+    return parts.filter(Boolean).filter(function (part, index, source) {
+      return source.indexOf(part) === index;
+    }).join(", ");
+  };
+
+  var locationLabelFromAddress = function (address) {
+    if (!address) {
+      return "";
+    }
+
+    var localArea = address.suburb
+      || address.quarter
+      || address.residential
+      || address.city_district
+      || address.neighbourhood;
+    var city = address.city || address.town || address.municipality || address.county;
+    var district = address.state_district || address.state;
+    var isDhaka = [city, district, address.state].filter(Boolean).join(" ").toLowerCase().indexOf("dhaka") !== -1;
+    var road = (address.road || "").toLowerCase();
+    var smallArea = [localArea, address.neighbourhood, address.suburb, address.quarter, address.residential].filter(Boolean).join(" ").toLowerCase();
+
+    if (isDhaka && (road.indexOf("satmasjid") !== -1 || address.postcode === "1205" || smallArea.indexOf("jigatola") !== -1 || smallArea.indexOf("staff quarter") !== -1)) {
+      return "Dhanmondi";
+    }
+
+    if (address.road) {
+      return localArea || city || address.road;
+    }
+
+    return compactParts([
+      localArea,
+      address.suburb,
+      address.quarter,
+      address.residential,
+      address.village,
+      address.town,
+      address.city,
+      district,
+    ]);
+  };
+
+  if (currentLocationButton && navigator.geolocation) {
+    currentLocationButton.addEventListener("click", function () {
+      currentLocationButton.disabled = true;
+      navigator.geolocation.getCurrentPosition(function (position) {
+        var latitude = position.coords.latitude.toFixed(6);
+        var longitude = position.coords.longitude.toFixed(6);
+        var coordinates = latitude + "," + longitude;
+        var reverseUrl = "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=" + latitude + "&lon=" + longitude;
+
+        fetch(reverseUrl, { headers: { "Accept": "application/json" } })
+          .then(function (response) {
+            return response.ok ? response.json() : null;
+          })
+          .then(function (data) {
+            var address = data ? data.address : null;
+            var locationName = locationLabelFromAddress(address);
+
+            if (advancedLocationInput) {
+              advancedLocationInput.value = locationName || coordinates;
+            }
+
+            if (postcodeInput && address && address.postcode) {
+              postcodeInput.value = address.postcode;
+            }
+
+            submitAdvancedSearch();
+          })
+          .catch(function () {
+            if (advancedLocationInput) {
+              advancedLocationInput.value = coordinates;
+            }
+
+            submitAdvancedSearch();
+          })
+          .finally(function () {
+            currentLocationButton.disabled = false;
+          });
+      }, function () {
+        currentLocationButton.disabled = false;
+      });
+    });
+  }
+
+  syncAdvancedForm();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
   var csrfToken = document.querySelector('meta[name="csrf-token"]');
   var token = csrfToken ? csrfToken.getAttribute("content") : "";
 

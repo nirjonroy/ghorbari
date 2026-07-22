@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
                     ? City::query()->select('id', 'district_id', 'name', 'slug')->with('district:id,name,slug')->where('status', true)->orderBy('name')->take(6)->get()
                     : collect(),
                 'areas' => Schema::hasTable('areas')
-                    ? Area::query()->select('id', 'district_id', 'city_id', 'name', 'slug')->with(['district:id,name,slug', 'city:id,name,slug,district_id'])->where('status', true)->orderBy('name')->take(6)->get()
+                    ? Area::query()->select('id', 'district_id', 'city_id', 'name', 'slug', 'postal_code')->with(['district:id,name,slug', 'city:id,name,slug,district_id'])->where('status', true)->orderBy('name')->take(12)->get()
                     : collect(),
                 'categories' => collect([
                     ['slug' => 'residential', 'name' => 'Residential'],

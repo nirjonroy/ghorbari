@@ -8,7 +8,7 @@
         <p>Sell with confidence</p>
         <h1>Sell Your Property In Bangladesh</h1>
         <form class="page-search" method="GET" action="{{ route('frontend.sell.index') }}">
-          <input type="search" name="address" value="{{ request('address') }}" class="form-control" placeholder="Enter your property address">
+          <input type="search" name="address" value="{{ request('address', request('q')) }}" class="form-control" placeholder="Enter your property address">
           <button class="btn btn-danger" type="submit"><i class="bi bi-house-check"></i></button>
         </form>
       </div>
