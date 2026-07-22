@@ -114,6 +114,15 @@ Route::post('/dashboard/subscription/payment/cancel/', [FrontendUserController::
     ->name('user.subscriptions.payment.cancel');
 Route::post('/dashboard/subscription/payment/ipn/', [FrontendUserController::class, 'paymentIpn'])
     ->name('user.subscriptions.payment.ipn');
+Route::get('/dashboard/billings/', [FrontendUserController::class, 'billings'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.billings.index');
+Route::get('/dashboard/billings/add-payment', [FrontendUserController::class, 'addPayment'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.billings.add-payment');
+Route::get('/dashboard/activity-logs', [FrontendUserController::class, 'activityLogs'])
+    ->middleware(['auth', 'verified'])
+    ->name('user.activity-logs.index');
 Route::get('/dashboard/properties/add-property', [UserPropertyController::class, 'create'])
     ->middleware(['auth', 'verified'])
     ->name('user.properties.create');

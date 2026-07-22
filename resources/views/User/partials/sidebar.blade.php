@@ -21,6 +21,9 @@
     <a class="{{ request()->routeIs('user.subscriptions.*') ? 'active' : '' }}" href="{{ route('user.subscriptions.index') }}"><i class="bi bi-credit-card-2-front"></i> Subscription</a>
     <a class="{{ request()->routeIs('user.properties.index', 'user.properties.active', 'user.properties.pending', 'user.properties.rejected', 'user.properties.expired') ? 'active' : '' }}" href="{{ route('user.properties.index') }}"><i class="bi bi-houses"></i> My Property</a>
     <a class="{{ request()->routeIs('user.properties.create') ? 'active' : '' }}" href="{{ route('user.properties.create') }}"><i class="bi bi-plus-circle"></i> Add New Property</a>
+    <a class="{{ request()->routeIs('user.billings.index') ? 'active' : '' }}" href="{{ route('user.billings.index') }}"><i class="bi bi-receipt"></i> Billings</a>
+    <a class="{{ request()->routeIs('user.billings.add-payment') ? 'active' : '' }}" href="{{ route('user.billings.add-payment') }}"><i class="bi bi-wallet2"></i> Add Payment</a>
+    <a class="{{ request()->routeIs('user.activity-logs.*') ? 'active' : '' }}" href="{{ route('user.activity-logs.index') }}"><i class="bi bi-clock-history"></i> Activity Logs</a>
     <span class="dashboard-menu-label">Account</span>
     <a class="{{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="bi bi-person-lines-fill"></i> Profile Details</a>
     <a href="#verification"><i class="bi bi-patch-check"></i> Verification</a>

@@ -54,6 +54,108 @@ class UserController extends Controller
         ]);
     }
 
+    public function billings(Request $request): View
+    {
+        return view('User.billings.index', [
+            'dashboardData' => $this->dashboardData($request),
+            'subscriptions' => $this->tableExists(UserSubscription::class)
+                ? UserSubscription::query()
+                    ->where('user_id', $request->user()->id)
+                    ->with('package:id,name,slug')
+                    ->latest()
+                    ->paginate(10)
+                : collect(),
+            'payments' => $this->tableExists(SubscriptionPayment::class)
+                ? SubscriptionPayment::query()
+                    ->where('user_id', $request->user()->id)
+                    ->with(['package:id,name,slug', 'subscription:id,package_name,status'])
+                    ->latest()
+                    ->paginate(10)
+                : collect(),
+            'activeSubscription' => $this->activeSubscription($request->user()->id),
+        ]);
+    }
+
+    public function addPayment(Request $request): View
+    {
+        return view('User.billings.add-payment', [
+            'dashboardData' => $this->dashboardData($request),
+            'packages' => $this->tableExists(SubscriptionPackage::class)
+                ? SubscriptionPackage::query()->where('is_active', true)->orderBy('sort_order')->orderBy('price')->get()
+                : collect(),
+            'activeSubscription' => $this->activeSubscription($request->user()->id),
+        ]);
+    }
+
+    public function activityLogs(Request $request): View
+    {
+        $userId = $request->user()->id;
+        $activities = collect();
+
+        if ($this->tableExists(Property::class)) {
+            $properties = Property::query()
+                ->where('owner_user_id', $userId)
+                ->select('id', 'title', 'verification_status', 'is_published', 'created_at', 'updated_at')
+                ->latest('updated_at')
+                ->take(20)
+                ->get();
+
+            foreach ($properties as $property) {
+                $activities->push([
+                    'title' => 'Property updated',
+                    'description' => $property->title.' is '.$property->verification_status.($property->is_published ? ' and published.' : '.'),
+                    'icon' => 'bi-house-check',
+                    'time' => $property->updated_at,
+                ]);
+            }
+        }
+
+        if ($this->tableExists(UserSubscription::class)) {
+            $subscriptions = UserSubscription::query()
+                ->where('user_id', $userId)
+                ->select('id', 'package_name', 'status', 'starts_at', 'ends_at', 'created_at', 'updated_at')
+                ->latest('updated_at')
+                ->take(20)
+                ->get();
+
+            foreach ($subscriptions as $subscription) {
+                $activities->push([
+                    'title' => 'Subscription '.$subscription->status,
+                    'description' => $subscription->package_name.' package'.($subscription->ends_at ? ' ends '.$subscription->ends_at->format('d M Y').'.' : '.'),
+                    'icon' => 'bi-gem',
+                    'time' => $subscription->updated_at,
+                ]);
+            }
+        }
+
+        if ($this->tableExists(SubscriptionPayment::class)) {
+            $payments = SubscriptionPayment::query()
+                ->where('user_id', $userId)
+                ->select('id', 'transaction_id', 'amount', 'currency', 'status', 'created_at', 'updated_at')
+                ->latest('updated_at')
+                ->take(20)
+                ->get();
+
+            foreach ($payments as $payment) {
+                $activities->push([
+                    'title' => 'Payment '.$payment->status,
+                    'description' => $payment->transaction_id.' - '.$payment->currency.' '.number_format((float) $payment->amount, 2),
+                    'icon' => 'bi-receipt',
+                    'time' => $payment->updated_at,
+                ]);
+            }
+        }
+
+        return view('User.activity-logs.index', [
+            'dashboardData' => $this->dashboardData($request),
+            'activities' => $activities
+                ->filter(fn ($activity) => $activity['time'])
+                ->sortByDesc('time')
+                ->take(50)
+                ->values(),
+        ]);
+    }
+
     public function checkout(Request $request, SubscriptionPackage $package, SslCommerzService $sslCommerz): RedirectResponse
     {
         abort_unless($package->is_active, 404);
