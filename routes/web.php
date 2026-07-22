@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SubscriptionPackageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Frontend\AgentController;
+use App\Http\Controllers\Frontend\AppointmentController;
 use App\Http\Controllers\Frontend\BuyController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\EarlyAccessController;
@@ -96,6 +97,9 @@ Route::get('/property/{district}/', [PropertyDirectoryController::class, 'distri
 Route::post('/favorites/{property}/toggle', [FavoriteController::class, 'toggle'])
     ->middleware(['auth', 'verified'])
     ->name('frontend.favorites.toggle');
+Route::post('/property/{property}/tour-request', [AppointmentController::class, 'store'])
+    ->middleware(['auth', 'verified'])
+    ->name('frontend.property.tour-request');
 
 Route::get('/dashboard', [FrontendUserController::class, 'profile'])
     ->middleware(['auth', 'verified'])

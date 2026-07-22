@@ -654,6 +654,37 @@ document.addEventListener("DOMContentLoaded", function () {
   var csrfToken = document.querySelector('meta[name="csrf-token"]');
   var token = csrfToken ? csrfToken.getAttribute("content") : "";
 
+  document.querySelectorAll("[data-tour-options]").forEach(function (group) {
+    var form = group.closest(".contact-card") ? group.closest(".contact-card").querySelector("[data-tour-request-form]") : null;
+    var input = form ? form.querySelector("[data-tour-type-input]") : null;
+    var message = form ? form.querySelector('textarea[name="message"]') : null;
+
+    group.querySelectorAll("[data-tour-option]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var tourType = button.getAttribute("data-tour-option") || "in_person";
+        group.querySelectorAll("[data-tour-option]").forEach(function (option) {
+          option.classList.toggle("active", option === button);
+        });
+
+        if (input) {
+          input.value = tourType;
+        }
+
+        if (message && !message.dataset.userEdited) {
+          message.placeholder = tourType === "video_chat"
+            ? "I'm interested in a video tour of this property."
+            : "I'm interested in touring this property.";
+        }
+      });
+    });
+
+    if (message) {
+      message.addEventListener("input", function () {
+        message.dataset.userEdited = "true";
+      });
+    }
+  });
+
   document.querySelectorAll(".js-share-property").forEach(function (button) {
     button.addEventListener("click", function (event) {
       event.preventDefault();

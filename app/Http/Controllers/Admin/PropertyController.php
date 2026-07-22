@@ -229,7 +229,12 @@ class PropertyController extends Controller
         ?SiteInfo $siteInfo,
         ImageUploadService $uploader
     ): void {
-        $mediaType = str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'image';
+        $mimeType = $file->getMimeType();
+        $mediaType = match (true) {
+            str_starts_with($mimeType, 'video/') => 'video',
+            $mimeType === 'application/pdf' => 'floor_plan',
+            default => 'image',
+        };
 
         if ($mediaType === 'image') {
             $path = $uploader->storeConverted(

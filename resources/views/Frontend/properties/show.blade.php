@@ -4,6 +4,8 @@
 
 @php
     $imageMedia = $property->media->where('media_type', 'image')->values();
+    $floorPlans = $property->media->where('media_type', 'floor_plan')->values();
+    $floorPlanUrl = $floorPlans->first()?->file_path ? asset($floorPlans->first()->file_path) : null;
     $fallbackImages = collect(range(1, 8))->map(fn ($index) => asset('frontend/assets/images/card_img_'.$index.'.jpg'));
     $galleryImages = $imageMedia->isNotEmpty()
         ? $imageMedia->map(fn ($media) => [
@@ -73,7 +75,7 @@
 
     <section class="detail-gallery">
       <div class="container-fluid px-lg-3">
-        <div class="gallery-grid">
+        <div class="gallery-grid gallery-count-{{ min($visibleGallery->count(), 5) }}">
           @foreach($visibleGallery as $index => $image)
             <button class="gallery-photo {{ $index === 0 ? 'gallery-main' : '' }}" type="button" data-bs-toggle="modal" data-bs-target="#photoGalleryModal" aria-label="Open {{ $image['space'] }} photo">
               <img src="{{ $image['url'] }}" alt="{{ $image['alt'] }}">
@@ -83,7 +85,7 @@
             </button>
           @endforeach
           <div class="gallery-quick-actions">
-            <button type="button"><i class="bi bi-columns-gap"></i> Floor Plans</button>
+            <button type="button" @if($floorPlanUrl) onclick="window.open('{{ $floorPlanUrl }}', '_blank', 'noopener')" @else disabled @endif><i class="bi bi-columns-gap"></i> Floor Plans</button>
             <button type="button" onclick="window.open('{{ $streetViewUrl }}', '_blank', 'noopener')"><i class="bi bi-signpost-split"></i> Street View</button>
             <button type="button"><i class="bi bi-stars"></i> Redesign</button>
           </div>
@@ -260,20 +262,25 @@
           <aside class="col-lg-4">
             <div class="contact-card detail-card" id="contactAgent">
               <h2>This Home Is Popular</h2>
-              <button class="btn btn-danger w-100 request-showing" type="button">Request Showing</button>
+              @if(session('success'))
+                <div class="alert alert-success py-2">{{ session('success') }}</div>
+              @endif
+              <button class="btn btn-danger w-100 request-showing" type="submit" form="tourRequestForm">Request Showing</button>
               <p class="small text-secondary mt-2 mb-3">Tour for free, no strings attached.</p>
               <button class="btn btn-outline-dark w-100 ask-question" type="button">Ask A Question</button>
-              <div class="tour-options" aria-label="Tour type">
-                <button class="active" type="button">In-person</button>
-                <button type="button">Video chat</button>
+              <div class="tour-options" aria-label="Tour type" data-tour-options>
+                <button class="active" type="button" data-tour-option="in_person">In-person</button>
+                <button type="button" data-tour-option="video_chat">Video chat</button>
               </div>
-              <form>
+              <form id="tourRequestForm" method="POST" action="{{ route('frontend.property.tour-request', ['property' => $property]) }}" data-tour-request-form>
+                @csrf
+                <input type="hidden" name="tour_type" value="in_person" data-tour-type-input>
                 <div class="row g-2">
-                  <div class="col-sm-6"><input type="text" class="form-control" placeholder="First name"></div>
-                  <div class="col-sm-6"><input type="text" class="form-control" placeholder="Last name"></div>
-                  <div class="col-12"><input type="email" class="form-control" placeholder="Email"></div>
-                  <div class="col-12"><input type="tel" class="form-control" placeholder="Phone"></div>
-                  <div class="col-12"><textarea class="form-control" rows="4" placeholder="I'm interested in this property."></textarea></div>
+                  <div class="col-sm-6"><input type="text" name="first_name" class="form-control" placeholder="First name"></div>
+                  <div class="col-sm-6"><input type="text" name="last_name" class="form-control" placeholder="Last name"></div>
+                  <div class="col-12"><input type="email" name="email" class="form-control" placeholder="Email"></div>
+                  <div class="col-12"><input type="tel" name="phone" class="form-control" placeholder="Phone"></div>
+                  <div class="col-12"><textarea class="form-control" name="message" rows="4" placeholder="I'm interested in touring this property."></textarea></div>
                 </div>
                 <button class="btn btn-dark w-100 mt-3" type="submit">Contact Agent</button>
               </form>
@@ -292,7 +299,7 @@
             <button type="button" class="photo-close" data-bs-dismiss="modal" aria-label="Close"><i class="bi bi-x-lg"></i></button>
             <nav class="photo-modal-tabs" aria-label="Photo sections">
               <button class="active" type="button">Photos</button>
-              <button type="button">Floor Plan</button>
+              <button type="button" @if($floorPlanUrl) onclick="window.open('{{ $floorPlanUrl }}', '_blank', 'noopener')" @else disabled @endif>Floor Plan</button>
               <button type="button" onclick="window.open('{{ $streetViewUrl }}', '_blank', 'noopener')">Street View</button>
               <button type="button">Neighborhood</button>
             </nav>
