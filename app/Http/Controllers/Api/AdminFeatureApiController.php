@@ -467,6 +467,7 @@ class AdminFeatureApiController extends Controller
             'subtitle' => ['nullable', 'string', 'max:255'],
             'short_description' => ['nullable', 'string'],
             'content' => [$model ? 'sometimes' : 'required', 'string'],
+            'background_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string'],
             'meta_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
@@ -759,6 +760,7 @@ class AdminFeatureApiController extends Controller
                 'hero_background_path' => ['directory' => 'uploads/blog/pages', 'width' => $siteInfo?->blog_page_image_width, 'height' => $siteInfo?->blog_page_image_height],
             ],
             'custom-pages' => [
+                'background_image' => ['directory' => 'uploads/custom-pages/backgrounds', 'width' => $siteInfo?->blog_page_image_width ?: 1920, 'height' => $siteInfo?->blog_page_image_height ?: 560],
                 'meta_image' => ['directory' => 'uploads/custom-pages', 'width' => $siteInfo?->blog_page_image_width, 'height' => $siteInfo?->blog_page_image_height],
             ],
             default => [],
@@ -868,7 +870,7 @@ class AdminFeatureApiController extends Controller
             'abouts', 'sliders' => ['image'],
             'blog-posts' => ['featured_image_path'],
             'blog-pages' => ['hero_background_path'],
-            'custom-pages' => ['meta_image'],
+            'custom-pages' => ['background_image', 'meta_image'],
             'agencies' => ['logo'],
             default => [],
         };

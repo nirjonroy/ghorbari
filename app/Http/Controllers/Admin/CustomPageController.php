@@ -38,6 +38,7 @@ class CustomPageController extends Controller
     {
         $data = $this->validatedData($request);
 
+        $data = $this->applyBackgroundImage($request, $data);
         $data = $this->applySeoImage($request, $data, null, 'uploads/custom-pages');
 
         CustomPage::create($data);
@@ -56,6 +57,7 @@ class CustomPageController extends Controller
     {
         $data = $this->validatedData($request, $customPage);
 
+        $data = $this->applyBackgroundImage($request, $data, $customPage);
         $data = $this->applySeoImage($request, $data, $customPage, 'uploads/custom-pages');
 
         $customPage->update($data);
@@ -69,6 +71,10 @@ class CustomPageController extends Controller
     {
         if ($customPage->meta_image && File::exists(public_path($customPage->meta_image))) {
             File::delete(public_path($customPage->meta_image));
+        }
+
+        if ($customPage->background_image && File::exists(public_path($customPage->background_image))) {
+            File::delete(public_path($customPage->background_image));
         }
 
         $customPage->delete();
@@ -91,6 +97,7 @@ class CustomPageController extends Controller
             'subtitle' => ['nullable', 'string', 'max:255'],
             'short_description' => ['nullable', 'string'],
             'content' => ['required', 'string'],
+            'background_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'status' => ['required', 'string', Rule::in(['draft', 'published', 'inactive'])],
             'published_at' => ['nullable', 'date'],
         ] + $this->seoValidationRules());
@@ -99,6 +106,27 @@ class CustomPageController extends Controller
         $data['template_type'] = 'default';
 
         unset($data['meta_image']);
+        unset($data['background_image']);
+
+        return $data;
+    }
+
+    private function applyBackgroundImage(Request $request, array $data, ?CustomPage $page = null): array
+    {
+        if (! $request->hasFile('background_image')) {
+            return $data;
+        }
+
+        $siteInfo = SiteInfo::query()->first();
+
+        $data['background_image'] = (new ImageUploadService())->storeConverted(
+            $request->file('background_image'),
+            'uploads/custom-pages/backgrounds',
+            $siteInfo?->blog_page_image_width ?: 1920,
+            $siteInfo?->blog_page_image_height ?: 560,
+            $page?->background_image,
+            $siteInfo?->image_output_format ?? 'webp'
+        );
 
         return $data;
     }

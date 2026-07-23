@@ -18,6 +18,7 @@ class CustomPage extends Model
         'subtitle',
         'short_description',
         'content',
+        'background_image',
         'seo_title',
         'seo_description',
         'meta_title',

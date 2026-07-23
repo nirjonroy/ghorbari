@@ -4,6 +4,7 @@
   $page = $customPageData['page'];
   $title = $page->meta_title ?: $page->page_name;
   $coverImage = $page->meta_image ? asset($page->meta_image) : null;
+  $backgroundImage = $page->background_image ? asset($page->background_image) : null;
 @endphp
 
 @section('title', $title . ' | Land Site')
@@ -19,7 +20,10 @@
 
 @section('content')
   <main data-api-url="{{ $customPageData['api_url'] }}">
-    <section class="blog-detail-hero">
+    <section
+      class="blog-detail-hero custom-page-hero {{ $backgroundImage ? 'has-background' : '' }}"
+      @if($backgroundImage) style="--custom-page-bg: url('{{ $backgroundImage }}');" @endif
+    >
       <div class="container">
         <a href="{{ route('frontend.home') }}" class="blog-back-link"><i class="bi bi-arrow-left"></i> Back To Home</a>
         <h1>{{ $page->page_name }}</h1>

@@ -64,6 +64,26 @@
         @error('content')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
+      <div class="col-md-6">
+        <label for="background_image" class="form-label">Background Image</label>
+        <input id="background_image" type="file" name="background_image" class="form-control @error('background_image') is-invalid @enderror" accept="image/jpeg,image/png,image/webp" data-preview="background-image-preview">
+        <div class="form-text">Recommended size: 1920 x 560 px. Accepted: JPG, PNG, WEBP.</div>
+        @error('background_image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Background Preview</label>
+        <div>
+          <img
+            id="background-image-preview"
+            src="{{ $page->background_image ? asset($page->background_image) : '' }}"
+            alt="Background preview"
+            class="img-fluid rounded border {{ $page->background_image ? '' : 'd-none' }}"
+            style="max-height: 160px; object-fit: cover;"
+          >
+        </div>
+      </div>
+
     </div>
   </div>
 
