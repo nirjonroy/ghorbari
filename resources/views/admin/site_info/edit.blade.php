@@ -318,12 +318,12 @@
                     <div class="col-md-4">
                       <label for="image_output_format" class="form-label">Converted Image Format</label>
                       <select id="image_output_format" name="image_output_format" class="form-select @error('image_output_format') is-invalid @enderror" required>
-                        @foreach (['webp' => 'WebP', 'jpg' => 'JPG', 'png' => 'PNG'] as $format => $label)
+                        @foreach (['webp' => 'WebP', 'jpg' => 'JPG', 'png' => 'PNG', 'original' => 'No Convert / Main Image Format'] as $format => $label)
                           <option value="{{ $format }}" @selected(old('image_output_format', $siteInfo->image_output_format ?? 'webp') === $format)>{{ $label }}</option>
                         @endforeach
                       </select>
                       @error('image_output_format')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                      <div class="form-text">This format will be used when new logo, favicon, slider, or other feature images are uploaded.</div>
+                      <div class="form-text">Choose No Convert to keep each uploaded image in its original/main file format.</div>
                     </div>
 
                     <div class="col-12">

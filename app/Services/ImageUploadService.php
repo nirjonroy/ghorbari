@@ -28,6 +28,10 @@ class ImageUploadService
             File::delete(public_path($oldPath));
         }
 
+        if ($format === 'original') {
+            return $this->storeOriginal($file, $directory, $targetDirectory);
+        }
+
         $baseName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
         $baseName = $baseName !== '' ? $baseName : 'image';
         $fileName = $this->availableFileName($targetDirectory, $baseName, $format);
@@ -108,7 +112,20 @@ class ImageUploadService
     {
         $format = strtolower($format);
 
-        return in_array($format, ['jpg', 'png', 'webp'], true) ? $format : 'webp';
+        return in_array($format, ['jpg', 'png', 'webp', 'original'], true) ? $format : 'webp';
+    }
+
+    private function storeOriginal(UploadedFile $file, string $directory, string $targetDirectory): string
+    {
+        $baseName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+        $baseName = $baseName !== '' ? $baseName : 'image';
+        $extension = strtolower($file->getClientOriginalExtension()) ?: 'jpg';
+        $extension = $extension === 'jpeg' ? 'jpg' : $extension;
+        $fileName = $this->availableFileName($targetDirectory, $baseName, $extension);
+
+        $file->move($targetDirectory, $fileName);
+
+        return trim($directory, '/').'/'.$fileName;
     }
 
     private function prepareCanvas($canvas, string $format): void

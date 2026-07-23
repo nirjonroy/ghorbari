@@ -59,7 +59,9 @@
                     </dd>
 
                     <dt class="col-sm-3">Converted Image Format</dt>
-                    <dd class="col-sm-9">{{ strtoupper($siteInfo->image_output_format ?? 'webp') }}</dd>
+                    <dd class="col-sm-9">
+                      {{ ($siteInfo->image_output_format ?? 'webp') === 'original' ? 'No Convert / Main Image Format' : strtoupper($siteInfo->image_output_format ?? 'webp') }}
+                    </dd>
 
                     <dt class="col-sm-3">Contact Email</dt>
                     <dd class="col-sm-9">{{ $siteInfo->contact_email ?? 'Not set' }}</dd>

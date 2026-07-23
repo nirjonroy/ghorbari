@@ -68,7 +68,7 @@ class SiteInfoController extends Controller
             'logo_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
             'favicon_width' => ['nullable', 'integer', 'min:1', 'max:512'],
             'favicon_height' => ['nullable', 'integer', 'min:1', 'max:512'],
-            'image_output_format' => ['required', 'in:jpg,png,webp'],
+            'image_output_format' => ['required', 'in:jpg,png,webp,original'],
             'contact_email' => ['nullable', 'email', 'max:255'],
             'text_direction' => ['required', 'in:ltr,rtl'],
             'default_theme' => ['required', 'in:light,dark'],
