@@ -106,6 +106,31 @@
                     </div>
                   </div>
                 </div>
+
+                <div class="card mt-3">
+                  <div class="card-header">
+                    <h3 class="card-title">Frontend APIs</h3>
+                  </div>
+                  <div class="card-body">
+                    @foreach($frontendApis as $group => $endpoints)
+                      <h6 class="text-uppercase text-muted small fw-bold mt-2 mb-2">{{ $group }}</h6>
+                      <div class="list-group mb-3">
+                        @foreach($endpoints as $endpoint)
+                          <button
+                            type="button"
+                            class="list-group-item list-group-item-action api-endpoint"
+                            data-method="{{ $endpoint['method'] }}"
+                            data-path="{{ $endpoint['path'] }}"
+                          >
+                            <span class="badge text-bg-success me-2">{{ $endpoint['method'] }}</span>
+                            <span class="fw-semibold">{{ $endpoint['label'] }}</span>
+                            <small class="d-block text-muted mt-1">{{ $endpoint['path'] }}</small>
+                          </button>
+                        @endforeach
+                      </div>
+                    @endforeach
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -150,6 +175,14 @@ document.addEventListener('DOMContentLoaded', function () {
     button.addEventListener('click', function () {
       method.value = 'GET';
       path.value = '/api/admin/' + this.dataset.resource;
+      body.value = '{}';
+    });
+  });
+
+  document.querySelectorAll('.api-endpoint').forEach((button) => {
+    button.addEventListener('click', function () {
+      method.value = this.dataset.method;
+      path.value = this.dataset.path;
       body.value = '{}';
     });
   });

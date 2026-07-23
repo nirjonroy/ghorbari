@@ -33,6 +33,21 @@ class ApiTesterController extends Controller
                 'admins',
             ],
             'examples' => [
+                'Frontend Home' => [
+                    'method' => 'GET',
+                    'path' => '/api/home',
+                    'body' => null,
+                ],
+                'Frontend Property Search' => [
+                    'method' => 'GET',
+                    'path' => '/api/property/for-sale?q=Dhaka',
+                    'body' => null,
+                ],
+                'Frontend Property Details' => [
+                    'method' => 'GET',
+                    'path' => '/api/property-details/banani-modern-residence-road-12-banani-dhaka-1',
+                    'body' => null,
+                ],
                 'Login' => [
                     'method' => 'POST',
                     'path' => '/api/admin/login',
@@ -69,6 +84,38 @@ class ApiTesterController extends Controller
                         'comment' => 'Comment text',
                         'is_approved' => true,
                     ],
+                ],
+            ],
+            'frontendApis' => [
+                'Main Pages' => [
+                    ['label' => 'Home', 'method' => 'GET', 'path' => '/api/home'],
+                    ['label' => 'Buy Hub', 'method' => 'GET', 'path' => '/api/for-sale'],
+                    ['label' => 'Rent Hub', 'method' => 'GET', 'path' => '/api/for-rent'],
+                    ['label' => 'Sell Hub', 'method' => 'GET', 'path' => '/api/sell'],
+                    ['label' => 'Open Houses', 'method' => 'GET', 'path' => '/api/open-houses'],
+                    ['label' => 'Early Access', 'method' => 'GET', 'path' => '/api/early-access'],
+                    ['label' => 'Calculator', 'method' => 'GET', 'path' => '/api/calculator'],
+                    ['label' => 'Agents', 'method' => 'GET', 'path' => '/api/real-estate-agents'],
+                    ['label' => 'About', 'method' => 'GET', 'path' => '/api/about'],
+                    ['label' => 'Contact', 'method' => 'GET', 'path' => '/api/contact'],
+                ],
+                'Property Search' => [
+                    ['label' => 'Buy Search', 'method' => 'GET', 'path' => '/api/property/for-sale?q=Dhaka'],
+                    ['label' => 'District Page', 'method' => 'GET', 'path' => '/api/property/dhaka'],
+                    ['label' => 'City Page', 'method' => 'GET', 'path' => '/api/property/dhaka/gulshan'],
+                    ['label' => 'Local Area Page', 'method' => 'GET', 'path' => '/api/property/dhaka/gulshan/gulshan-1'],
+                    ['label' => 'By Category', 'method' => 'GET', 'path' => '/api/property/for-rent/residential'],
+                    ['label' => 'By Type', 'method' => 'GET', 'path' => '/api/property/for-rent/residential/apartment'],
+                    ['label' => 'By District', 'method' => 'GET', 'path' => '/api/property/for-rent/apartment/dhaka'],
+                    ['label' => 'By City', 'method' => 'GET', 'path' => '/api/property/for-rent/apartment/dhaka/gulshan'],
+                    ['label' => 'By Local Area', 'method' => 'GET', 'path' => '/api/property/for-rent/apartment/dhaka/gulshan/gulshan-1'],
+                    ['label' => 'Land Sale City', 'method' => 'GET', 'path' => '/api/property/for-sale/residential/land-plot/gulshan'],
+                    ['label' => 'Property Details', 'method' => 'GET', 'path' => '/api/property-details/banani-modern-residence-road-12-banani-dhaka-1'],
+                ],
+                'Content Pages' => [
+                    ['label' => 'Blog List', 'method' => 'GET', 'path' => '/api/blog'],
+                    ['label' => 'Blog Detail', 'method' => 'GET', 'path' => '/api/blog/sample-real-estate-guide'],
+                    ['label' => 'Custom Page', 'method' => 'GET', 'path' => '/api/custom-pages/guides/buy-guide'],
                 ],
             ],
         ]);
