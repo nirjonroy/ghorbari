@@ -1,30 +1,34 @@
 document.addEventListener("DOMContentLoaded", function () {
   var root = document.documentElement;
-  var themeToggle = document.querySelector(".theme-toggle");
+  var themeToggles = document.querySelectorAll(".theme-toggle");
   var savedTheme = localStorage.getItem("landsite-theme");
   var defaultTheme = root.getAttribute("data-default-theme") || "light";
   var currentTheme = savedTheme || defaultTheme;
 
   var setTheme = function (theme) {
     root.setAttribute("data-theme", theme);
-    if (!themeToggle) {
+    if (!themeToggles.length) {
       return;
     }
 
     var isDark = theme === "dark";
-    themeToggle.setAttribute("aria-pressed", isDark ? "true" : "false");
-    themeToggle.innerHTML = isDark
-      ? '<i class="bi bi-sun"></i><span>Light</span>'
-      : '<i class="bi bi-moon"></i><span>Dark</span>';
+    themeToggles.forEach(function (themeToggle) {
+      themeToggle.setAttribute("aria-pressed", isDark ? "true" : "false");
+      themeToggle.innerHTML = isDark
+        ? '<i class="bi bi-sun"></i><span>Light</span>'
+        : '<i class="bi bi-moon"></i><span>Dark</span>';
+    });
   };
 
   setTheme(currentTheme);
 
-  if (themeToggle) {
-    themeToggle.addEventListener("click", function () {
-      var nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      localStorage.setItem("landsite-theme", nextTheme);
-      setTheme(nextTheme);
+  if (themeToggles.length) {
+    themeToggles.forEach(function (themeToggle) {
+      themeToggle.addEventListener("click", function () {
+        var nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        localStorage.setItem("landsite-theme", nextTheme);
+        setTheme(nextTheme);
+      });
     });
   }
 

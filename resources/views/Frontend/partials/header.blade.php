@@ -83,15 +83,22 @@
           </li>
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.rent.*') ? 'active' : '' }}" href="{{ route('frontend.rent.index') }}">Rent</a></li>
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.sell.*') ? 'active' : '' }}" href="{{ route('frontend.sell.index') }}">Sell</a></li>
-          <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.calculator.*') ? 'active' : '' }}" href="{{ route('frontend.calculator.index') }}">Calculator</a></li>
-          <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.agents.*') ? 'active' : '' }}" href="{{ route('frontend.agents.index') }}">Agents</a></li>
-          <li class="nav-item"><a class="nav-link {{ request()->routeIs('dashboard', 'user.dashboard', 'user.profile.*') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a></li>
-          <li class="nav-item"><button class="theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false"><i class="bi bi-moon"></i><span>Dark</span></button></li>
-          <li class="nav-item ms-lg-2">
-            <button class="btn btn-dark px-4" type="button" data-bs-toggle="modal" data-bs-target="#authModal">Join / Sign in</button>
-          </li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('user.properties.create') ? 'active' : '' }}" href="{{ route('user.properties.create') }}">Advertise</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.blog.*') ? 'active' : '' }}" href="{{ route('frontend.blog.index') }}">Blog</a></li>
+          <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.about.*') ? 'active' : '' }}" href="{{ route('frontend.about.index') }}">About</a></li>
+          @guest
+            <li class="nav-item"><a class="nav-link {{ request()->routeIs('login') ? 'active' : '' }}" href="{{ route('login') }}">Sign In</a></li>
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-dark px-4" href="{{ route('register') }}">Sign Up</a>
+            </li>
+          @else
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-dark px-4" href="{{ route('dashboard') }}">Dashboard</a>
+            </li>
+          @endguest
         </ul>
       </div>
     </div>
   </nav>
+  <button class="theme-toggle floating-theme-toggle" type="button" aria-label="Switch theme" aria-pressed="false"><i class="bi bi-moon"></i><span>Dark</span></button>
 
