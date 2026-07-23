@@ -1,13 +1,29 @@
       <!--begin::Sidebar-->
       <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
         <div class="sidebar-brand">
+          @php
+            $adminBrandName = data_get($adminSiteInfo ?? null, 'sidebar_lg_header')
+                ?: data_get($adminSiteInfo ?? null, 'site_name')
+                ?: data_get($adminSiteInfo ?? null, 'sidebar_sm_header')
+                ?: 'AdminLTE 4';
+            $adminBrandLogo = data_get($adminSiteInfo ?? null, 'logo');
+          @endphp
           <a href="{{ route('admin.dashboard') }}" class="brand-link">
-            <img
-              src="{{ asset('admin/assets/img/AdminLTELogo.png') }}"
-              alt="AdminLTE Logo"
-              class="brand-image opacity-75 shadow"
-            />
-            <span class="brand-text fw-light">AdminLTE 4</span>
+            @if($adminBrandLogo)
+              <img
+                src="{{ asset($adminBrandLogo) }}"
+                alt="{{ $adminBrandName }}"
+                class="brand-image shadow bg-white"
+                style="object-fit: contain; padding: 2px;"
+              />
+            @else
+              <img
+                src="{{ asset('admin/assets/img/AdminLTELogo.png') }}"
+                alt="{{ $adminBrandName }}"
+                class="brand-image opacity-75 shadow"
+              />
+            @endif
+            <span class="brand-text fw-light">{{ $adminBrandName }}</span>
           </a>
         </div>
 
