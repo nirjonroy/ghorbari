@@ -1,5 +1,13 @@
 @extends('Frontend.layouts.master')
 @section('title', $page['title'] ?? $property->title.' | Land Site')
+@section('meta_title', $property->meta_title ?: $property->seo_title ?: $property->title)
+@section('meta_description', $property->meta_description ?: $property->seo_description ?: strip_tags($property->description))
+@section('keywords', $property->keywords)
+@section('author', $property->author)
+@section('publisher', $property->publisher)
+@section('copyright', $property->copyright)
+@section('site_name', $property->site_name)
+@section('meta_image', $property->meta_image)
 @section('body_class', 'detail-page')
 
 @php

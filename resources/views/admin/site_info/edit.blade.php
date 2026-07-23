@@ -307,6 +307,8 @@
                 </div>
               </div>
 
+              @include('Admin.partials.seo-fields', ['model' => $siteInfo])
+
               <div class="card mt-3">
                 <div class="card-header">
                   <h3 class="card-title">Image Settings</h3>

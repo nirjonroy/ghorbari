@@ -20,7 +20,7 @@
         </div>
         <div class="app-content">
           <div class="container-fluid">
-            <form method="POST" action="{{ route('admin.amenities.store') }}">
+            <form method="POST" action="{{ route('admin.amenities.store') }}" enctype="multipart/form-data">
               @include('Admin.amenities.partials.form', ['title' => 'Amenity Information'])
             </form>
           </div>

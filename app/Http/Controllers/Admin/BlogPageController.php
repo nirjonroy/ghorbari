@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\BlogPage;
 use App\Models\SiteInfo;
@@ -12,6 +13,8 @@ use Illuminate\View\View;
 
 class BlogPageController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $blogPage = BlogPage::query()->first();
@@ -42,9 +45,9 @@ class BlogPageController extends Controller
             'read_button_text' => ['nullable', 'string', 'max:255'],
             'article_tags_title' => ['nullable', 'string', 'max:255'],
             'comments_section_title' => ['nullable', 'string', 'max:255'],
-        ]);
+        ] + $this->seoValidationRules());
 
-        unset($data['hero_background_path']);
+        unset($data['hero_background_path'], $data['meta_image']);
 
         if ($request->hasFile('hero_background_path')) {
             $siteInfo = SiteInfo::query()->first();
@@ -58,6 +61,7 @@ class BlogPageController extends Controller
                 $siteInfo?->image_output_format ?? 'webp'
             );
         }
+        $data = $this->applySeoImage($request, $data, $blogPage, 'uploads/blog/page/seo');
 
         BlogPage::query()->updateOrCreate(
             ['id' => optional($blogPage)->id],

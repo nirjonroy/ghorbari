@@ -21,7 +21,7 @@
 
         <div class="app-content">
           <div class="container-fluid">
-            <form method="POST" action="{{ route('admin.blog-categories.update', $category) }}">
+            <form method="POST" action="{{ route('admin.blog-categories.update', $category) }}" enctype="multipart/form-data">
               @method('PUT')
               @include('Admin.blog_categories.partials.form', ['title' => 'Category Information'])
             </form>

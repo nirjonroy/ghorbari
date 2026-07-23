@@ -7,6 +7,14 @@
 @endphp
 
 @section('title', $title . ' | Land Site')
+@section('meta_title', $page->meta_title ?: $page->seo_title ?: $page->page_name)
+@section('meta_description', $page->meta_description ?: $page->seo_description ?: $page->short_description)
+@section('keywords', $page->keywords)
+@section('author', $page->author)
+@section('publisher', $page->publisher)
+@section('copyright', $page->copyright)
+@section('site_name', $page->site_name)
+@section('meta_image', $page->meta_image)
 @section('body_class', 'frontend-page blog-detail-page custom-page')
 
 @section('content')

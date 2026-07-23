@@ -1,6 +1,14 @@
 @extends('Frontend.layouts.master')
 
 @section('title', $blogData['post']->title . ' | Land Site')
+@section('meta_title', $blogData['post']->meta_title ?: $blogData['post']->seo_title ?: $blogData['post']->title)
+@section('meta_description', $blogData['post']->meta_description ?: $blogData['post']->seo_description ?: $blogData['post']->excerpt)
+@section('keywords', $blogData['post']->keywords ?: implode(', ', $blogData['post']->tags ?? []))
+@section('author', $blogData['post']->author ?: $blogData['post']->author_name)
+@section('publisher', $blogData['post']->publisher)
+@section('copyright', $blogData['post']->copyright)
+@section('site_name', $blogData['post']->site_name)
+@section('meta_image', $blogData['post']->meta_image ?: $blogData['post']->featured_image_path)
 @section('body_class', 'frontend-page blog-detail-page')
 
 @php

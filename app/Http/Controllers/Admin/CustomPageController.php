@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\CustomPage;
 use App\Models\SiteInfo;
@@ -15,6 +16,8 @@ use Illuminate\View\View;
 
 class CustomPageController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $pages = CustomPage::query()
@@ -35,9 +38,7 @@ class CustomPageController extends Controller
     {
         $data = $this->validatedData($request);
 
-        if ($request->hasFile('meta_image')) {
-            $data['meta_image'] = $this->storeImage($request);
-        }
+        $data = $this->applySeoImage($request, $data, null, 'uploads/custom-pages');
 
         CustomPage::create($data);
 
@@ -55,9 +56,7 @@ class CustomPageController extends Controller
     {
         $data = $this->validatedData($request, $customPage);
 
-        if ($request->hasFile('meta_image')) {
-            $data['meta_image'] = $this->storeImage($request, $customPage->meta_image);
-        }
+        $data = $this->applySeoImage($request, $data, $customPage, 'uploads/custom-pages');
 
         $customPage->update($data);
 
@@ -92,12 +91,9 @@ class CustomPageController extends Controller
             'subtitle' => ['nullable', 'string', 'max:255'],
             'short_description' => ['nullable', 'string'],
             'content' => ['required', 'string'],
-            'meta_title' => ['nullable', 'string', 'max:255'],
-            'meta_description' => ['nullable', 'string'],
-            'meta_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'status' => ['required', 'string', Rule::in(['draft', 'published', 'inactive'])],
             'published_at' => ['nullable', 'date'],
-        ]);
+        ] + $this->seoValidationRules());
 
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: $data['page_name'], $page);
         $data['template_type'] = 'default';
@@ -129,17 +125,4 @@ class CustomPageController extends Controller
         return trim(preg_replace('#/+#', '/', trim($path)), '/');
     }
 
-    private function storeImage(Request $request, ?string $oldPath = null): string
-    {
-        $siteInfo = SiteInfo::query()->first();
-
-        return (new ImageUploadService())->storeConverted(
-            $request->file('meta_image'),
-            'uploads/custom-pages',
-            $siteInfo?->blog_page_image_width,
-            $siteInfo?->blog_page_image_height,
-            $oldPath,
-            $siteInfo?->image_output_format ?? 'webp'
-        );
-    }
 }

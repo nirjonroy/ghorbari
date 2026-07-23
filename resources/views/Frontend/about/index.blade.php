@@ -1,6 +1,14 @@
 @extends('Frontend.layouts.master')
 
 @section('title', (($aboutData['about']->title ?? null) ?: 'About Us') . ' | Land Site')
+@section('meta_title', $aboutData['about']?->meta_title ?: $aboutData['about']?->seo_title ?: (($aboutData['about']->title ?? null) ?: 'About Us'))
+@section('meta_description', $aboutData['about']?->meta_description ?: $aboutData['about']?->seo_description ?: $aboutData['about']?->short_description)
+@section('keywords', $aboutData['about']?->keywords)
+@section('author', $aboutData['about']?->author)
+@section('publisher', $aboutData['about']?->publisher)
+@section('copyright', $aboutData['about']?->copyright)
+@section('site_name', $aboutData['about']?->site_name)
+@section('meta_image', $aboutData['about']?->meta_image ?: $aboutData['about']?->image)
 @section('body_class', 'frontend-page frontend-inner-page about-page')
 
 @php

@@ -87,6 +87,9 @@
       </div>
     </div>
   </div>
+
+  @include('Admin.partials.seo-fields', ['model' => $about])
+
   <div class="card-footer d-flex justify-content-end gap-2">
     <a href="{{ route('admin.abouts.index') }}" class="btn btn-secondary">Cancel</a>
     <button type="submit" class="btn btn-primary">Save About</button>

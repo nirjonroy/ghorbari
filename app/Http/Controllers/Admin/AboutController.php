@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\About;
 use App\Models\SiteInfo;
@@ -15,6 +16,8 @@ use Illuminate\View\View;
 
 class AboutController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $abouts = About::query()
@@ -37,6 +40,7 @@ class AboutController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = $this->storeImage($request);
         }
+        $data = $this->applySeoImage($request, $data, null, 'uploads/abouts/seo');
 
         About::create($data);
 
@@ -62,6 +66,7 @@ class AboutController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = $this->storeImage($request, $about->image);
         }
+        $data = $this->applySeoImage($request, $data, $about, 'uploads/abouts/seo');
 
         $about->update($data);
 
@@ -99,9 +104,9 @@ class AboutController extends Controller
             'vision_description' => ['nullable', 'string'],
             'display_order' => ['required', 'integer', 'min:0'],
             'status' => ['required', 'string', 'max:50'],
-        ]);
+        ] + $this->seoValidationRules());
 
-        unset($data['image']);
+        unset($data['image'], $data['meta_image']);
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: $data['title'], $about);
 
         return $data;

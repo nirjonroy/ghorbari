@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
@@ -16,6 +17,8 @@ use Illuminate\View\View;
 
 class BlogPostController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $posts = BlogPost::query()
@@ -41,6 +44,7 @@ class BlogPostController extends Controller
         if ($request->hasFile('featured_image_path')) {
             $data['featured_image_path'] = $this->storeImage($request);
         }
+        $data = $this->applySeoImage($request, $data, null, 'uploads/blog/posts/seo');
 
         BlogPost::create($data);
 
@@ -64,6 +68,7 @@ class BlogPostController extends Controller
         if ($request->hasFile('featured_image_path')) {
             $data['featured_image_path'] = $this->storeImage($request, $blogPost->featured_image_path);
         }
+        $data = $this->applySeoImage($request, $data, $blogPost, 'uploads/blog/posts/seo');
 
         $blogPost->update($data);
 
@@ -97,17 +102,16 @@ class BlogPostController extends Controller
             'quote' => ['nullable', 'string'],
             'featured_image_path' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'featured_image_source' => ['nullable', 'string', 'max:255'],
-            'meta_description' => ['nullable', 'string', 'max:255'],
             'tags_input' => ['nullable', 'string'],
             'published_at' => ['nullable', 'date'],
-        ]);
+        ] + $this->seoValidationRules());
 
         $data['slug'] = Str::slug($data['slug'] ?: $data['title']);
         $data['tags'] = $this->commaSeparatedValues($data['tags_input'] ?? null);
         $data['is_published'] = $request->boolean('is_published');
         $data['show_on_home'] = $request->boolean('show_on_home');
 
-        unset($data['tags_input'], $data['featured_image_path']);
+        unset($data['tags_input'], $data['featured_image_path'], $data['meta_image']);
 
         return $data;
     }

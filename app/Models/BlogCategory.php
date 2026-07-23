@@ -16,6 +16,16 @@ class BlogCategory extends Model
         'description',
         'display_order',
         'is_active',
+        'seo_title',
+        'seo_description',
+        'meta_title',
+        'meta_description',
+        'meta_image',
+        'author',
+        'publisher',
+        'copyright',
+        'site_name',
+        'keywords',
     ];
 
     protected $casts = [

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\Agency;
 use App\Models\AgentProfile;
@@ -13,6 +14,8 @@ use Illuminate\View\View;
 
 class AgentProfileController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $agents = AgentProfile::query()
@@ -30,7 +33,7 @@ class AgentProfileController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        AgentProfile::create($this->validatedData($request));
+        AgentProfile::create($this->applySeoImage($request, $this->validatedData($request), null, 'uploads/agents/seo'));
 
         return redirect()->route('admin.agent-profiles.index')->with('status', 'Agent profile created successfully.');
     }
@@ -42,7 +45,7 @@ class AgentProfileController extends Controller
 
     public function update(Request $request, AgentProfile $agentProfile): RedirectResponse
     {
-        $agentProfile->update($this->validatedData($request, $agentProfile));
+        $agentProfile->update($this->applySeoImage($request, $this->validatedData($request, $agentProfile), $agentProfile, 'uploads/agents/seo'));
 
         return redirect()->route('admin.agent-profiles.index')->with('status', 'Agent profile updated successfully.');
     }
@@ -65,7 +68,7 @@ class AgentProfileController extends Controller
 
     private function validatedData(Request $request, ?AgentProfile $agentProfile = null): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'user_id' => ['required', 'exists:users,id', Rule::unique('agent_profiles', 'user_id')->ignore($agentProfile)],
             'agency_id' => ['nullable', 'exists:agencies,id'],
             'designation' => ['nullable', 'string', 'max:150'],
@@ -75,6 +78,10 @@ class AgentProfileController extends Controller
             'service_area' => ['nullable', 'string', 'max:255'],
             'rating' => ['nullable', 'numeric', 'min:0', 'max:5'],
             'status' => ['required', 'string', 'max:50'],
-        ]);
+        ] + $this->seoValidationRules());
+
+        unset($data['meta_image']);
+
+        return $data;
     }
 }

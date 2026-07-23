@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\Agency;
 use App\Models\SiteInfo;
@@ -15,6 +16,8 @@ use Illuminate\View\View;
 
 class AgencyController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $agencies = Agency::query()
@@ -37,6 +40,7 @@ class AgencyController extends Controller
         if ($request->hasFile('logo')) {
             $data['logo'] = $this->storeLogo($request);
         }
+        $data = $this->applySeoImage($request, $data, null, 'uploads/agencies/seo');
 
         Agency::create($data);
 
@@ -55,6 +59,7 @@ class AgencyController extends Controller
         if ($request->hasFile('logo')) {
             $data['logo'] = $this->storeLogo($request, $agency->logo);
         }
+        $data = $this->applySeoImage($request, $data, $agency, 'uploads/agencies/seo');
 
         $agency->update($data);
 
@@ -83,9 +88,9 @@ class AgencyController extends Controller
             'website' => ['nullable', 'url', 'max:255'],
             'description' => ['nullable', 'string'],
             'status' => ['required', 'string', 'max:50'],
-        ]);
+        ] + $this->seoValidationRules());
 
-        unset($data['logo']);
+        unset($data['logo'], $data['meta_image']);
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: $data['name'], $agency);
 
         return $data;

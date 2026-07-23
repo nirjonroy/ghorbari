@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\SubscriptionPackage;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +13,8 @@ use Illuminate\View\View;
 
 class SubscriptionPackageController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $packages = SubscriptionPackage::query()
@@ -29,7 +32,7 @@ class SubscriptionPackageController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        SubscriptionPackage::create($this->validatedData($request));
+        SubscriptionPackage::create($this->applySeoImage($request, $this->validatedData($request), null, 'uploads/subscriptions/seo'));
 
         return redirect()
             ->route('admin.subscription-packages.index')
@@ -43,7 +46,7 @@ class SubscriptionPackageController extends Controller
 
     public function update(Request $request, SubscriptionPackage $subscriptionPackage): RedirectResponse
     {
-        $subscriptionPackage->update($this->validatedData($request, $subscriptionPackage));
+        $subscriptionPackage->update($this->applySeoImage($request, $this->validatedData($request, $subscriptionPackage), $subscriptionPackage, 'uploads/subscriptions/seo'));
 
         return redirect()
             ->route('admin.subscription-packages.index')
@@ -73,8 +76,9 @@ class SubscriptionPackageController extends Controller
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_featured' => ['nullable', 'boolean'],
             'is_active' => ['nullable', 'boolean'],
-        ]);
+        ] + $this->seoValidationRules());
 
+        unset($data['meta_image']);
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: $data['name'], $package);
         $data['currency'] = strtoupper($data['currency']);
         $data['is_featured'] = $request->boolean('is_featured');

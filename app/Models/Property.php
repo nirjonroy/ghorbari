@@ -43,6 +43,16 @@ class Property extends Model
         'is_published',
         'published_at',
         'expires_at',
+        'seo_title',
+        'seo_description',
+        'meta_title',
+        'meta_description',
+        'meta_image',
+        'author',
+        'publisher',
+        'copyright',
+        'site_name',
+        'keywords',
     ];
 
     protected $casts = [

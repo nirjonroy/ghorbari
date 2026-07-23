@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\SiteInfo;
 use App\Services\ImageUploadService;
@@ -14,6 +15,8 @@ use Illuminate\View\View;
 
 class SiteInfoController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $siteInfo = SiteInfo::query()->first();
@@ -92,7 +95,7 @@ class SiteInfoController extends Controller
             'blog_page_image_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
             'agency_logo_width' => ['nullable', 'integer', 'min:1', 'max:5000'],
             'agency_logo_height' => ['nullable', 'integer', 'min:1', 'max:5000'],
-        ]);
+        ] + $this->seoValidationRules());
 
         foreach ([
             'maintenance_mode',
@@ -104,7 +107,7 @@ class SiteInfoController extends Controller
             $data[$field] = $request->boolean($field);
         }
 
-        unset($data['logo'], $data['favicon'], $data['buy_home_icon'], $data['sell_home_icon'], $data['rent_property_icon']);
+        unset($data['logo'], $data['favicon'], $data['buy_home_icon'], $data['sell_home_icon'], $data['rent_property_icon'], $data['meta_image']);
 
         $imageUploadService = new ImageUploadService();
 
@@ -131,6 +134,7 @@ class SiteInfoController extends Controller
                 );
             }
         }
+        $data = $this->applySeoImage($request, $data, $siteInfo, 'uploads/siteinfo/seo');
 
         SiteInfo::query()->updateOrCreate(
             ['id' => optional($siteInfo)->id],

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use App\Models\Area;
@@ -24,6 +25,8 @@ use Illuminate\View\View;
 
 class PropertyController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $properties = Property::query()
@@ -44,6 +47,7 @@ class PropertyController extends Controller
         $data = $this->validatedData($request);
         $amenityIds = $data['amenities'] ?? [];
         unset($data['amenities'], $data['media_files'], $data['media_space_names'], $data['existing_media_space_names']);
+        $data = $this->applySeoImage($request, $data, null, 'uploads/properties/seo');
 
         $property = Property::create($data);
         $property->amenities()->sync($amenityIds);
@@ -76,6 +80,7 @@ class PropertyController extends Controller
         $amenityIds = $data['amenities'] ?? [];
         $existingMediaSpaceNames = $data['existing_media_space_names'] ?? [];
         unset($data['amenities'], $data['media_files'], $data['media_space_names'], $data['existing_media_space_names']);
+        $data = $this->applySeoImage($request, $data, $property, 'uploads/properties/seo');
 
         $property->update($data);
         $property->amenities()->sync($amenityIds);
@@ -170,8 +175,9 @@ class PropertyController extends Controller
             'media_space_names.*' => ['nullable', 'string', 'max:255'],
             'existing_media_space_names' => ['nullable', 'array'],
             'existing_media_space_names.*' => ['nullable', 'string', 'max:255'],
-        ]);
+        ] + $this->seoValidationRules());
 
+        unset($data['meta_image']);
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: $data['title'], $property);
         $data['is_featured'] = $request->boolean('is_featured');
         $data['is_early_access'] = $request->boolean('is_early_access');

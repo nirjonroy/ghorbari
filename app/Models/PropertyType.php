@@ -14,6 +14,16 @@ class PropertyType extends Model
         'slug',
         'icon',
         'status',
+        'seo_title',
+        'seo_description',
+        'meta_title',
+        'meta_description',
+        'meta_image',
+        'author',
+        'publisher',
+        'copyright',
+        'site_name',
+        'keywords',
     ];
 
     public function properties()

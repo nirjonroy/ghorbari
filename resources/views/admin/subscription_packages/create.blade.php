@@ -20,7 +20,7 @@
         </div>
         <div class="app-content">
           <div class="container-fluid">
-            <form method="POST" action="{{ route('admin.subscription-packages.store') }}">
+            <form method="POST" action="{{ route('admin.subscription-packages.store') }}" enctype="multipart/form-data">
               @include('Admin.subscription_packages.partials.form')
             </form>
           </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\SiteInfo;
 use App\Models\Slider;
@@ -13,6 +14,8 @@ use Illuminate\View\View;
 
 class SliderController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $sliders = Slider::query()
@@ -36,6 +39,7 @@ class SliderController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = $this->storeImage($request);
         }
+        $data = $this->applySeoImage($request, $data, null, 'uploads/sliders/seo');
 
         Slider::create($data);
 
@@ -57,6 +61,7 @@ class SliderController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = $this->storeImage($request, $slider->image);
         }
+        $data = $this->applySeoImage($request, $data, $slider, 'uploads/sliders/seo');
 
         $slider->update($data);
 
@@ -80,7 +85,7 @@ class SliderController extends Controller
 
     private function validatedData(Request $request): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'title_one' => ['nullable', 'string', 'max:255'],
             'title_two' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
@@ -88,7 +93,11 @@ class SliderController extends Controller
             'serial' => ['required', 'integer', 'min:0'],
             'slider_location' => ['nullable', 'string', 'max:255'],
             'product_slug' => ['nullable', 'string', 'max:255'],
-        ]);
+        ] + $this->seoValidationRules());
+
+        unset($data['meta_image']);
+
+        return $data;
     }
 
     private function storeImage(Request $request, ?string $oldPath = null): string

@@ -20,7 +20,7 @@
         </div>
         <div class="app-content">
           <div class="container-fluid">
-            <form method="POST" action="{{ route('admin.property-types.store') }}">
+            <form method="POST" action="{{ route('admin.property-types.store') }}" enctype="multipart/form-data">
               @include('Admin.property_types.partials.form', ['title' => 'Property Type Information'])
             </form>
           </div>

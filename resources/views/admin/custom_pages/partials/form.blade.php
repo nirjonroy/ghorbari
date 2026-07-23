@@ -64,29 +64,11 @@
         @error('content')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
-      <div class="col-md-6">
-        <label for="meta_title" class="form-label">Meta Title</label>
-        <input id="meta_title" type="text" name="meta_title" class="form-control @error('meta_title') is-invalid @enderror" value="{{ old('meta_title', $page->meta_title) }}">
-        @error('meta_title')<div class="invalid-feedback">{{ $message }}</div>@enderror
-      </div>
-
-      <div class="col-md-6">
-        <label for="meta_image" class="form-label">Meta Image</label>
-        <input id="meta_image" type="file" name="meta_image" class="form-control @error('meta_image') is-invalid @enderror" accept="image/*" data-preview="meta-image-preview">
-        @error('meta_image')<div class="invalid-feedback">{{ $message }}</div>@enderror
-        <div class="form-text">Accepted: JPG, PNG, WEBP. Saved using Site Info image format.</div>
-        <div class="mt-2">
-          <img id="meta-image-preview" src="{{ $page->meta_image ? asset($page->meta_image) : '' }}" alt="Meta image preview" class="img-thumbnail {{ $page->meta_image ? '' : 'd-none' }}" style="max-height: 120px">
-        </div>
-      </div>
-
-      <div class="col-12">
-        <label for="meta_description" class="form-label">Meta Description</label>
-        <textarea id="meta_description" name="meta_description" class="form-control @error('meta_description') is-invalid @enderror" rows="3">{{ old('meta_description', $page->meta_description) }}</textarea>
-        @error('meta_description')<div class="invalid-feedback">{{ $message }}</div>@enderror
-      </div>
     </div>
   </div>
+
+  @include('Admin.partials.seo-fields', ['model' => $page])
+
   <div class="card-footer d-flex justify-content-end gap-2">
     <a href="{{ route('admin.custom-pages.index') }}" class="btn btn-secondary">Cancel</a>
     <button type="submit" class="btn btn-primary">Save Page</button>

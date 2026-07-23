@@ -19,6 +19,16 @@ class Agency extends Model
         'website',
         'description',
         'status',
+        'seo_title',
+        'seo_description',
+        'meta_title',
+        'meta_description',
+        'meta_image',
+        'author',
+        'publisher',
+        'copyright',
+        'site_name',
+        'keywords',
     ];
 
     public function agents(): HasMany

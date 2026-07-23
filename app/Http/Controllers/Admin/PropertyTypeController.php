@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\PropertyType;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +13,8 @@ use Illuminate\View\View;
 
 class PropertyTypeController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $propertyTypes = PropertyType::query()
@@ -28,7 +31,7 @@ class PropertyTypeController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        PropertyType::create($this->validatedData($request));
+        PropertyType::create($this->applySeoImage($request, $this->validatedData($request), null, 'uploads/property-types/seo'));
 
         return redirect()
             ->route('admin.property-types.index')
@@ -47,7 +50,7 @@ class PropertyTypeController extends Controller
 
     public function update(Request $request, PropertyType $propertyType): RedirectResponse
     {
-        $propertyType->update($this->validatedData($request, $propertyType));
+        $propertyType->update($this->applySeoImage($request, $this->validatedData($request, $propertyType), $propertyType, 'uploads/property-types/seo'));
 
         return redirect()
             ->route('admin.property-types.index')
@@ -70,8 +73,9 @@ class PropertyTypeController extends Controller
             'slug' => ['nullable', 'string', 'max:120', Rule::unique('property_types', 'slug')->ignore($propertyType)],
             'icon' => ['nullable', 'string', 'max:255'],
             'status' => ['required', 'string', 'max:50'],
-        ]);
+        ] + $this->seoValidationRules());
 
+        unset($data['meta_image']);
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: $data['name'], $propertyType);
 
         return $data;

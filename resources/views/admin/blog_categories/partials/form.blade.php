@@ -33,6 +33,9 @@
       </div>
     </div>
   </div>
+
+  @include('Admin.partials.seo-fields', ['model' => $category])
+
   <div class="card-footer d-flex justify-content-end gap-2">
     <a href="{{ route('admin.blog-categories.index') }}" class="btn btn-secondary">Cancel</a>
     <button type="submit" class="btn btn-primary">Save Category</button>

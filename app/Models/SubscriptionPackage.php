@@ -22,6 +22,16 @@ class SubscriptionPackage extends Model
         'is_featured',
         'is_active',
         'sort_order',
+        'seo_title',
+        'seo_description',
+        'meta_title',
+        'meta_description',
+        'meta_image',
+        'author',
+        'publisher',
+        'copyright',
+        'site_name',
+        'keywords',
     ];
 
     protected $casts = [

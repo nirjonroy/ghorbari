@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\BlogCategory;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +13,8 @@ use Illuminate\View\View;
 
 class BlogCategoryController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $categories = BlogCategory::query()
@@ -30,7 +33,7 @@ class BlogCategoryController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        BlogCategory::create($this->validatedData($request));
+        BlogCategory::create($this->applySeoImage($request, $this->validatedData($request), null, 'uploads/blog/categories/seo'));
 
         return redirect()
             ->route('admin.blog-categories.index')
@@ -44,7 +47,7 @@ class BlogCategoryController extends Controller
 
     public function update(Request $request, BlogCategory $blogCategory): RedirectResponse
     {
-        $blogCategory->update($this->validatedData($request, $blogCategory));
+        $blogCategory->update($this->applySeoImage($request, $this->validatedData($request, $blogCategory), $blogCategory, 'uploads/blog/categories/seo'));
 
         return redirect()
             ->route('admin.blog-categories.index')
@@ -66,8 +69,9 @@ class BlogCategoryController extends Controller
             'name' => ['required', 'string', 'max:255', Rule::unique('blog_categories', 'name')->ignore($category)],
             'description' => ['nullable', 'string'],
             'display_order' => ['required', 'integer', 'min:0'],
-        ]);
+        ] + $this->seoValidationRules());
 
+        unset($data['meta_image']);
         $data['slug'] = Str::slug($data['name']);
         $data['is_active'] = $request->boolean('is_active');
 

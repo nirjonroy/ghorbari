@@ -76,6 +76,16 @@ class SiteInfo extends Model
         'blog_page_image_height',
         'agency_logo_width',
         'agency_logo_height',
+        'seo_title',
+        'seo_description',
+        'meta_title',
+        'meta_description',
+        'meta_image',
+        'author',
+        'publisher',
+        'copyright',
+        'site_name',
+        'keywords',
     ];
 
     protected $casts = [

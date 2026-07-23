@@ -67,6 +67,8 @@
   </div>
 </div>
 
+@include('Admin.partials.seo-fields', ['model' => $slider])
+
 <div class="d-flex justify-content-end gap-2 my-3">
   <a href="{{ route('admin.sliders.index') }}" class="btn btn-secondary">Cancel</a>
   <button type="submit" class="btn btn-primary">{{ $buttonText }}</button>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +13,8 @@ use Illuminate\View\View;
 
 class AmenityController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $amenities = Amenity::query()
@@ -28,7 +31,7 @@ class AmenityController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        Amenity::create($this->validatedData($request));
+        Amenity::create($this->applySeoImage($request, $this->validatedData($request), null, 'uploads/amenities/seo'));
 
         return redirect()
             ->route('admin.amenities.index')
@@ -47,7 +50,7 @@ class AmenityController extends Controller
 
     public function update(Request $request, Amenity $amenity): RedirectResponse
     {
-        $amenity->update($this->validatedData($request, $amenity));
+        $amenity->update($this->applySeoImage($request, $this->validatedData($request, $amenity), $amenity, 'uploads/amenities/seo'));
 
         return redirect()
             ->route('admin.amenities.index')
@@ -70,8 +73,9 @@ class AmenityController extends Controller
             'slug' => ['nullable', 'string', 'max:120', Rule::unique('amenities', 'slug')->ignore($amenity)],
             'icon' => ['nullable', 'string', 'max:255'],
             'status' => ['required', 'string', 'max:50'],
-        ]);
+        ] + $this->seoValidationRules());
 
+        unset($data['meta_image']);
         $data['slug'] = $this->uniqueSlug($data['slug'] ?: $data['name'], $amenity);
 
         return $data;

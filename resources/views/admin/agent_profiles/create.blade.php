@@ -20,7 +20,7 @@
         </div>
         <div class="app-content">
           <div class="container-fluid">
-            <form method="POST" action="{{ route('admin.agent-profiles.store') }}">
+            <form method="POST" action="{{ route('admin.agent-profiles.store') }}" enctype="multipart/form-data">
               @include('Admin.agent_profiles.partials.form', ['title' => 'Agent Information'])
             </form>
           </div>

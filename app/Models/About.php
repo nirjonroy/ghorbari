@@ -23,6 +23,16 @@ class About extends Model
         'vision_description',
         'display_order',
         'status',
+        'seo_title',
+        'seo_description',
+        'meta_title',
+        'meta_description',
+        'meta_image',
+        'author',
+        'publisher',
+        'copyright',
+        'site_name',
+        'keywords',
     ];
 
     protected $casts = [

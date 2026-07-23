@@ -266,6 +266,9 @@
       </div>
     </div>
   </div>
+
+  @include('Admin.partials.seo-fields', ['model' => $property])
+
   <div class="card-footer d-flex justify-content-end gap-2">
     <a href="{{ route('admin.properties.index') }}" class="btn btn-secondary">Cancel</a>
     <button type="submit" class="btn btn-primary">Save Property</button>
