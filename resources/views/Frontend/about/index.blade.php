@@ -9,6 +9,9 @@
 @section('copyright', $aboutData['about']?->copyright)
 @section('site_name', $aboutData['about']?->site_name)
 @section('meta_image', $aboutData['about']?->meta_image ?: $aboutData['about']?->image)
+@section('robots', $aboutData['about']?->robots ?? 'index_follow')
+@section('canonical_url', route('frontend.about.index'))
+@section('updated_time', optional($aboutData['about']?->updated_at)->toIso8601String())
 @section('body_class', 'frontend-page frontend-inner-page about-page')
 
 @php

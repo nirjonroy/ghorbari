@@ -16,32 +16,7 @@
 <html lang="en" data-default-theme="{{ $defaultTheme }}" data-theme="{{ $defaultTheme }}">
 <head>
   <title>{{ $metaTitle }}</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  @if($metaDescription)
-    <meta name="description" content="{{ $metaDescription }}">
-  @endif
-  @if($metaKeywords)
-    <meta name="keywords" content="{{ $metaKeywords }}">
-  @endif
-  @if($metaAuthor)
-    <meta name="author" content="{{ $metaAuthor }}">
-  @endif
-  @if($metaPublisher)
-    <meta name="publisher" content="{{ $metaPublisher }}">
-  @endif
-  @if($metaCopyright)
-    <meta name="copyright" content="{{ $metaCopyright }}">
-  @endif
-  <meta property="og:title" content="{{ $metaTitle }}">
-  @if($metaDescription)
-    <meta property="og:description" content="{{ $metaDescription }}">
-  @endif
-  <meta property="og:site_name" content="{{ $metaSiteName }}">
-  @if($metaImage)
-    <meta property="og:image" content="{{ asset($metaImage) }}">
-  @endif
+  @include('Frontend.partials.head')
   @if(filled(data_get($frontendSiteInfo, 'favicon')))
     <link rel="icon" href="{{ asset(data_get($frontendSiteInfo, 'favicon')) }}">
     <link rel="shortcut icon" href="{{ asset(data_get($frontendSiteInfo, 'favicon')) }}">

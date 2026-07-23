@@ -49,6 +49,16 @@
         @error('keywords')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
+      <div class="col-md-6">
+        <label for="robots" class="form-label">Robots</label>
+        <select id="robots" name="robots" class="form-select @error('robots') is-invalid @enderror" required>
+          <option value="index_follow" @selected(old('robots', $seoModel?->robots ?? 'index_follow') === 'index_follow')>Index, Follow</option>
+          <option value="noindex_nofollow" @selected(old('robots', $seoModel?->robots ?? 'index_follow') === 'noindex_nofollow')>Noindex, Nofollow</option>
+        </select>
+        @error('robots')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        <div class="form-text">Controls Google crawling for this page.</div>
+      </div>
+
       <div class="col-md-3">
         <label for="author" class="form-label">Author</label>
         <input id="author" type="text" name="author" class="form-control @error('author') is-invalid @enderror" value="{{ $seoValue('author') }}">

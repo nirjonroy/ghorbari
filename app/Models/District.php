@@ -16,6 +16,17 @@ class District extends Model
         'name',
         'slug',
         'status',
+        'seo_title',
+        'seo_description',
+        'meta_title',
+        'meta_description',
+        'meta_image',
+        'author',
+        'publisher',
+        'copyright',
+        'site_name',
+        'keywords',
+        'robots',
     ];
 
     protected $casts = [

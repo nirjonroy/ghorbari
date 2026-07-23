@@ -1,6 +1,17 @@
 @extends('Frontend.layouts.master')
 
 @section('title', (($blogData['page']->hero_title ?? null) ?: 'Blog') . ' | Land Site')
+@section('meta_title', ($blogData['page'] ?? null)?->meta_title ?: ($blogData['page'] ?? null)?->seo_title ?: (($blogData['page']->hero_title ?? null) ?: 'Blog'))
+@section('meta_description', ($blogData['page'] ?? null)?->meta_description ?: ($blogData['page'] ?? null)?->seo_description ?: 'Fresh blogs, market guides, buying tips, rental advice, and Bangladesh real estate updates.')
+@section('keywords', ($blogData['page'] ?? null)?->keywords)
+@section('author', ($blogData['page'] ?? null)?->author)
+@section('publisher', ($blogData['page'] ?? null)?->publisher)
+@section('copyright', ($blogData['page'] ?? null)?->copyright)
+@section('site_name', ($blogData['page'] ?? null)?->site_name)
+@section('meta_image', ($blogData['page'] ?? null)?->meta_image ?: ($blogData['page'] ?? null)?->hero_background_path)
+@section('robots', ($blogData['page'] ?? null)?->robots ?? 'index_follow')
+@section('canonical_url', route('frontend.blog.index'))
+@section('updated_time', optional(($blogData['page'] ?? null)?->updated_at)->toIso8601String())
 @section('body_class', 'frontend-page blog-page')
 
 @php

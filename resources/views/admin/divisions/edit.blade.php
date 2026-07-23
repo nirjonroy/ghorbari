@@ -21,7 +21,7 @@
 
         <div class="app-content">
           <div class="container-fluid">
-            <form method="POST" action="{{ route('admin.divisions.update', $division) }}">
+            <form method="POST" action="{{ route('admin.divisions.update', $division) }}" enctype="multipart/form-data">
               @method('PUT')
               @include('Admin.divisions.partials.form', ['title' => 'Division Information'])
             </form>

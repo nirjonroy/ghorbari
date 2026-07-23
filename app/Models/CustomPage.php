@@ -29,6 +29,7 @@ class CustomPage extends Model
         'copyright',
         'site_name',
         'keywords',
+        'robots',
         'status',
         'published_at',
     ];

@@ -24,6 +24,7 @@ class Amenity extends Model
         'copyright',
         'site_name',
         'keywords',
+        'robots',
     ];
 
     public function properties()

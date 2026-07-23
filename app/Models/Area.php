@@ -18,6 +18,17 @@ class Area extends Model
         'post_office',
         'postal_code',
         'status',
+        'seo_title',
+        'seo_description',
+        'meta_title',
+        'meta_description',
+        'meta_image',
+        'author',
+        'publisher',
+        'copyright',
+        'site_name',
+        'keywords',
+        'robots',
     ];
 
     protected $casts = [

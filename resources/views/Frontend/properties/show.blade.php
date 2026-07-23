@@ -8,6 +8,9 @@
 @section('copyright', $property->copyright)
 @section('site_name', $property->site_name)
 @section('meta_image', $property->meta_image)
+@section('robots', $property->robots ?? 'index_follow')
+@section('canonical_url', route('frontend.property.show', ['property' => $property->detailSlug()]))
+@section('updated_time', optional($property->updated_at)->toIso8601String())
 @section('body_class', 'detail-page')
 
 @php

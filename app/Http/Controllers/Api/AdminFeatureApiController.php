@@ -345,6 +345,23 @@ class AdminFeatureApiController extends Controller
             ->findOrFail($model->id);
     }
 
+    private function seoRules(): array
+    {
+        return [
+            'seo_title' => ['nullable', 'string', 'max:255'],
+            'seo_description' => ['nullable', 'string'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string'],
+            'meta_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'author' => ['nullable', 'string', 'max:255'],
+            'publisher' => ['nullable', 'string', 'max:255'],
+            'copyright' => ['nullable', 'string', 'max:255'],
+            'site_name' => ['nullable', 'string', 'max:255'],
+            'keywords' => ['nullable', 'string'],
+            'robots' => ['nullable', 'in:index_follow,noindex_nofollow'],
+        ];
+    }
+
     private function config(string $resource): array
     {
         $configs = [
@@ -421,7 +438,7 @@ class AdminFeatureApiController extends Controller
             'phone_number_required' => ['nullable', 'boolean'],
             'enable_subscription_notify' => ['nullable', 'boolean'],
             'enable_save_contact_message' => ['nullable', 'boolean'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function aboutRules(?Model $model): array
@@ -440,7 +457,7 @@ class AdminFeatureApiController extends Controller
             'vision_description' => ['nullable', 'string'],
             'display_order' => [$model ? 'sometimes' : 'required', 'integer', 'min:0'],
             'status' => ['nullable', 'string', 'max:50'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function sliderRules(): array
@@ -454,7 +471,7 @@ class AdminFeatureApiController extends Controller
             'slider_location' => ['nullable', 'string', 'max:255'],
             'product_slug' => ['nullable', 'string', 'max:255'],
             'status' => ['nullable', 'boolean'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function customPageRules(?Model $model): array
@@ -473,7 +490,7 @@ class AdminFeatureApiController extends Controller
             'meta_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'status' => ['nullable', Rule::in(['draft', 'published', 'inactive'])],
             'published_at' => ['nullable', 'date'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function userRules(?Model $model): array
@@ -525,7 +542,7 @@ class AdminFeatureApiController extends Controller
             'website' => ['nullable', 'url', 'max:255'],
             'description' => ['nullable', 'string'],
             'status' => ['nullable', 'string', 'max:50'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function agentProfileRules(?Model $model): array
@@ -540,7 +557,7 @@ class AdminFeatureApiController extends Controller
             'service_area' => ['nullable', 'string', 'max:255'],
             'rating' => ['nullable', 'numeric', 'min:0', 'max:5'],
             'status' => ['nullable', 'string', 'max:50'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function nameSlugRules(string $table, ?Model $model, bool $hasIcon = false): array
@@ -550,7 +567,7 @@ class AdminFeatureApiController extends Controller
             'slug' => ['nullable', 'string', 'max:120', Rule::unique($table, 'slug')->ignore($model)],
             'icon' => [$hasIcon ? 'nullable' : 'prohibited', 'string', 'max:255'],
             'status' => ['nullable', 'string', 'max:50'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function propertyRules(?Model $model): array
@@ -594,7 +611,7 @@ class AdminFeatureApiController extends Controller
             'media_files.*.*' => ['nullable', 'file', 'mimes:jpg,jpeg,png,webp,mp4,mov,pdf', 'max:10240'],
             'media_space_names' => ['nullable', 'array'],
             'media_space_names.*' => ['nullable', 'string', 'max:255'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function locationRules(string $table, ?Model $model): array
@@ -603,7 +620,7 @@ class AdminFeatureApiController extends Controller
             'name' => [$model ? 'sometimes' : 'required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique($table, 'slug')->ignore($model)],
             'status' => ['nullable', 'boolean'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function districtRules(?Model $model): array
@@ -638,7 +655,7 @@ class AdminFeatureApiController extends Controller
             'description' => ['nullable', 'string'],
             'display_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['nullable', 'boolean'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function blogPostRules(?Model $model): array
@@ -659,7 +676,7 @@ class AdminFeatureApiController extends Controller
             'published_at' => ['nullable', 'date'],
             'is_published' => ['nullable', 'boolean'],
             'show_on_home' => ['nullable', 'boolean'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function blogCommentRules(): array
@@ -688,7 +705,7 @@ class AdminFeatureApiController extends Controller
             'read_button_text' => ['nullable', 'string', 'max:255'],
             'article_tags_title' => ['nullable', 'string', 'max:255'],
             'comments_section_title' => ['nullable', 'string', 'max:255'],
-        ];
+        ] + $this->seoRules();
     }
 
     private function contactMessageRules(): array
@@ -766,6 +783,31 @@ class AdminFeatureApiController extends Controller
             default => [],
         };
 
+        $seoImageResources = [
+            'abouts',
+            'sliders',
+            'agencies',
+            'agent-profiles',
+            'property-types',
+            'amenities',
+            'properties',
+            'divisions',
+            'districts',
+            'cities',
+            'areas',
+            'blog-categories',
+            'blog-posts',
+            'blog-pages',
+        ];
+
+        if (in_array($resource, $seoImageResources, true) && ! array_key_exists('meta_image', $fields)) {
+            $fields['meta_image'] = [
+                'directory' => 'uploads/seo',
+                'width' => $siteInfo?->blog_page_image_width,
+                'height' => $siteInfo?->blog_page_image_height,
+            ];
+        }
+
         foreach ($fields as $field => $options) {
             unset($data[$field]);
 
@@ -807,6 +849,19 @@ class AdminFeatureApiController extends Controller
                     $data['image_output_format']
                 );
             }
+        }
+
+        unset($data['meta_image']);
+
+        if ($request->hasFile('meta_image')) {
+            $data['meta_image'] = $uploader->storeConverted(
+                $request->file('meta_image'),
+                'uploads/seo',
+                $siteInfo?->blog_page_image_width,
+                $siteInfo?->blog_page_image_height,
+                $siteInfo?->meta_image,
+                $data['image_output_format']
+            );
         }
 
         return SiteInfo::query()->updateOrCreate(['id' => $siteInfo?->id], $data);

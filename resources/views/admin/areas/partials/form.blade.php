@@ -58,3 +58,5 @@
     <button type="submit" class="btn btn-primary">Save Area</button>
   </div>
 </div>
+
+@include('Admin.partials.seo-fields', ['model' => $area])

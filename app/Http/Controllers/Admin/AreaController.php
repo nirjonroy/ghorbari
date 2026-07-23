@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\City;
@@ -14,6 +15,8 @@ use Illuminate\View\View;
 
 class AreaController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $areas = Area::query()
@@ -35,7 +38,9 @@ class AreaController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        Area::create($this->validatedData($request));
+        $data = $this->applySeoImage($request, $this->validatedData($request), null, 'uploads/locations/seo');
+
+        Area::create($data);
 
         return redirect()
             ->route('admin.areas.index')
@@ -53,7 +58,9 @@ class AreaController extends Controller
 
     public function update(Request $request, Area $area): RedirectResponse
     {
-        $area->update($this->validatedData($request, $area));
+        $data = $this->applySeoImage($request, $this->validatedData($request, $area), $area, 'uploads/locations/seo');
+
+        $area->update($data);
 
         return redirect()
             ->route('admin.areas.index')
@@ -84,7 +91,7 @@ class AreaController extends Controller
             ],
             'post_office' => ['nullable', 'string', 'max:255'],
             'postal_code' => ['nullable', 'string', 'max:255'],
-        ]);
+        ] + $this->seoValidationRules());
 
         $data['slug'] = Str::slug($data['name']);
         $data['status'] = $request->boolean('status');

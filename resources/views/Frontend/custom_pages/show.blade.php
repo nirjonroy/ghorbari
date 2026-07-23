@@ -16,6 +16,9 @@
 @section('copyright', $page->copyright)
 @section('site_name', $page->site_name)
 @section('meta_image', $page->meta_image)
+@section('robots', $page->robots ?? 'index_follow')
+@section('canonical_url', url('/'.$page->url_path))
+@section('updated_time', optional($page->updated_at)->toIso8601String())
 @section('body_class', 'frontend-page blog-detail-page custom-page')
 
 @section('content')

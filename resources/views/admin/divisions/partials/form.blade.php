@@ -24,3 +24,5 @@
     <button type="submit" class="btn btn-primary">Save Division</button>
   </div>
 </div>
+
+@include('Admin.partials.seo-fields', ['model' => $division])

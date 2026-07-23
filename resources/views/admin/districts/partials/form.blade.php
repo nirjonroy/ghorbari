@@ -34,3 +34,5 @@
     <button type="submit" class="btn btn-primary">Save District</button>
   </div>
 </div>
+
+@include('Admin.partials.seo-fields', ['model' => $district])

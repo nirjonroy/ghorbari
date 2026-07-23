@@ -36,3 +36,5 @@
     <button type="submit" class="btn btn-primary">Save City</button>
   </div>
 </div>
+
+@include('Admin.partials.seo-fields', ['model' => $city])

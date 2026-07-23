@@ -22,6 +22,7 @@ trait ManagesSeoFields
             'copyright' => ['nullable', 'string', 'max:255'],
             'site_name' => ['nullable', 'string', 'max:255'],
             'keywords' => ['nullable', 'string'],
+            'robots' => ['required', 'in:index_follow,noindex_nofollow'],
         ];
     }
 

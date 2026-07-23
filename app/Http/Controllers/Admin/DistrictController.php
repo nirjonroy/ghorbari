@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\District;
 use App\Models\Division;
@@ -13,6 +14,8 @@ use Illuminate\View\View;
 
 class DistrictController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $districts = District::query()
@@ -34,7 +37,9 @@ class DistrictController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        District::create($this->validatedData($request));
+        $data = $this->applySeoImage($request, $this->validatedData($request), null, 'uploads/locations/seo');
+
+        District::create($data);
 
         return redirect()
             ->route('admin.districts.index')
@@ -51,7 +56,9 @@ class DistrictController extends Controller
 
     public function update(Request $request, District $district): RedirectResponse
     {
-        $district->update($this->validatedData($request, $district));
+        $data = $this->applySeoImage($request, $this->validatedData($request, $district), $district, 'uploads/locations/seo');
+
+        $district->update($data);
 
         return redirect()
             ->route('admin.districts.index')
@@ -79,7 +86,7 @@ class DistrictController extends Controller
                     ->where('division_id', $request->input('division_id'))
                     ->ignore($district),
             ],
-        ]);
+        ] + $this->seoValidationRules());
 
         $data['slug'] = Str::slug($data['name']);
         $data['status'] = $request->boolean('status');

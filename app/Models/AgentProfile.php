@@ -31,6 +31,7 @@ class AgentProfile extends Model
         'copyright',
         'site_name',
         'keywords',
+        'robots',
     ];
 
     protected $casts = [

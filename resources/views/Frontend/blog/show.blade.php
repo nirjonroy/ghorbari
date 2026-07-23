@@ -9,6 +9,9 @@
 @section('copyright', $blogData['post']->copyright)
 @section('site_name', $blogData['post']->site_name)
 @section('meta_image', $blogData['post']->meta_image ?: $blogData['post']->featured_image_path)
+@section('robots', $blogData['post']->robots ?? 'index_follow')
+@section('canonical_url', route('frontend.blog.show', ['slug' => $blogData['post']->slug]))
+@section('updated_time', optional($blogData['post']->updated_at)->toIso8601String())
 @section('body_class', 'frontend-page blog-detail-page')
 
 @php

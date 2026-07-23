@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\ManagesSeoFields;
 use App\Http\Controllers\Controller;
 use App\Models\Division;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +13,8 @@ use Illuminate\View\View;
 
 class DivisionController extends Controller
 {
+    use ManagesSeoFields;
+
     public function index(): View
     {
         $divisions = Division::query()
@@ -29,7 +32,9 @@ class DivisionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        Division::create($this->validatedData($request));
+        $data = $this->applySeoImage($request, $this->validatedData($request), null, 'uploads/locations/seo');
+
+        Division::create($data);
 
         return redirect()
             ->route('admin.divisions.index')
@@ -43,7 +48,9 @@ class DivisionController extends Controller
 
     public function update(Request $request, Division $division): RedirectResponse
     {
-        $division->update($this->validatedData($request, $division));
+        $data = $this->applySeoImage($request, $this->validatedData($request, $division), $division, 'uploads/locations/seo');
+
+        $division->update($data);
 
         return redirect()
             ->route('admin.divisions.index')
@@ -63,7 +70,7 @@ class DivisionController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('divisions', 'name')->ignore($division)],
-        ]);
+        ] + $this->seoValidationRules());
 
         $data['slug'] = Str::slug($data['name']);
         $data['status'] = $request->boolean('status');

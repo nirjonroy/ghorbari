@@ -31,5 +31,6 @@ class BlogPage extends Model
         'copyright',
         'site_name',
         'keywords',
+        'robots',
     ];
 }

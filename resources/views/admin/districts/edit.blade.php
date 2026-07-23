@@ -21,7 +21,7 @@
 
         <div class="app-content">
           <div class="container-fluid">
-            <form method="POST" action="{{ route('admin.districts.update', $district) }}">
+            <form method="POST" action="{{ route('admin.districts.update', $district) }}" enctype="multipart/form-data">
               @method('PUT')
               @include('Admin.districts.partials.form', ['title' => 'District Information'])
             </form>

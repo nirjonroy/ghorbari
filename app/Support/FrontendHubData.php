@@ -111,7 +111,7 @@ class FrontendHubData
         $district = District::query()->where('slug', $districtSlug)->first();
         $districtName = $district?->name ?? str($districtSlug)->headline();
 
-        return $this->propertyResults($request, [
+        return $this->propertyResults($request, $this->withSeo([
             'listing_types' => ['buy', 'sell', 'rent'],
             'route_name' => 'frontend.property.district',
             'api_route_name' => 'api.frontend.property.district',
@@ -123,7 +123,7 @@ class FrontendHubData
             'badge_label' => 'Property',
             'default_search' => $districtName,
             'district_id' => $district?->id ?? 0,
-        ]);
+        ], $district));
     }
 
     public function cityPage(Request $request, string $districtSlug, string $citySlug): array
@@ -135,7 +135,7 @@ class FrontendHubData
             ->first();
         $cityName = $city?->name ?? str($citySlug)->headline();
 
-        return $this->propertyResults($request, [
+        return $this->propertyResults($request, $this->withSeo([
             'listing_types' => ['buy', 'sell', 'rent'],
             'route_name' => 'frontend.property.city',
             'api_route_name' => 'api.frontend.property.city',
@@ -148,7 +148,7 @@ class FrontendHubData
             'default_search' => $cityName,
             'district_id' => $district?->id ?? 0,
             'city_id' => $city?->id ?? 0,
-        ]);
+        ], $city));
     }
 
     public function localAreaPage(Request $request, string $districtSlug, string $citySlug, string $localAreaSlug): array
@@ -165,7 +165,7 @@ class FrontendHubData
             ->first();
         $areaName = $area?->name ?? str($localAreaSlug)->headline();
 
-        return $this->propertyResults($request, [
+        return $this->propertyResults($request, $this->withSeo([
             'listing_types' => ['buy', 'sell', 'rent'],
             'route_name' => 'frontend.property.local-area',
             'api_route_name' => 'api.frontend.property.local-area',
@@ -179,7 +179,7 @@ class FrontendHubData
             'district_id' => $district?->id ?? 0,
             'city_id' => $city?->id ?? 0,
             'area_id' => $area?->id ?? 0,
-        ]);
+        ], $area));
     }
 
     public function categoryPage(Request $request, string $purpose, string $category): array
@@ -206,7 +206,7 @@ class FrontendHubData
         $propertyType = PropertyType::query()->where('slug', $type)->first();
         $typeName = $propertyType?->name ?? str($type)->replace('-', ' ')->headline();
 
-        return $this->propertyResults($request, [
+        return $this->propertyResults($request, $this->withSeo([
             'listing_types' => $this->listingTypesForPurpose($purpose),
             'route_name' => 'frontend.property.type',
             'api_route_name' => 'api.frontend.property.type',
@@ -219,7 +219,7 @@ class FrontendHubData
             'default_search' => 'Bangladesh',
             'property_category' => $category,
             'property_type_id' => $propertyType?->id ?? 0,
-        ]);
+        ], $propertyType));
     }
 
     public function purposeTypeDistrictPage(Request $request, string $purpose, string $type, string $districtSlug): array
@@ -229,7 +229,7 @@ class FrontendHubData
         $typeName = $propertyType?->name ?? str($type)->replace('-', ' ')->headline();
         $districtName = $district?->name ?? str($districtSlug)->headline();
 
-        return $this->propertyResults($request, [
+        return $this->propertyResults($request, $this->withSeo([
             'listing_types' => $this->listingTypesForPurpose($purpose),
             'route_name' => 'frontend.property.purpose-type-district',
             'api_route_name' => 'api.frontend.property.purpose-type-district',
@@ -242,7 +242,7 @@ class FrontendHubData
             'default_search' => $districtName,
             'property_type_id' => $propertyType?->id ?? 0,
             'district_id' => $district?->id ?? 0,
-        ]);
+        ], $propertyType ?: $district));
     }
 
     public function purposeTypeCityPage(Request $request, string $purpose, string $type, string $districtSlug, string $citySlug): array
@@ -256,7 +256,7 @@ class FrontendHubData
         $typeName = $propertyType?->name ?? str($type)->replace('-', ' ')->headline();
         $cityName = $city?->name ?? str($citySlug)->headline();
 
-        return $this->propertyResults($request, [
+        return $this->propertyResults($request, $this->withSeo([
             'listing_types' => $this->listingTypesForPurpose($purpose),
             'route_name' => 'frontend.property.purpose-type-city',
             'api_route_name' => 'api.frontend.property.purpose-type-city',
@@ -270,7 +270,7 @@ class FrontendHubData
             'property_type_id' => $propertyType?->id ?? 0,
             'district_id' => $district?->id ?? 0,
             'city_id' => $city?->id ?? 0,
-        ]);
+        ], $propertyType ?: $city));
     }
 
     public function purposeTypeLocalAreaPage(Request $request, string $purpose, string $type, string $districtSlug, string $citySlug, string $localAreaSlug): array
@@ -289,7 +289,7 @@ class FrontendHubData
         $typeName = $propertyType?->name ?? str($type)->replace('-', ' ')->headline();
         $areaName = $area?->name ?? str($localAreaSlug)->headline();
 
-        return $this->propertyResults($request, [
+        return $this->propertyResults($request, $this->withSeo([
             'listing_types' => $this->listingTypesForPurpose($purpose),
             'route_name' => 'frontend.property.purpose-type-local-area',
             'api_route_name' => 'api.frontend.property.purpose-type-local-area',
@@ -304,7 +304,7 @@ class FrontendHubData
             'district_id' => $district?->id ?? 0,
             'city_id' => $city?->id ?? 0,
             'area_id' => $area?->id ?? 0,
-        ]);
+        ], $propertyType ?: $area));
     }
 
     public function landSaleCityPage(Request $request, string $citySlug): array
@@ -316,7 +316,7 @@ class FrontendHubData
             ->pluck('id')
             ->all();
 
-        return $this->propertyResults($request, [
+        return $this->propertyResults($request, $this->withSeo([
             'listing_types' => ['buy', 'sell'],
             'route_name' => 'frontend.property.land-sale-city',
             'api_route_name' => 'api.frontend.property.land-sale-city',
@@ -330,7 +330,27 @@ class FrontendHubData
             'city_id' => $city?->id ?? 0,
             'property_type_ids' => $landTypeIds ?: [0],
             'property_categories' => ['land', 'residential'],
-        ]);
+        ], $city));
+    }
+
+    private function withSeo(array $page, $source = null): array
+    {
+        if (! $source) {
+            return $page;
+        }
+
+        $page['meta_title'] = $source->meta_title ?: $source->seo_title ?: ($page['meta_title'] ?? null);
+        $page['meta_description'] = $source->meta_description ?: $source->seo_description ?: ($page['meta_description'] ?? null);
+        $page['keywords'] = $source->keywords ?: ($page['keywords'] ?? null);
+        $page['author'] = $source->author ?: ($page['author'] ?? null);
+        $page['publisher'] = $source->publisher ?: ($page['publisher'] ?? null);
+        $page['copyright'] = $source->copyright ?: ($page['copyright'] ?? null);
+        $page['site_name'] = $source->site_name ?: ($page['site_name'] ?? null);
+        $page['meta_image'] = $source->meta_image ?: ($page['meta_image'] ?? null);
+        $page['robots'] = $source->robots ?: ($page['robots'] ?? 'index_follow');
+        $page['updated_time'] = optional($source->updated_at)->toIso8601String();
+
+        return $page;
     }
 
     public function propertyDetail(Request $request, string $propertySlug): array

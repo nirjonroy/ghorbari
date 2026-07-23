@@ -20,7 +20,7 @@
         </div>
         <div class="app-content">
           <div class="container-fluid">
-            <form method="POST" action="{{ route('admin.cities.update', $city) }}">
+            <form method="POST" action="{{ route('admin.cities.update', $city) }}" enctype="multipart/form-data">
               @method('PUT')
               @include('Admin.cities.partials.form', ['title' => 'City Information'])
             </form>

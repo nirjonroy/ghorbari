@@ -31,6 +31,7 @@ class BlogPost extends Model
         'copyright',
         'site_name',
         'keywords',
+        'robots',
         'tags',
         'comments',
         'published_at',

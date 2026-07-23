@@ -21,7 +21,7 @@
 
         <div class="app-content">
           <div class="container-fluid">
-            <form method="POST" action="{{ route('admin.areas.store') }}">
+            <form method="POST" action="{{ route('admin.areas.store') }}" enctype="multipart/form-data">
               @include('Admin.areas.partials.form', ['title' => 'Area Information'])
             </form>
           </div>
