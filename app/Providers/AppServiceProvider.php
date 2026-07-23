@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
-        View::composer('Frontend.layouts.master', function ($view) {
+        View::composer(['Frontend.layouts.master', 'layouts.guest'], function ($view) {
             $siteInfo = Schema::hasTable('siteinfo')
                 ? SiteInfo::query()->first()
                 : null;
