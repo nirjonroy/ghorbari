@@ -64,6 +64,13 @@
               </li>
 
               <li class="nav-item">
+                <a href="{{ route('admin.custom-pages.index') }}" class="nav-link {{ request()->routeIs('admin.custom-pages.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-file-earmark-richtext-fill"></i>
+                  <p>Custom Pages</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
                 <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-people-fill"></i>
                   <p>Users</p>

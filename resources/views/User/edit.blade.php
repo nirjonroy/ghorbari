@@ -3,6 +3,8 @@
 @section('title', 'Edit User Profile | Land Site')
 @section('body_class', 'frontend-page user-dashboard-page')
 
+@include('Admin.partials.rich-text-editor')
+
 @section('content')
 @php
     $user = $dashboardData['user'];
@@ -85,7 +87,7 @@
             </div>
             <div class="col-md-12">
               <label class="form-label">Bio</label>
-              <textarea name="bio" class="form-control" rows="4">{{ $input('bio') }}</textarea>
+              <textarea name="bio" class="form-control rich-text-editor" rows="4">{{ $input('bio') }}</textarea>
             </div>
           </div>
         </section>

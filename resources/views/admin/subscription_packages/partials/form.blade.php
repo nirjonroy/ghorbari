@@ -1,4 +1,6 @@
 @csrf
+@include('Admin.partials.rich-text-editor')
+
 <div class="card">
   <div class="card-header"><h3 class="card-title">Package Information</h3></div>
   <div class="card-body">
@@ -42,7 +44,7 @@
       </div>
       <div class="col-12">
         <label class="form-label">Description</label>
-        <textarea name="description" class="form-control" rows="4">{{ old('description', $package->description) }}</textarea>
+        <textarea name="description" class="form-control rich-text-editor" rows="4">{{ old('description', $package->description) }}</textarea>
       </div>
       <div class="col-md-3">
         <div class="form-check form-switch">

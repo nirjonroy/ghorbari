@@ -2,6 +2,8 @@
 
 @section('title', 'Edit Site Info')
 
+@include('Admin.partials.rich-text-editor')
+
 @section('content')
       <!--begin::App Main-->
       <main class="app-main">
@@ -214,7 +216,7 @@
 
                     <div class="col-12">
                       <label for="footer_contact_note" class="form-label">Footer Contact Note</label>
-                      <textarea id="footer_contact_note" name="footer_contact_note" class="form-control" rows="4">{{ old('footer_contact_note', $siteInfo->footer_contact_note ?? '') }}</textarea>
+                      <textarea id="footer_contact_note" name="footer_contact_note" class="form-control rich-text-editor" rows="4">{{ old('footer_contact_note', $siteInfo->footer_contact_note ?? '') }}</textarea>
                     </div>
                   </div>
                 </div>

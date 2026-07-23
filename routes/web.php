@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\BlogPageController;
 use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\CustomPageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\DivisionController;
@@ -31,6 +32,7 @@ use App\Http\Controllers\Frontend\BuyController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\CalculatorController;
 use App\Http\Controllers\Frontend\ContactController as FrontendContactController;
+use App\Http\Controllers\Frontend\CustomPageController as FrontendCustomPageController;
 use App\Http\Controllers\Frontend\EarlyAccessController;
 use App\Http\Controllers\Frontend\FavoriteController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -221,6 +223,12 @@ Route::resource('/admin/contacts', ContactMessageController::class)
     ->parameters(['contacts' => 'contact'])
     ->names('admin.contacts');
 
+Route::resource('/admin/custom-pages', CustomPageController::class)
+    ->except('show')
+    ->middleware(['auth:admin', 'permission:manage custom pages|manage about,admin'])
+    ->parameters(['custom-pages' => 'customPage'])
+    ->names('admin.custom-pages');
+
 Route::resource('/admin/agencies', AgencyController::class)
     ->except('show')
     ->middleware(['auth:admin', 'permission:manage agencies,admin'])
@@ -326,3 +334,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin-auth.php';
+
+Route::get('/{customPagePath}', [FrontendCustomPageController::class, 'show'])
+    ->where('customPagePath', '.*')
+    ->name('frontend.custom-pages.show');

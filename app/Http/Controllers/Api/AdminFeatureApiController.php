@@ -15,6 +15,7 @@ use App\Models\BlogPage;
 use App\Models\BlogPost;
 use App\Models\City;
 use App\Models\ContactMessage;
+use App\Models\CustomPage;
 use App\Models\District;
 use App\Models\Division;
 use App\Models\Property;
@@ -258,6 +259,12 @@ class AdminFeatureApiController extends Controller
 
     private function validatedData(Request $request, string $resource, ?Model $model = null): array
     {
+        if ($resource === 'custom-pages' && $request->has('url_path')) {
+            $request->merge([
+                'url_path' => trim(preg_replace('#/+#', '/', trim((string) $request->input('url_path'))), '/'),
+            ]);
+        }
+
         $rules = match ($resource) {
             'site-info' => $this->siteInfoRules(),
             'abouts' => $this->aboutRules($model),
@@ -275,6 +282,7 @@ class AdminFeatureApiController extends Controller
             'blog-posts' => $this->blogPostRules($model),
             'blog-comments' => $this->blogCommentRules(),
             'blog-pages' => $this->blogPageRules(),
+            'custom-pages' => $this->customPageRules($model),
             'contact-messages' => $this->contactMessageRules(),
             'roles' => $this->roleRules($model),
             'permissions' => $this->permissionRules($model),
@@ -305,8 +313,12 @@ class AdminFeatureApiController extends Controller
             unset($data['tags_input']);
         }
 
-        if (isset($data['slug']) || in_array($resource, ['abouts', 'agencies', 'property-types', 'amenities', 'divisions', 'districts', 'cities', 'areas', 'blog-categories', 'blog-posts', 'properties'], true)) {
-            $data['slug'] = $this->uniqueSlug($resource, $data['slug'] ?? ($data['title'] ?? $data['name'] ?? 'item'), $model);
+        if (isset($data['slug']) || in_array($resource, ['abouts', 'agencies', 'property-types', 'amenities', 'divisions', 'districts', 'cities', 'areas', 'blog-categories', 'blog-posts', 'custom-pages', 'properties'], true)) {
+            $data['slug'] = $this->uniqueSlug($resource, $data['slug'] ?? ($data['title'] ?? $data['page_name'] ?? $data['name'] ?? 'item'), $model);
+        }
+
+        if ($resource === 'custom-pages') {
+            $data['template_type'] = 'default';
         }
 
         return $data;
@@ -353,6 +365,7 @@ class AdminFeatureApiController extends Controller
             'blog-posts' => ['model' => BlogPost::class, 'with' => ['category', 'comments']],
             'blog-comments' => ['model' => BlogComment::class, 'with' => ['post', 'user']],
             'blog-pages' => ['model' => BlogPage::class],
+            'custom-pages' => ['model' => CustomPage::class, 'order' => [['id', 'desc']]],
             'contact-messages' => ['model' => ContactMessage::class, 'with' => ['user']],
             'roles' => ['model' => Role::class, 'with' => ['permissions'], 'order' => [['name', 'asc']]],
             'permissions' => ['model' => Permission::class, 'order' => [['name', 'asc']]],
@@ -441,6 +454,24 @@ class AdminFeatureApiController extends Controller
             'slider_location' => ['nullable', 'string', 'max:255'],
             'product_slug' => ['nullable', 'string', 'max:255'],
             'status' => ['nullable', 'boolean'],
+        ];
+    }
+
+    private function customPageRules(?Model $model): array
+    {
+        return [
+            'page_name' => [$model ? 'sometimes' : 'required', 'string', 'max:255'],
+            'slug' => ['nullable', 'string', 'max:255'],
+            'url_path' => [$model ? 'sometimes' : 'required', 'string', 'max:255', Rule::unique('custom_pages', 'url_path')->ignore($model)],
+            'template_type' => ['nullable', 'string', 'max:80'],
+            'subtitle' => ['nullable', 'string', 'max:255'],
+            'short_description' => ['nullable', 'string'],
+            'content' => [$model ? 'sometimes' : 'required', 'string'],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string'],
+            'meta_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'status' => ['nullable', Rule::in(['draft', 'published', 'inactive'])],
+            'published_at' => ['nullable', 'date'],
         ];
     }
 
@@ -727,6 +758,9 @@ class AdminFeatureApiController extends Controller
             'blog-pages' => [
                 'hero_background_path' => ['directory' => 'uploads/blog/pages', 'width' => $siteInfo?->blog_page_image_width, 'height' => $siteInfo?->blog_page_image_height],
             ],
+            'custom-pages' => [
+                'meta_image' => ['directory' => 'uploads/custom-pages', 'width' => $siteInfo?->blog_page_image_width, 'height' => $siteInfo?->blog_page_image_height],
+            ],
             default => [],
         };
 
@@ -834,6 +868,7 @@ class AdminFeatureApiController extends Controller
             'abouts', 'sliders' => ['image'],
             'blog-posts' => ['featured_image_path'],
             'blog-pages' => ['hero_background_path'],
+            'custom-pages' => ['meta_image'],
             'agencies' => ['logo'],
             default => [],
         };

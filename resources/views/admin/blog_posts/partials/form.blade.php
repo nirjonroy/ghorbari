@@ -1,26 +1,9 @@
 @csrf
+@include('Admin.partials.rich-text-editor')
 
 @php
   $tagsValue = old('tags_input', is_array($post->tags) ? implode(', ', $post->tags) : '');
 @endphp
-
-@push('styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css">
-<style>
-  .note-editor.note-frame {
-    border-color: #dee2e6;
-  }
-
-  .note-editor .note-toolbar {
-    background: #fff;
-    border-bottom-color: #dee2e6;
-  }
-
-  .note-editor .note-editing-area .note-editable {
-    min-height: 260px;
-  }
-</style>
-@endpush
 
 <div class="card">
   <div class="card-header">
@@ -71,7 +54,7 @@
 
       <div class="col-12">
         <label for="content" class="form-label">Long Description</label>
-        <textarea id="content" name="content" class="form-control summernote-editor @error('content') is-invalid @enderror" rows="8" required>{{ old('content', $post->content) }}</textarea>
+        <textarea id="content" name="content" class="form-control rich-text-editor @error('content') is-invalid @enderror" rows="8" required>{{ old('content', $post->content) }}</textarea>
         @error('content')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
@@ -110,25 +93,8 @@
 </div>
 
 @push('scripts')
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    $('.summernote-editor').summernote({
-      height: 260,
-      fontNames: ['Source Sans Pro', 'Arial', 'Arial Black', 'Courier New', 'Helvetica', 'Times New Roman'],
-      toolbar: [
-        ['style', ['style']],
-        ['fontname', ['fontname']],
-        ['font', ['bold', 'italic', 'underline', 'clear']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['table', ['table']],
-        ['insert', ['link', 'picture', 'video']],
-        ['view', ['fullscreen', 'codeview', 'help']]
-      ]
-    });
-
     const titleInput = document.getElementById('title');
     const slugInput = document.getElementById('slug');
     let slugEdited = Boolean(slugInput && slugInput.value);

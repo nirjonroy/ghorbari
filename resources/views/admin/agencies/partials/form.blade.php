@@ -1,4 +1,5 @@
 @csrf
+@include('Admin.partials.rich-text-editor')
 
 <div class="card">
   <div class="card-header">
@@ -53,7 +54,7 @@
       </div>
       <div class="col-12">
         <label for="description" class="form-label">Description</label>
-        <textarea id="description" name="description" rows="5" class="form-control @error('description') is-invalid @enderror">{{ old('description', $agency->description) }}</textarea>
+        <textarea id="description" name="description" rows="5" class="form-control rich-text-editor @error('description') is-invalid @enderror">{{ old('description', $agency->description) }}</textarea>
         @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
     </div>

@@ -1,4 +1,5 @@
 @csrf
+@include('Admin.partials.rich-text-editor')
 
 <div class="card">
   <div class="card-header">
@@ -60,7 +61,7 @@
       </div>
       <div class="col-12">
         <label for="long_description" class="form-label">Long Description</label>
-        <textarea id="long_description" name="long_description" class="form-control @error('long_description') is-invalid @enderror" rows="8" required>{{ old('long_description', $about->long_description) }}</textarea>
+        <textarea id="long_description" name="long_description" class="form-control rich-text-editor @error('long_description') is-invalid @enderror" rows="8" required>{{ old('long_description', $about->long_description) }}</textarea>
         @error('long_description')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
 
@@ -76,12 +77,12 @@
       </div>
       <div class="col-md-6">
         <label for="mission_description" class="form-label">Mission Description</label>
-        <textarea id="mission_description" name="mission_description" class="form-control @error('mission_description') is-invalid @enderror" rows="4">{{ old('mission_description', $about->mission_description) }}</textarea>
+        <textarea id="mission_description" name="mission_description" class="form-control rich-text-editor @error('mission_description') is-invalid @enderror" rows="4">{{ old('mission_description', $about->mission_description) }}</textarea>
         @error('mission_description')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
       <div class="col-md-6">
         <label for="vision_description" class="form-label">Vision Description</label>
-        <textarea id="vision_description" name="vision_description" class="form-control @error('vision_description') is-invalid @enderror" rows="4">{{ old('vision_description', $about->vision_description) }}</textarea>
+        <textarea id="vision_description" name="vision_description" class="form-control rich-text-editor @error('vision_description') is-invalid @enderror" rows="4">{{ old('vision_description', $about->vision_description) }}</textarea>
         @error('vision_description')<div class="invalid-feedback">{{ $message }}</div>@enderror
       </div>
     </div>

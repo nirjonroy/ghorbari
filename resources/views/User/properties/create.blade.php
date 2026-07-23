@@ -3,6 +3,8 @@
 @section('title', 'Add Property | Land Site')
 @section('body_class', 'frontend-page user-dashboard-page')
 
+@include('Admin.partials.rich-text-editor')
+
 @section('content')
 @php
     $user = $dashboardData['user'];
@@ -207,7 +209,7 @@
 
             <div class="col-12">
               <label for="description" class="form-label">Description</label>
-              <textarea id="description" name="description" class="form-control @error('description') is-invalid @enderror" rows="6">{{ old('description') }}</textarea>
+              <textarea id="description" name="description" class="form-control rich-text-editor @error('description') is-invalid @enderror" rows="6">{{ old('description') }}</textarea>
               @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
 

@@ -21,6 +21,7 @@ class AdminRolePermissionSeeder extends Seeder
             'manage sliders',
             'manage subscriptions',
             'manage contacts',
+            'manage custom pages',
             'manage users',
             'manage agencies',
             'manage agents',
