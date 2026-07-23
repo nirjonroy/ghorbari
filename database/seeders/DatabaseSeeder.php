@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PropertySampleDataSeeder::class);
         $this->call(PropertyLocationBackfillSeeder::class);
         $this->call(DemoBlogSeeder::class);
+        $this->call(DemoCustomPageSeeder::class);
         $this->call(DemoSubscriptionPackageSeeder::class);
     }
 }

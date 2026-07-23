@@ -22,7 +22,6 @@
     <section class="blog-detail-hero">
       <div class="container">
         <a href="{{ route('frontend.home') }}" class="blog-back-link"><i class="bi bi-arrow-left"></i> Back To Home</a>
-        <span class="article-category">Custom Page</span>
         <h1>{{ $page->page_name }}</h1>
         @if($page->subtitle || $page->short_description)
           <p>{{ $page->subtitle ?: $page->short_description }}</p>
