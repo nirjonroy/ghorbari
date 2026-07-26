@@ -6,6 +6,8 @@
 @php
   $siteInfo = $contactData['site_info'] ?? null;
   $map = $contactData['map'] ?? null;
+  $phoneRequired = (bool) ($siteInfo?->phone_number_required ?? false);
+  $defaultPhoneCode = $siteInfo?->default_phone_code;
 @endphp
 
 @section('content')
@@ -63,8 +65,8 @@
                 @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
               </div>
               <div class="col-md-6">
-                <label for="contactPhone">Phone</label>
-                <input id="contactPhone" name="phone" value="{{ old('phone', auth()->user()?->phone) }}" class="form-control @error('phone') is-invalid @enderror" type="text">
+                <label for="contactPhone">Phone{{ $phoneRequired ? ' *' : '' }}</label>
+                <input id="contactPhone" name="phone" value="{{ old('phone', auth()->user()?->phone ?: $defaultPhoneCode) }}" class="form-control @error('phone') is-invalid @enderror" type="text" @required($phoneRequired)>
                 @error('phone')<div class="invalid-feedback">{{ $message }}</div>@enderror
               </div>
               <div class="col-md-6">

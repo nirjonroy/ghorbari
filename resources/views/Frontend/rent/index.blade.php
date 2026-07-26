@@ -7,14 +7,16 @@
 
       return $media ? asset($media->file_path) : asset('frontend/assets/images/'.$fallback);
   };
-  $propertyPrice = function ($property) {
-      $price = (float) $property->price;
+  $currencyLabel = data_get($frontendSiteInfo, 'currency_icon') ?: data_get($frontendSiteInfo, 'currency_name') ?: 'BDT';
+  $currencyRate = (float) (data_get($frontendSiteInfo, 'currency_rate') ?: 1);
+  $propertyPrice = function ($property) use ($currencyLabel, $currencyRate) {
+      $price = (float) $property->price * $currencyRate;
 
       if ($price >= 10000000) {
-          return 'BDT '.rtrim(rtrim(number_format($price / 10000000, 2), '0'), '.').' Cr';
+          return $currencyLabel.' '.rtrim(rtrim(number_format($price / 10000000, 2), '0'), '.').' Cr';
       }
 
-      return 'BDT '.number_format($price).($property->rent_period ? ' / '.$property->rent_period : ' / month');
+      return $currencyLabel.' '.number_format($price).($property->rent_period ? ' / '.$property->rent_period : ' / month');
   };
   $propertyFacts = function ($property) {
       return collect([

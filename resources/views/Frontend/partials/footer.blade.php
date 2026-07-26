@@ -2,13 +2,18 @@
   $footerLogo = filled(data_get($frontendSiteInfo, 'logo'))
       ? asset(data_get($frontendSiteInfo, 'logo'))
       : asset('frontend/assets/images/logo.png');
+  $footerNote = trim(strip_tags((string) data_get($frontendSiteInfo, 'footer_contact_note')));
+  $siteName = data_get($frontendSiteInfo, 'site_name') ?: data_get($frontendSiteInfo, 'sidebar_lg_header') ?: 'Land Site';
+  $copyright = data_get($frontendSiteInfo, 'copyright') ?: 'Designed and developed by BlackTech Corp.';
+  $topbarEmail = data_get($frontendSiteInfo, 'topbar_email') ?: data_get($frontendSiteInfo, 'contact_email');
+  $topbarPhone = data_get($frontendSiteInfo, 'topbar_phone');
 @endphp
 <footer class="footer">
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
           <img src="{{ $footerLogo }}" alt="{{ data_get($frontendSiteInfo, 'sidebar_lg_header', 'Land Site') }} logo">
-          <p>Land Site helps buyers, sellers, and renters compare trusted property options across Bangladesh.</p>
+          <p>{{ $footerNote ?: $siteName.' helps buyers, sellers, and renters compare trusted property options across Bangladesh.' }}</p>
         </div>
         <div>
           <h2>Join Us</h2>
@@ -25,6 +30,12 @@
         <div>
           <h2>Find Us</h2>
           <a href="{{ route('frontend.contact.index') }}">Contact</a>
+          @if($topbarEmail)
+            <a href="mailto:{{ $topbarEmail }}">{{ $topbarEmail }}</a>
+          @endif
+          @if($topbarPhone)
+            <a href="tel:{{ $topbarPhone }}">{{ $topbarPhone }}</a>
+          @endif
           <a href="#">Help Center</a>
           <div class="footer-social">
             <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
@@ -34,7 +45,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Land Site. Designed and developed by BlackTech Corp.</p>
+        <p>&copy; {{ now()->year }} {{ $siteName }}. {{ $copyright }}</p>
         <div>
           <a href="#">Privacy Policy</a>
           <a href="#">Terms Of Use</a>

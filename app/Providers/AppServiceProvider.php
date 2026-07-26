@@ -33,10 +33,22 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
 
-        View::composer(['Frontend.layouts.master', 'layouts.guest'], function ($view) {
+        $siteInfo = null;
+
+        try {
             $siteInfo = Schema::hasTable('siteinfo')
                 ? SiteInfo::query()->first()
                 : null;
+        } catch (\Throwable $exception) {
+            $siteInfo = null;
+        }
+
+        if ($siteInfo?->timezone && in_array($siteInfo->timezone, timezone_identifiers_list(), true)) {
+            config(['app.timezone' => $siteInfo->timezone]);
+            date_default_timezone_set($siteInfo->timezone);
+        }
+
+        View::composer(['Frontend.layouts.master', 'layouts.guest'], function ($view) use ($siteInfo) {
             $landTypeIds = Schema::hasTable('property_types')
                 ? PropertyType::query()->whereIn('slug', ['land-plot', 'land'])->pluck('id')->all()
                 : [];
@@ -81,8 +93,8 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        View::composer('Admin.layouts.master', function ($view) {
-            $view->with('adminSiteInfo', Schema::hasTable('siteinfo') ? SiteInfo::query()->first() : null);
+        View::composer('Admin.layouts.master', function ($view) use ($siteInfo) {
+            $view->with('adminSiteInfo', $siteInfo);
         });
     }
 }

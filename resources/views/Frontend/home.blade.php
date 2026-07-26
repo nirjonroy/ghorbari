@@ -20,6 +20,8 @@
     $blogPosts = collect($homeData['blog_posts'] ?? []);
     $agents = collect($homeData['agents'] ?? []);
     $siteInfo = $homeData['site_info'] ?? null;
+    $currencyLabel = data_get($siteInfo, 'currency_icon') ?: data_get($siteInfo, 'currency_name') ?: 'BDT';
+    $currencyRate = (float) (data_get($siteInfo, 'currency_rate') ?: 1);
     $menuTypes = collect($frontendMenuData['types'] ?? []);
     $menuDistricts = collect($frontendMenuData['districts'] ?? []);
     $menuCities = collect($frontendMenuData['cities'] ?? []);
@@ -47,16 +49,18 @@
 
         return $media ? asset($media->file_path) : asset('frontend/assets/images/'.$fallback);
     };
-    $propertyPrice = function ($property) {
+    $propertyPrice = function ($property) use ($currencyLabel, $currencyRate) {
+        $amount = (float) $property->price * $currencyRate;
+
         if ($property->listing_type === 'rent') {
-            return 'BDT '.number_format((float) $property->price).' / '.($property->rent_period ?: 'month');
+            return $currencyLabel.' '.number_format($amount).' / '.($property->rent_period ?: 'month');
         }
 
-        if ((float) $property->price >= 10000000) {
-            return 'BDT '.rtrim(rtrim(number_format((float) $property->price / 10000000, 2), '0'), '.').' Cr';
+        if ($amount >= 10000000) {
+            return $currencyLabel.' '.rtrim(rtrim(number_format($amount / 10000000, 2), '0'), '.').' Cr';
         }
 
-        return 'BDT '.number_format((float) $property->price);
+        return $currencyLabel.' '.number_format($amount);
     };
     $propertyMeta = function ($property) {
         return collect([
@@ -166,11 +170,11 @@
                     </div>
                     <div class="col-md-6">
                       <label for="minPrice" class="form-label">Min Price</label>
-                      <input id="minPrice" name="min_price" type="number" min="0" class="form-control" placeholder="Min Price (BDT)">
+                      <input id="minPrice" name="min_price" type="number" min="0" class="form-control" placeholder="Min Price ({{ $currencyLabel }})">
                     </div>
                     <div class="col-md-6">
                       <label for="maxPrice" class="form-label">Max Price</label>
-                      <input id="maxPrice" name="max_price" type="number" min="0" class="form-control" placeholder="Max Price (BDT)">
+                      <input id="maxPrice" name="max_price" type="number" min="0" class="form-control" placeholder="Max Price ({{ $currencyLabel }})">
                     </div>
                   </div>
                   <div class="advanced-actions">
@@ -495,7 +499,7 @@
 
     <section class="listings-section" id="property-listings">
       <div class="container">
-        <h2 class="listings-title">Property Listings In Bangladesh</h2>
+        <h2 class="listings-title">{{ $siteInfo?->homepage_section_title ?: 'Property Listings In Bangladesh' }}</h2>
 
         <ul class="nav listings-tabs" id="listingTabs" role="tablist">
           <li class="nav-item" role="presentation">

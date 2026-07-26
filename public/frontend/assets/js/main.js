@@ -2,11 +2,15 @@ document.addEventListener("DOMContentLoaded", function () {
   var root = document.documentElement;
   var themeToggles = document.querySelectorAll(".theme-toggle");
   var savedTheme = localStorage.getItem("landsite-theme");
-  var defaultTheme = root.getAttribute("data-default-theme") || "light";
-  var currentTheme = savedTheme || defaultTheme;
+  var savedDefaultTheme = localStorage.getItem("landsite-default-theme");
+  var defaultTheme = root.getAttribute("data-default-theme") === "dark" ? "dark" : "light";
+  var currentTheme = savedTheme && savedDefaultTheme === defaultTheme ? savedTheme : defaultTheme;
 
   var setTheme = function (theme) {
     root.setAttribute("data-theme", theme);
+    if (document.body) {
+      document.body.setAttribute("data-theme", theme);
+    }
     if (!themeToggles.length) {
       return;
     }
@@ -21,12 +25,14 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   setTheme(currentTheme);
+  localStorage.setItem("landsite-default-theme", defaultTheme);
 
   if (themeToggles.length) {
     themeToggles.forEach(function (themeToggle) {
       themeToggle.addEventListener("click", function () {
         var nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
         localStorage.setItem("landsite-theme", nextTheme);
+        localStorage.setItem("landsite-default-theme", defaultTheme);
         setTheme(nextTheme);
       });
     });
@@ -236,8 +242,10 @@ document.addEventListener("DOMContentLoaded", function () {
     reset: document.getElementById("resetCalculator")
   };
 
-  var formatBDT = function (value) {
-    return "BDT " + Math.round(value).toLocaleString("en-BD");
+  var currencyLabel = document.body.dataset.currencyLabel || "BDT";
+
+  var formatCurrency = function (value) {
+    return currencyLabel + " " + Math.round(value).toLocaleString("en-BD");
   };
 
   var calculatePayment = function () {
@@ -258,11 +266,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var downPercent = homePrice ? Math.round((downPayment / homePrice) * 100) : 0;
 
     fields.downPercent.textContent = downPercent + "%";
-    fields.monthlyPayment.textContent = formatBDT(total);
-    fields.principalValue.textContent = formatBDT(principal);
-    fields.taxValue.textContent = formatBDT(taxes);
-    fields.serviceValue.textContent = formatBDT(serviceCharge);
-    fields.loanAmount.textContent = formatBDT(paymentAmount);
+    fields.monthlyPayment.textContent = formatCurrency(total);
+    fields.principalValue.textContent = formatCurrency(principal);
+    fields.taxValue.textContent = formatCurrency(taxes);
+    fields.serviceValue.textContent = formatCurrency(serviceCharge);
+    fields.loanAmount.textContent = formatCurrency(paymentAmount);
     fields.principalBar.style.width = total ? (principal / total * 100) + "%" : "0";
     fields.taxBar.style.width = total ? (taxes / total * 100) + "%" : "0";
     fields.serviceBar.style.width = total ? (serviceCharge / total * 100) + "%" : "0";
@@ -354,7 +362,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var markerBounds = [];
 
   properties.forEach(function (property) {
-    var label = property.is_search_location ? property.price : "BDT " + property.price;
+    var currencyLabel = document.body.dataset.currencyLabel || "BDT";
+    var label = property.is_search_location ? property.price : currencyLabel + " " + property.price;
     var icon = L.divIcon({
       className: "leaflet-price-marker" + (property.active ? " is-active" : ""),
       html: label,

@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\SiteInfo;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -20,6 +22,8 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
+        abort_unless($this->registrationEnabled(), 404);
+
         return view('auth.register');
     }
 
@@ -30,6 +34,8 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        abort_unless($this->registrationEnabled(), 404);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
@@ -47,5 +53,16 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    private function registrationEnabled(): bool
+    {
+        try {
+            $siteInfo = Schema::hasTable('siteinfo') ? SiteInfo::query()->first() : null;
+        } catch (\Throwable $exception) {
+            return true;
+        }
+
+        return (bool) ($siteInfo?->enable_user_register ?? true);
     }
 }

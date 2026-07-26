@@ -31,12 +31,15 @@
         ]);
     $visibleGallery = $galleryImages->take(5)->values();
     $primaryImage = $galleryImages->first()['url'] ?? asset('frontend/assets/images/card_img_1.jpg');
-    $price = (float) $property->price >= 10000000
-        ? 'BDT '.rtrim(rtrim(number_format((float) $property->price / 10000000, 2), '0'), '.').' Cr'
-        : 'BDT '.number_format((float) $property->price);
+    $currencyLabel = data_get($frontendSiteInfo, 'currency_icon') ?: data_get($frontendSiteInfo, 'currency_name') ?: 'BDT';
+    $currencyRate = (float) (data_get($frontendSiteInfo, 'currency_rate') ?: 1);
+    $displayAmount = (float) $property->price * $currencyRate;
+    $price = $displayAmount >= 10000000
+        ? $currencyLabel.' '.rtrim(rtrim(number_format($displayAmount / 10000000, 2), '0'), '.').' Cr'
+        : $currencyLabel.' '.number_format($displayAmount);
     $displayPrice = $property->listing_type === 'rent' ? $price.' / '.($property->rent_period ?: 'month') : $price;
     $paymentEstimate = $page['calculator'] ?? app(\App\Support\CalculatorSettings::class)->estimate((float) $property->price);
-    $monthlyEstimate = 'BDT '.number_format(($paymentEstimate['total'] ?? 0) / 100000, 2).' Lac/mo';
+    $monthlyEstimate = $currencyLabel.' '.number_format((($paymentEstimate['total'] ?? 0) * $currencyRate) / 100000, 2).' Lac/mo';
     $address = collect([
         optional($property->area)->name,
         optional($property->city)->name,
@@ -203,9 +206,9 @@
                 <span style="width: {{ number_format($paymentEstimate['service_percent'] ?? 0, 4, '.', '') }}%"></span>
               </div>
               <div class="payment-legend">
-                <span><i class="legend principal"></i> Principal and interest: BDT {{ number_format($paymentEstimate['principal'] ?? 0) }}</span>
-                <span><i class="legend tax"></i> Taxes and fees: BDT {{ number_format($paymentEstimate['taxes'] ?? 0) }}</span>
-                <span><i class="legend service"></i> Service charge: BDT {{ number_format($paymentEstimate['service'] ?? 0) }}</span>
+                <span><i class="legend principal"></i> Principal and interest: {{ $currencyLabel }} {{ number_format(($paymentEstimate['principal'] ?? 0) * $currencyRate) }}</span>
+                <span><i class="legend tax"></i> Taxes and fees: {{ $currencyLabel }} {{ number_format(($paymentEstimate['taxes'] ?? 0) * $currencyRate) }}</span>
+                <span><i class="legend service"></i> Service charge: {{ $currencyLabel }} {{ number_format(($paymentEstimate['service'] ?? 0) * $currencyRate) }}</span>
               </div>
               <a href="{{ route('frontend.calculator.index', ['price' => (int) $property->price]) }}" class="btn btn-dark mt-3">Open calculator</a>
             </article>
@@ -258,7 +261,8 @@
                   <div class="col-md-4">
                     <a href="{{ $related->detailUrl() }}" class="mini-listing text-decoration-none">
                       <img src="{{ $recommendedImage($related, 'card_img_10.jpg') }}" alt="{{ $related->title }}">
-                      <strong>{{ (float) $related->price >= 10000000 ? 'BDT '.rtrim(rtrim(number_format((float) $related->price / 10000000, 2), '0'), '.').' Cr' : 'BDT '.number_format((float) $related->price) }}</strong>
+                      @php($relatedAmount = (float) $related->price * $currencyRate)
+                      <strong>{{ $relatedAmount >= 10000000 ? $currencyLabel.' '.rtrim(rtrim(number_format($relatedAmount / 10000000, 2), '0'), '.').' Cr' : $currencyLabel.' '.number_format($relatedAmount) }}</strong>
                       <span>{{ collect([optional($related->area)->name, optional($related->city)->name])->filter()->join(', ') ?: $related->title }}</span>
                     </a>
                   </div>

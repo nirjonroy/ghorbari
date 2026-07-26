@@ -14,12 +14,13 @@
         'taxRate' => $defaults['tax_rate'],
         'serviceCharge' => $defaults['service_charge'],
     ];
+    $currencyLabel = data_get($frontendSiteInfo, 'currency_icon') ?: data_get($frontendSiteInfo, 'currency_name') ?: 'BDT';
   @endphp
 
   <main data-api-url="{{ $page['api_url'] ?? route('api.frontend.calculator') }}">
     <section class="page-hero">
       <div class="container">
-        <p>BDT estimate</p>
+        <p>{{ $currencyLabel }} estimate</p>
         <h1>Payment Calculator</h1>
         <p class="calculator-subtitle">Estimate monthly property payments using price, down payment, term, rate, taxes, and service charge.</p>
       </div>
@@ -37,7 +38,7 @@
               <div class="calculator-field">
                 <label for="homePrice">Property price</label>
                 <div class="input-group">
-                  <span class="input-group-text">BDT</span>
+                  <span class="input-group-text">{{ $currencyLabel }}</span>
                   <input type="number" class="form-control calc-input" id="homePrice" value="{{ $defaults['home_price'] }}" min="{{ $defaults['home_price_min'] }}" step="{{ $defaults['home_price_step'] }}">
                 </div>
                 <input type="range" class="form-range calc-input" id="homePriceRange" min="{{ $defaults['home_price_min'] }}" max="{{ $defaults['home_price_max'] }}" step="{{ $defaults['home_price_step'] }}" value="{{ $defaults['home_price'] }}">
@@ -46,7 +47,7 @@
               <div class="calculator-field">
                 <label for="downPayment">Down payment</label>
                 <div class="input-group">
-                  <span class="input-group-text">BDT</span>
+                  <span class="input-group-text">{{ $currencyLabel }}</span>
                   <input type="number" class="form-control calc-input" id="downPayment" value="{{ $defaults['down_payment'] }}" min="0" step="100000">
                   <span class="input-group-text" id="downPercent">{{ $defaults['down_percent'] }}%</span>
                 </div>
@@ -82,7 +83,7 @@
                 <div class="col-sm-6 calculator-field">
                   <label for="serviceCharge">Service charge</label>
                   <div class="input-group">
-                    <span class="input-group-text">BDT</span>
+                    <span class="input-group-text">{{ $currencyLabel }}</span>
                     <input type="number" class="form-control calc-input" id="serviceCharge" value="{{ $defaults['service_charge'] }}" min="{{ $defaults['service_charge_min'] }}" max="{{ $defaults['service_charge_max'] }}" step="{{ $defaults['service_charge_step'] }}">
                   </div>
                 </div>
@@ -95,7 +96,7 @@
               <div class="d-flex justify-content-between align-items-start gap-3">
                 <div>
                   <span class="result-label">Estimated payment</span>
-                  <h2><span id="monthlyPayment">BDT 0</span> Per Month</h2>
+                  <h2><span id="monthlyPayment">{{ $currencyLabel }} 0</span> Per Month</h2>
                 </div>
                 <button class="btn btn-link" id="resetCalculator" type="button">Reset</button>
               </div>
@@ -105,10 +106,10 @@
                 <span id="serviceBar"></span>
               </div>
               <div class="result-list">
-                <div><span><i class="dot principal"></i>Principal and interest</span><strong id="principalValue">BDT 0</strong></div>
-                <div><span><i class="dot tax"></i>Property taxes</span><strong id="taxValue">BDT 0</strong></div>
-                <div><span><i class="dot service"></i>Service charge</span><strong id="serviceValue">BDT 0</strong></div>
-                <div><span><i class="dot total"></i>Payment amount</span><strong id="loanAmount">BDT 0</strong></div>
+                <div><span><i class="dot principal"></i>Principal and interest</span><strong id="principalValue">{{ $currencyLabel }} 0</strong></div>
+                <div><span><i class="dot tax"></i>Property taxes</span><strong id="taxValue">{{ $currencyLabel }} 0</strong></div>
+                <div><span><i class="dot service"></i>Service charge</span><strong id="serviceValue">{{ $currencyLabel }} 0</strong></div>
+                <div><span><i class="dot total"></i>Payment amount</span><strong id="loanAmount">{{ $currencyLabel }} 0</strong></div>
               </div>
               <a href="{{ route('frontend.agents.index') }}" class="btn btn-danger result-cta">Contact agent</a>
             </aside>

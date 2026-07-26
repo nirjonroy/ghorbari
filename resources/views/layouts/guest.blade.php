@@ -5,9 +5,12 @@
         ? asset(data_get($siteInfo, 'logo'))
         : asset('frontend/assets/images/logo.png');
     $favicon = data_get($siteInfo, 'favicon');
+    $textDirection = in_array(data_get($siteInfo, 'text_direction', 'ltr'), ['ltr', 'rtl'], true)
+        ? data_get($siteInfo, 'text_direction', 'ltr')
+        : 'ltr';
 @endphp
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ $textDirection }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -10,6 +10,7 @@ use App\Models\OpenHouseSchedule;
 use App\Models\Property;
 use App\Models\PropertyView;
 use App\Models\SavedSearch;
+use App\Models\SiteInfo;
 use App\Models\SubscriptionPackage;
 use App\Models\SubscriptionPayment;
 use App\Models\UserNotification;
@@ -554,6 +555,7 @@ class UserController extends Controller
             return false;
         }
 
+        $previousStatus = $payment->status;
         $validation = null;
 
         if ($status === 'paid') {
@@ -582,6 +584,8 @@ class UserController extends Controller
         ]);
 
         if (! $payment->subscription) {
+            $this->createSubscriptionNotification($payment, $status, $previousStatus);
+
             return $status === 'paid';
         }
 
@@ -599,12 +603,54 @@ class UserController extends Controller
                 ->where('status', 'active')
                 ->update(['status' => 'expired']);
 
+            $this->createSubscriptionNotification($payment, $status, $previousStatus);
+
             return true;
         }
 
         $payment->subscription->update(['status' => $status]);
+        $this->createSubscriptionNotification($payment, $status, $previousStatus);
 
         return false;
+    }
+
+    private function createSubscriptionNotification(SubscriptionPayment $payment, string $status, ?string $previousStatus): void
+    {
+        if ($previousStatus === $status || ! $this->subscriptionNotificationsEnabled() || ! $this->tableExists(UserNotification::class)) {
+            return;
+        }
+
+        $packageName = $payment->subscription?->package_name ?: $payment->package?->name ?: 'Subscription';
+        $title = match ($status) {
+            'paid' => 'Subscription activated',
+            'failed' => 'Subscription payment failed',
+            'cancelled' => 'Subscription payment cancelled',
+            default => 'Subscription '.$status,
+        };
+
+        UserNotification::create([
+            'user_id' => $payment->user_id,
+            'type' => 'subscription',
+            'title' => $title,
+            'message' => $packageName.' payment status is '.ucfirst($status).'.',
+            'data' => [
+                'payment_id' => $payment->id,
+                'subscription_id' => $payment->user_subscription_id,
+                'transaction_id' => $payment->transaction_id,
+                'status' => $status,
+            ],
+        ]);
+    }
+
+    private function subscriptionNotificationsEnabled(): bool
+    {
+        try {
+            $siteInfo = Schema::hasTable('siteinfo') ? SiteInfo::query()->first() : null;
+        } catch (\Throwable $exception) {
+            return false;
+        }
+
+        return (bool) ($siteInfo?->enable_subscription_notify ?? false);
     }
 
     private function storeUserFile($file, string $prefix): string

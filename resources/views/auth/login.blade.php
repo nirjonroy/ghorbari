@@ -40,10 +40,14 @@
         </div>
 
         <div class="auth-actions">
-            <span class="auth-switch">
-                New here?
-                <a class="auth-link" href="{{ route('register') }}">Create account</a>
-            </span>
+            @if(data_get($frontendSiteInfo, 'enable_user_register', true))
+                <span class="auth-switch">
+                    New here?
+                    <a class="auth-link" href="{{ route('register') }}">Create account</a>
+                </span>
+            @else
+                <span class="auth-switch">Registration is currently disabled.</span>
+            @endif
 
             <button class="auth-submit" type="submit">
                 {{ __('Sign In') }}

@@ -42,11 +42,15 @@
 
       return $media ? asset($media->file_path) : asset('frontend/assets/images/'.$fallback);
   };
-  $propertyPrice = function ($property) {
-      if ((float) $property->price >= 10000000) {
-          $price = 'BDT '.rtrim(rtrim(number_format((float) $property->price / 10000000, 2), '0'), '.').' Cr';
+  $currencyLabel = data_get($frontendSiteInfo, 'currency_icon') ?: data_get($frontendSiteInfo, 'currency_name') ?: 'BDT';
+  $currencyRate = (float) (data_get($frontendSiteInfo, 'currency_rate') ?: 1);
+  $propertyPrice = function ($property) use ($currencyLabel, $currencyRate) {
+      $amount = (float) $property->price * $currencyRate;
+
+      if ($amount >= 10000000) {
+          $price = $currencyLabel.' '.rtrim(rtrim(number_format($amount / 10000000, 2), '0'), '.').' Cr';
       } else {
-          $price = 'BDT '.number_format((float) $property->price);
+          $price = $currencyLabel.' '.number_format($amount);
       }
 
       return $property->listing_type === 'rent' ? $price.' / '.($property->rent_period ?: 'month') : $price;

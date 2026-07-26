@@ -30,15 +30,16 @@ class ContactController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $siteInfo = Schema::hasTable('siteinfo') ? SiteInfo::query()->first() : null;
+        $phoneRule = $siteInfo?->phone_number_required ? 'required' : 'nullable';
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:40'],
+            'phone' => [$phoneRule, 'string', 'max:40'],
             'subject' => ['nullable', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:5000'],
         ]);
-
-        $siteInfo = Schema::hasTable('siteinfo') ? SiteInfo::query()->first() : null;
 
         if (! $siteInfo || $siteInfo->enable_save_contact_message) {
             ContactMessage::create(array_merge($data, [
