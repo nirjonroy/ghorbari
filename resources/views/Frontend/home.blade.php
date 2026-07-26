@@ -25,6 +25,7 @@
     $currencyLabel = data_get($siteInfo, 'currency_icon') ?: data_get($siteInfo, 'currency_name') ?: 'BDT';
     $currencyRate = (float) (data_get($siteInfo, 'currency_rate') ?: 1);
     $menuTypes = collect($frontendMenuData['types'] ?? []);
+    $menuDivisions = collect($frontendMenuData['divisions'] ?? []);
     $menuDistricts = collect($frontendMenuData['districts'] ?? []);
     $menuCities = collect($frontendMenuData['cities'] ?? []);
     $menuAreas = collect($frontendMenuData['areas'] ?? []);
@@ -35,6 +36,47 @@
         ->unique()
         ->values();
     $postcodeOptions = $menuAreas->pluck('postal_code')->filter()->unique()->values();
+    $fallbackDivisions = collect(['Dhaka', 'Chattogram', 'Sylhet', 'Cox\'s Bazar', 'Rajshahi', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh']);
+    $chipLocations = $menuDivisions->pluck('name')->filter()->values();
+    $chipLocations = $chipLocations->isNotEmpty() ? $chipLocations : $fallbackDivisions;
+    $citySitemapLinks = $menuCities
+        ->filter(fn ($city) => $city->district)
+        ->map(fn ($city) => [
+            'label' => $city->name.' Real Estate',
+            'url' => route('frontend.property.city', ['district' => $city->district->slug, 'city' => $city->slug]),
+        ])
+        ->values();
+    $citySitemapLinks = $citySitemapLinks->isNotEmpty()
+        ? $citySitemapLinks
+        : collect(['Dhaka', 'Chattogram', 'Sylhet', 'Cox\'s Bazar', 'Rajshahi', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh'])->map(fn ($city) => [
+            'label' => $city.' Real Estate',
+            'url' => route('frontend.property.buy-search', ['q' => $city]),
+        ]);
+    $districtSitemapLinks = $menuDistricts
+        ->map(fn ($district) => [
+            'label' => $district->name.' District Homes For Sale',
+            'url' => route('frontend.property.district', ['district' => $district->slug]),
+        ])
+        ->values();
+    $districtSitemapLinks = $districtSitemapLinks->isNotEmpty()
+        ? $districtSitemapLinks
+        : collect(['Dhaka', 'Chattogram', 'Sylhet', 'Gazipur', 'Narayanganj', 'Cumilla', 'Khulna', 'Rajshahi', 'Barishal', 'Rangpur'])->map(fn ($district) => [
+            'label' => $district.' District Homes For Sale',
+            'url' => route('frontend.property.buy-search', ['q' => $district]),
+        ]);
+    $divisionSitemapLinks = ($menuDivisions->isNotEmpty() ? $menuDivisions->pluck('name') : $fallbackDivisions)
+        ->map(fn ($division) => [
+            'label' => $division.' Division Properties',
+            'url' => route('frontend.property.buy-search', ['q' => $division]),
+        ]);
+    $rentCityLinks = $menuCities
+        ->pluck('name')
+        ->filter()
+        ->unique()
+        ->values();
+    $rentCityLinks = $rentCityLinks->isNotEmpty()
+        ? $rentCityLinks
+        : collect(['Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh']);
     $serviceIcon = fn ($field, $fallback) => filled($siteInfo?->{$field})
         ? asset($siteInfo->{$field})
         : asset('frontend/assets/images/icons/'.$fallback);
@@ -935,15 +977,9 @@
       <div class="container text-center">
         <h2>Browse The <span>Newest</span> Homes Across Bangladesh</h2>
         <div class="newest-chip-list">
-          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Dhaka</a>
-          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Chattogram</a>
-          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Sylhet</a>
-          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Cox's Bazar</a>
-          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Rajshahi</a>
-          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Khulna</a>
-          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Barishal</a>
-          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Rangpur</a>
-          <a href="{{ route('frontend.property.buy-search') }}"><i class="bi bi-geo-alt-fill"></i> Mymensingh</a>
+          @foreach($chipLocations as $location)
+            <a href="{{ route('frontend.property.buy-search', ['q' => $location]) }}"><i class="bi bi-geo-alt-fill"></i> {{ $location }}</a>
+          @endforeach
         </div>
       </div>
     </section>
@@ -953,70 +989,46 @@
         <div class="sitemap-group">
           <div class="sitemap-heading">
             <h2>Search For Homes By City</h2>
-            <a href="#">View Full List</a>
+            <a href="{{ route('frontend.property.buy-search') }}">View Full List</a>
           </div>
           <div class="sitemap-links">
-            <a href="{{ route('frontend.property.buy-search') }}">Dhaka Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Chattogram Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Sylhet Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Cox's Bazar Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Rajshahi Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Khulna Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Barishal Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Rangpur Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Mymensingh Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Gazipur Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Narayanganj Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Cumilla Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Bogura Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Jashore Real Estate</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Savar Real Estate</a>
+            @foreach($citySitemapLinks as $link)
+              <a href="{{ $link['url'] }}">{{ $link['label'] }}</a>
+            @endforeach
           </div>
         </div>
 
         <div class="sitemap-group">
           <div class="sitemap-heading">
             <h2>Search For Homes By District</h2>
-            <a href="#">View Full List</a>
+            <a href="{{ route('frontend.property.buy-search') }}">View Full List</a>
           </div>
           <div class="sitemap-links">
-            <a href="{{ route('frontend.property.buy-search') }}">Dhaka District Homes For Sale</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Chattogram District Homes For Sale</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Sylhet District Homes For Sale</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Gazipur District Homes For Sale</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Narayanganj District Homes For Sale</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Cumilla District Homes For Sale</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Khulna District Homes For Sale</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Rajshahi District Homes For Sale</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Barishal District Homes For Sale</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Rangpur District Homes For Sale</a>
+            @foreach($districtSitemapLinks as $link)
+              <a href="{{ $link['url'] }}">{{ $link['label'] }}</a>
+            @endforeach
           </div>
         </div>
 
         <div class="sitemap-group">
           <div class="sitemap-heading">
             <h2>Search For Homes By Division</h2>
-            <a href="#">View Full List</a>
+            <a href="{{ route('frontend.property.buy-search') }}">View Full List</a>
           </div>
           <div class="sitemap-links">
-            <a href="{{ route('frontend.property.buy-search') }}">Dhaka Division Properties</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Chattogram Division Properties</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Sylhet Division Properties</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Rajshahi Division Properties</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Khulna Division Properties</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Barishal Division Properties</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Rangpur Division Properties</a>
-            <a href="{{ route('frontend.property.buy-search') }}">Mymensingh Division Properties</a>
+            @foreach($divisionSitemapLinks as $link)
+              <a href="{{ $link['url'] }}">{{ $link['label'] }}</a>
+            @endforeach
           </div>
         </div>
 
         <div class="sitemap-group mb-0">
           <div class="sitemap-heading">
             <h2>Search For Apartments By City</h2>
-            <a href="#">View Full List</a>
+            <a href="{{ route('frontend.rent.index') }}">View Full List</a>
           </div>
           <div class="sitemap-links">
-            @foreach(['Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh'] as $rentCity)
+            @foreach($rentCityLinks as $rentCity)
               <a href="{{ route('frontend.rent.index', ['q' => $rentCity]) }}">{{ $rentCity }} Apartments For Rent</a>
             @endforeach
           </div>
