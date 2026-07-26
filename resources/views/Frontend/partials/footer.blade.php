@@ -7,6 +7,13 @@
   $copyright = data_get($frontendSiteInfo, 'copyright') ?: 'Designed and developed by BlackTech Corp.';
   $topbarEmail = data_get($frontendSiteInfo, 'topbar_email') ?: data_get($frontendSiteInfo, 'contact_email');
   $topbarPhone = data_get($frontendSiteInfo, 'topbar_phone');
+  $socialLinks = collect([
+      'facebook' => ['url' => data_get($frontendSiteInfo, 'facebook_url'), 'icon' => 'bi-facebook', 'label' => 'Facebook'],
+      'instagram' => ['url' => data_get($frontendSiteInfo, 'instagram_url'), 'icon' => 'bi-instagram', 'label' => 'Instagram'],
+      'linkedin' => ['url' => data_get($frontendSiteInfo, 'linkedin_url'), 'icon' => 'bi-linkedin', 'label' => 'LinkedIn'],
+      'youtube' => ['url' => data_get($frontendSiteInfo, 'youtube_url'), 'icon' => 'bi-youtube', 'label' => 'YouTube'],
+      'twitter' => ['url' => data_get($frontendSiteInfo, 'twitter_url'), 'icon' => 'bi-twitter-x', 'label' => 'Twitter/X'],
+  ])->filter(fn ($link) => filled($link['url']));
 @endphp
 <footer class="footer">
     <div class="container">
@@ -37,11 +44,15 @@
             <a href="tel:{{ $topbarPhone }}">{{ $topbarPhone }}</a>
           @endif
           <a href="#">Help Center</a>
-          <div class="footer-social">
-            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-            <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-          </div>
+          @if($socialLinks->isNotEmpty())
+            <div class="footer-social">
+              @foreach($socialLinks as $socialLink)
+                <a href="{{ $socialLink['url'] }}" aria-label="{{ $socialLink['label'] }}" target="_blank" rel="noopener noreferrer">
+                  <i class="bi {{ $socialLink['icon'] }}"></i>
+                </a>
+              @endforeach
+            </div>
+          @endif
         </div>
       </div>
       <div class="footer-bottom">

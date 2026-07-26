@@ -143,6 +143,36 @@
 
               <div class="card mt-3">
                 <div class="card-header">
+                  <h3 class="card-title">Social Links</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row g-3">
+                    @foreach ([
+                      'facebook_url' => ['label' => 'Facebook URL', 'placeholder' => 'https://facebook.com/your-page'],
+                      'instagram_url' => ['label' => 'Instagram URL', 'placeholder' => 'https://instagram.com/your-profile'],
+                      'linkedin_url' => ['label' => 'LinkedIn URL', 'placeholder' => 'https://linkedin.com/company/your-company'],
+                      'youtube_url' => ['label' => 'YouTube URL', 'placeholder' => 'https://youtube.com/@your-channel'],
+                      'twitter_url' => ['label' => 'Twitter/X URL', 'placeholder' => 'https://x.com/your-profile'],
+                    ] as $field => $social)
+                      <div class="col-md-6">
+                        <label for="{{ $field }}" class="form-label">{{ $social['label'] }}</label>
+                        <input
+                          id="{{ $field }}"
+                          type="url"
+                          name="{{ $field }}"
+                          class="form-control @error($field) is-invalid @enderror"
+                          value="{{ old($field, $siteInfo->{$field} ?? '') }}"
+                          placeholder="{{ $social['placeholder'] }}"
+                        >
+                        @error($field)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                      </div>
+                    @endforeach
+                  </div>
+                </div>
+              </div>
+
+              <div class="card mt-3">
+                <div class="card-header">
                   <h3 class="card-title">Header, Footer, and Currency</h3>
                 </div>
                 <div class="card-body">

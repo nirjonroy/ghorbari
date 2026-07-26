@@ -84,6 +84,24 @@
                     <dt class="col-sm-3">Frontend URL</dt>
                     <dd class="col-sm-9">{{ $siteInfo->frontend_url ?? 'Not set' }}</dd>
 
+                    <dt class="col-sm-3">Social Links</dt>
+                    <dd class="col-sm-9">
+                      @php
+                        $socialLinks = [
+                            'Facebook' => $siteInfo->facebook_url,
+                            'Instagram' => $siteInfo->instagram_url,
+                            'LinkedIn' => $siteInfo->linkedin_url,
+                            'YouTube' => $siteInfo->youtube_url,
+                            'Twitter/X' => $siteInfo->twitter_url,
+                        ];
+                      @endphp
+                      @forelse(array_filter($socialLinks) as $label => $url)
+                        <a href="{{ $url }}" target="_blank" rel="noopener" class="me-3">{{ $label }}</a>
+                      @empty
+                        Not set
+                      @endforelse
+                    </dd>
+
                     <dt class="col-sm-3">Homepage Section Title</dt>
                     <dd class="col-sm-9">{{ $siteInfo->homepage_section_title ?? 'Not set' }}</dd>
 
