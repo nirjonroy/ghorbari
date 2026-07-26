@@ -103,9 +103,6 @@
                     <p class="mb-1 mt-3">
                         <a href="{{ route('admin.password.request') }}">I forgot my password</a>
                     </p>
-                    <p class="mb-0">
-                        <a href="{{ route('admin.register') }}" class="text-center">Register a new admin</a>
-                    </p>
                 </div>
             </div>
         </div>
