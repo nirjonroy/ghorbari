@@ -48,6 +48,8 @@ class AppServiceProvider extends ServiceProvider
             date_default_timezone_set($siteInfo->timezone);
         }
 
+        View::share('frontendSiteInfo', $siteInfo);
+
         View::composer(['Frontend.layouts.master', 'layouts.guest'], function ($view) use ($siteInfo) {
             $landTypeIds = Schema::hasTable('property_types')
                 ? PropertyType::query()->whereIn('slug', ['land-plot', 'land'])->pluck('id')->all()

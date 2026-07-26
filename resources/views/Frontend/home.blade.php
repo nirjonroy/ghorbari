@@ -19,6 +19,8 @@
     $saleProperties = collect($homeData['sale_properties'] ?? []);
     $blogPosts = collect($homeData['blog_posts'] ?? []);
     $agents = collect($homeData['agents'] ?? []);
+    $localConfidence = $homeData['local_confidence'] ?? [];
+    $localConfidenceCities = collect($localConfidence['cities'] ?? []);
     $siteInfo = $homeData['site_info'] ?? null;
     $currencyLabel = data_get($siteInfo, 'currency_icon') ?: data_get($siteInfo, 'currency_name') ?: 'BDT';
     $currencyRate = (float) (data_get($siteInfo, 'currency_rate') ?: 1);
@@ -750,13 +752,13 @@
             <div class="row g-3 mt-3">
               <div class="col-sm-6">
                 <div class="stat-box">
-                  <strong>21k+</strong>
+                  <strong>{{ $localConfidence['active_homes_label'] ?? '0' }}</strong>
                   <span>active homes</span>
                 </div>
               </div>
               <div class="col-sm-6">
                 <div class="stat-box">
-                  <strong>4.9</strong>
+                  <strong>{{ $localConfidence['agent_rating'] ?? '0.0' }}</strong>
                   <span>agent rating</span>
                 </div>
               </div>
@@ -764,30 +766,21 @@
           </div>
           <div class="col-lg-7">
             <div class="row g-3">
-              <div class="col-sm-6">
-                <a class="city-card" href="#">
-                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Drone_view_from_Kamal_Atat%C3%BCrk_Avenue.jpg/330px-Drone_view_from_Kamal_Atat%C3%BCrk_Avenue.jpg" alt="Dhaka city">
-                  <span>Dhaka</span>
-                </a>
-              </div>
-              <div class="col-sm-6">
-                <a class="city-card" href="#">
-                  <img src="https://www.heavenlybhutan.com/wp-content/uploads/2020/09/Chittagong-Bangladesh-e1616045287646.jpg" alt="Chattogram city">
-                  <span>Chattogram</span>
-                </a>
-              </div>
-              <div class="col-sm-6">
-                <a class="city-card" href="#">
-                  <img src="https://grandsylhet.com/wp-content/uploads/elementor/thumbs/wmremove-transformed-1-r4e9tivz9nke0dx3pgf50sfny771k4w5amwb17u0lw.jpeg" alt="Sylhet city">
-                  <span>Sylhet</span>
-                </a>
-              </div>
-              <div class="col-sm-6">
-                <a class="city-card" href="#">
-                  <img src="https://bdscenictours.b-cdn.net/wp-content/uploads/2019/11/Exploring-Coxs-Bazar.jpg" alt="Cox's Bazar city">
-                  <span>Cox's Bazar</span>
-                </a>
-              </div>
+              @forelse($localConfidenceCities as $city)
+                <div class="col-sm-6">
+                  <a class="city-card" href="{{ $city['url'] }}">
+                    <img src="{{ $city['image'] }}" alt="{{ $city['name'] }} city">
+                    <span>{{ $city['name'] }}</span>
+                  </a>
+                </div>
+              @empty
+                <div class="col-12">
+                  <div class="stat-box">
+                    <strong>No cities yet</strong>
+                    <span>Add active cities and published properties from the admin panel.</span>
+                  </div>
+                </div>
+              @endforelse
             </div>
           </div>
         </div>

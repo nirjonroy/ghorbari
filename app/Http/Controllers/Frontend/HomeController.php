@@ -7,6 +7,7 @@ use App\Models\About;
 use App\Models\Agency;
 use App\Models\AgentProfile;
 use App\Models\BlogPost;
+use App\Models\City;
 use App\Models\Property;
 use App\Models\PropertyType;
 use App\Models\SiteInfo;
@@ -87,6 +88,7 @@ class HomeController extends Controller
                 ->latest()
                 ->take(8)
                 ->get() : collect(),
+            'local_confidence' => $this->localConfidenceData(),
             'blog_posts' => $this->modelTableExists(BlogPost::class) ? BlogPost::query()
                 ->select('id', 'blog_category_id', 'title', 'slug', 'author_name', 'excerpt', 'featured_image_path', 'published_at', 'created_at')
                 ->where('is_published', true)
@@ -141,5 +143,82 @@ class HomeController extends Controller
                 'agent.user:id,name,email,phone,profile_photo_path',
                 'agency:id,name,slug,logo',
             ]);
+    }
+
+    private function localConfidenceData(): array
+    {
+        $fallbackImages = [
+            'dhaka' => 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Drone_view_from_Kamal_Atat%C3%BCrk_Avenue.jpg/330px-Drone_view_from_Kamal_Atat%C3%BCrk_Avenue.jpg',
+            'chattogram' => 'https://www.heavenlybhutan.com/wp-content/uploads/2020/09/Chittagong-Bangladesh-e1616045287646.jpg',
+            'sylhet' => 'https://grandsylhet.com/wp-content/uploads/elementor/thumbs/wmremove-transformed-1-r4e9tivz9nke0dx3pgf50sfny771k4w5amwb17u0lw.jpeg',
+            'coxs-bazar' => 'https://bdscenictours.b-cdn.net/wp-content/uploads/2019/11/Exploring-Coxs-Bazar.jpg',
+        ];
+
+        $activeHomes = $this->modelTableExists(Property::class)
+            ? Property::query()
+                ->where('is_published', true)
+                ->where('property_status', 'available')
+                ->count()
+            : 0;
+
+        $agentRating = $this->modelTableExists(AgentProfile::class)
+            ? (float) AgentProfile::query()
+                ->where('status', 'active')
+                ->whereNotNull('rating')
+                ->avg('rating')
+            : 0;
+
+        $cities = $this->modelTableExists(City::class) && $this->modelTableExists(Property::class)
+            ? City::query()
+                ->select('id', 'district_id', 'name', 'slug', 'meta_image')
+                ->where('status', true)
+                ->with('district:id,name,slug')
+                ->withCount(['properties as active_properties_count' => function ($query) {
+                    $query->where('is_published', true)
+                        ->where('property_status', 'available');
+                }])
+                ->orderByDesc('active_properties_count')
+                ->orderBy('name')
+                ->take(4)
+                ->get()
+            : collect();
+
+        if ($cities->isEmpty() && $this->modelTableExists(City::class)) {
+            $cities = City::query()
+                ->select('id', 'district_id', 'name', 'slug', 'meta_image')
+                ->where('status', true)
+                ->with('district:id,name,slug')
+                ->orderBy('name')
+                ->take(4)
+                ->get();
+        }
+
+        return [
+            'active_homes' => $activeHomes,
+            'active_homes_label' => $this->compactCount($activeHomes),
+            'agent_rating' => $agentRating ? number_format($agentRating, 1) : '0.0',
+            'cities' => $cities->map(function (City $city) use ($fallbackImages) {
+                $fallbackImage = $fallbackImages[$city->slug] ?? array_values($fallbackImages)[$city->id % count($fallbackImages)];
+
+                return [
+                    'name' => $city->name,
+                    'slug' => $city->slug,
+                    'property_count' => (int) ($city->active_properties_count ?? 0),
+                    'image' => $city->meta_image ? asset($city->meta_image) : $fallbackImage,
+                    'url' => $city->district
+                        ? route('frontend.property.city', ['district' => $city->district->slug, 'city' => $city->slug])
+                        : route('frontend.property.buy-search', ['q' => $city->name]),
+                ];
+            })->values(),
+        ];
+    }
+
+    private function compactCount(int $count): string
+    {
+        if ($count >= 1000) {
+            return rtrim(rtrim(number_format($count / 1000, 1), '0'), '.').'k+';
+        }
+
+        return (string) $count;
     }
 }
