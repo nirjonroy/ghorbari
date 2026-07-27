@@ -37,6 +37,7 @@
     <a class="{{ request()->routeIs('user.favorites.*') ? 'active' : '' }}" href="{{ route('user.favorites.index') }}"><i class="bi bi-heart"></i> Favorites</a>
     <a class="{{ request()->routeIs('user.saved-searches.*') ? 'active' : '' }}" href="{{ route('user.saved-searches.index') }}"><i class="bi bi-search-heart"></i> Saved Search</a>
     <a class="{{ request()->routeIs('user.notifications.*') ? 'active' : '' }}" href="{{ route('user.notifications.index') }}"><i class="bi bi-bell"></i> Notifications</a>
+    <a class="{{ request()->routeIs('user.support-chats.*') ? 'active' : '' }}" href="{{ route('user.support-chats.index') }}"><i class="bi bi-chat-dots"></i> Support Chat</a>
     <a class="{{ request()->routeIs('user.open-house.*') ? 'active' : '' }}" href="{{ route('user.open-house.index') }}"><i class="bi bi-door-open"></i> Open House</a>
     <a class="{{ request()->routeIs('user.feed.*') ? 'active' : '' }}" href="{{ route('user.feed.index') }}"><i class="bi bi-newspaper"></i> Feed</a>
     <span class="dashboard-menu-label">Account</span>

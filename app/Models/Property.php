@@ -123,6 +123,11 @@ class Property extends Model
         return $this->hasMany(PropertyView::class);
     }
 
+    public function supportConversations()
+    {
+        return $this->hasMany(SupportConversation::class);
+    }
+
     public function detailSlug(): string
     {
         return collect([

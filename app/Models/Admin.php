@@ -34,4 +34,9 @@ class Admin extends Authenticatable
     {
         $this->notify(new AdminResetPasswordNotification($token));
     }
+
+    public function supportConversations()
+    {
+        return $this->hasMany(SupportConversation::class);
+    }
 }

@@ -329,6 +329,177 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
+  var widget = document.querySelector("[data-support-chat]");
+  if (!widget) {
+    return;
+  }
+
+  var panel = widget.querySelector(".support-chat-panel");
+  var body = widget.querySelector("[data-support-chat-body]");
+  var form = widget.querySelector("[data-support-chat-form]");
+  var conversationInput = widget.querySelector("[data-support-chat-conversation]");
+  var propertyInput = widget.querySelector("[data-support-chat-property]");
+  var targetInput = widget.querySelector("[data-support-chat-target]");
+  var recipientInput = widget.querySelector("[data-support-chat-recipient]");
+  var subjectInput = widget.querySelector("[data-support-chat-subject]");
+  var csrf = document.querySelector('meta[name="csrf-token"]') && document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+  var pollTimer = null;
+
+  var isAuthenticated = widget.dataset.authenticated === "1";
+
+  var openPanel = function () {
+    if (!isAuthenticated) {
+      window.location.href = widget.dataset.loginUrl || "/login";
+      return;
+    }
+
+    panel.hidden = false;
+    widget.classList.add("is-open");
+  };
+
+  var closePanel = function () {
+    panel.hidden = true;
+    widget.classList.remove("is-open");
+  };
+
+  var renderConversation = function (conversation) {
+    if (!conversation || !conversation.messages) {
+      return;
+    }
+
+    conversationInput.value = conversation.id;
+    body.innerHTML = conversation.messages.map(function (message) {
+      return [
+        '<div class="support-chat-message ' + (message.own ? "is-own" : "") + '">',
+        '<span>' + (message.sender_type === "admin" ? "Admin" : (message.own ? "You" : "User")) + '</span>',
+        '<p>' + escapeHtml(message.message) + '</p>',
+        '<small>' + escapeHtml(message.time || "") + '</small>',
+        '</div>'
+      ].join("");
+    }).join("");
+    body.scrollTop = body.scrollHeight;
+  };
+
+  var fetchMessages = function (conversationId) {
+    if (!conversationId) {
+      return;
+    }
+
+    var url = (widget.dataset.messagesUrlTemplate || "").replace("__ID__", conversationId);
+    if (!url) {
+      return;
+    }
+
+    fetch(url, {
+      headers: { "Accept": "application/json" },
+      credentials: "same-origin"
+    })
+      .then(function (response) { return response.ok ? response.json() : null; })
+      .then(function (payload) {
+        if (payload && payload.conversation) {
+          renderConversation(payload.conversation);
+        }
+      });
+  };
+
+  var startPolling = function () {
+    window.clearInterval(pollTimer);
+    if (!conversationInput || !conversationInput.value) {
+      return;
+    }
+
+    pollTimer = window.setInterval(function () {
+      fetchMessages(conversationInput.value);
+    }, 5000);
+  };
+
+  document.querySelectorAll("[data-support-chat-open]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      openPanel();
+
+      if (!isAuthenticated) {
+        return;
+      }
+
+      if (button.dataset.chatTarget && targetInput) {
+        targetInput.value = button.dataset.chatTarget;
+      }
+      if (button.dataset.chatRecipient && recipientInput) {
+        recipientInput.value = button.dataset.chatRecipient;
+      }
+      if (button.dataset.chatSubject && subjectInput) {
+        subjectInput.value = button.dataset.chatSubject;
+      }
+      if (button.dataset.conversationId) {
+        fetchMessages(button.dataset.conversationId);
+        startPolling();
+      }
+    });
+  });
+
+  widget.querySelectorAll("[data-support-chat-close]").forEach(function (button) {
+    button.addEventListener("click", closePanel);
+  });
+
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+      var messageField = form.querySelector("textarea[name='message']");
+      var message = messageField.value.trim();
+      if (!message) {
+        return;
+      }
+
+      var conversationId = conversationInput.value;
+      var url = conversationId
+        ? (widget.dataset.replyUrlTemplate || "").replace("__ID__", conversationId)
+        : widget.dataset.storeUrl;
+
+      var formData = new FormData(form);
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "X-CSRF-TOKEN": csrf || ""
+        },
+        credentials: "same-origin",
+        body: formData
+      })
+        .then(function (response) {
+          if (response.status === 401 || response.status === 419) {
+            window.location.href = widget.dataset.loginUrl || "/login";
+            return null;
+          }
+          return response.ok ? response.json() : null;
+        })
+        .then(function (payload) {
+          if (!payload || !payload.conversation) {
+            return;
+          }
+
+          messageField.value = "";
+          renderConversation(payload.conversation);
+          startPolling();
+        });
+    });
+  }
+
+  var escapeHtml = function (value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  };
+
+  if (propertyInput && !propertyInput.value && widget.dataset.propertyId) {
+    propertyInput.value = widget.dataset.propertyId;
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
   var mapElement = document.getElementById("bdResultsMap");
   if (!mapElement || typeof L === "undefined") {
     return;

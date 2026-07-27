@@ -80,6 +80,13 @@
               </li>
 
               <li class="nav-item">
+                <a href="{{ route('admin.support-chats.index') }}" class="nav-link {{ request()->routeIs('admin.support-chats.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-chat-dots-fill"></i>
+                  <p>Support Chats</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
                 <a href="{{ route('admin.custom-pages.index') }}" class="nav-link {{ request()->routeIs('admin.custom-pages.*') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-file-earmark-richtext-fill"></i>
                   <p>Custom Pages</p>

@@ -162,7 +162,16 @@
                   <p>{{ $agent?->designation ?: ($agency?->name ?: 'Property advisor, Land Site Bangladesh') }}</p>
                   <p class="mb-0"><i class="bi bi-star-fill text-warning"></i> {{ $agent?->rating ?: '4.9' }} rating{{ $agent?->experience_years ? ' | '.$agent->experience_years.' years experience' : '' }}</p>
                 </div>
-                <a href="#contactAgent" class="btn btn-outline-dark ms-lg-auto">Contact agent</a>
+                <button
+                  class="btn btn-outline-dark ms-lg-auto"
+                  type="button"
+                  data-support-chat-open
+                  data-chat-target="agent"
+                  data-chat-recipient="{{ $agentUser?->id }}"
+                  data-chat-subject="{{ $property->title }}"
+                >
+                  Contact agent
+                </button>
               </div>
             </article>
 
@@ -287,7 +296,16 @@
               @endif
               <button class="btn btn-danger w-100 request-showing" type="submit" form="tourRequestForm">Request Showing</button>
               <p class="small text-secondary mt-2 mb-3">Tour for free, no strings attached.</p>
-              <button class="btn btn-outline-dark w-100 ask-question" type="button">Ask A Question</button>
+              <button
+                class="btn btn-outline-dark w-100 ask-question"
+                type="button"
+                data-support-chat-open
+                data-chat-target="{{ $agentUser?->id ? 'agent' : 'owner' }}"
+                data-chat-recipient="{{ $agentUser?->id ?: $property->owner_user_id }}"
+                data-chat-subject="{{ $property->title }}"
+              >
+                Ask A Question
+              </button>
               <div class="tour-options" aria-label="Tour type" data-tour-options>
                 <button class="active" type="button" data-tour-option="in_person">In-person</button>
                 <button type="button" data-tour-option="video_chat">Video chat</button>
@@ -302,7 +320,16 @@
                   <div class="col-12"><input type="tel" name="phone" class="form-control" placeholder="Phone"></div>
                   <div class="col-12"><textarea class="form-control" name="message" rows="4" placeholder="I'm interested in touring this property."></textarea></div>
                 </div>
-                <button class="btn btn-dark w-100 mt-3" type="submit">Contact Agent</button>
+                <button
+                  class="btn btn-dark w-100 mt-3"
+                  type="button"
+                  data-support-chat-open
+                  data-chat-target="{{ $agentUser?->id ? 'agent' : 'owner' }}"
+                  data-chat-recipient="{{ $agentUser?->id ?: $property->owner_user_id }}"
+                  data-chat-subject="{{ $property->title }}"
+                >
+                  Contact Agent
+                </button>
               </form>
             </div>
           </aside>
@@ -358,7 +385,17 @@
             <h2 id="photoGalleryModalLabel">{{ $displayPrice }}</h2>
             <p class="photo-summary-facts">{{ $summaryFacts->map(fn ($fact) => $fact['value'].' '.$fact['label'])->join(' | ') }}</p>
             <p>{{ $address ?: $property->title }}</p>
-            <a href="#contactAgent" class="btn btn-dark w-100" data-bs-dismiss="modal">Contact Agent</a>
+            <button
+              class="btn btn-dark w-100"
+              type="button"
+              data-bs-dismiss="modal"
+              data-support-chat-open
+              data-chat-target="{{ $agentUser?->id ? 'agent' : 'owner' }}"
+              data-chat-recipient="{{ $agentUser?->id ?: $property->owner_user_id }}"
+              data-chat-subject="{{ $property->title }}"
+            >
+              Contact Agent
+            </button>
           </aside>
 
           <div class="photo-thumb-row">

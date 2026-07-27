@@ -32,6 +32,11 @@ class UserController extends Controller
         ]);
     }
 
+    public function dashboardPayload(Request $request): array
+    {
+        return $this->dashboardData($request);
+    }
+
     public function profile(Request $request): View
     {
         return view('User.profile', [

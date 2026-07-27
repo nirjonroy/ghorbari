@@ -83,4 +83,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(SubscriptionPayment::class);
     }
+
+    public function supportConversations(): HasMany
+    {
+        return $this->hasMany(SupportConversation::class);
+    }
+
+    public function assignedSupportConversations(): HasMany
+    {
+        return $this->hasMany(SupportConversation::class, 'recipient_user_id');
+    }
 }

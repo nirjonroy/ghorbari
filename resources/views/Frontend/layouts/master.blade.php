@@ -32,6 +32,7 @@
   @yield('content')
   @include('Frontend.partials.footer')
   @include('Frontend.partials.auth-modal')
+  @include('Frontend.partials.support-chat')
   @include('Frontend.partials.scripts')
   @stack('scripts')
 </body>

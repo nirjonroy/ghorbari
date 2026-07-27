@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SiteInfoController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\SubscriptionPackageController;
+use App\Http\Controllers\Admin\SupportChatController as AdminSupportChatController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Frontend\AgentController;
 use App\Http\Controllers\Frontend\AppointmentController;
@@ -40,6 +41,7 @@ use App\Http\Controllers\Frontend\OpenHouseController;
 use App\Http\Controllers\Frontend\PropertyDirectoryController;
 use App\Http\Controllers\Frontend\RentController;
 use App\Http\Controllers\Frontend\SellController;
+use App\Http\Controllers\Frontend\SupportChatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\PropertyController as UserPropertyController;
 use App\Http\Controllers\User\UserController as FrontendUserController;
@@ -109,6 +111,17 @@ Route::post('/favorites/{property}/toggle', [FavoriteController::class, 'toggle'
 Route::post('/property/{property}/tour-request', [AppointmentController::class, 'store'])
     ->middleware(['auth', 'verified'])
     ->name('frontend.property.tour-request');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard/support-chats/', [SupportChatController::class, 'index'])
+        ->name('user.support-chats.index');
+    Route::post('/support-chats/', [SupportChatController::class, 'store'])
+        ->name('frontend.support-chats.store');
+    Route::get('/support-chats/{supportChat}/messages', [SupportChatController::class, 'messages'])
+        ->name('frontend.support-chats.messages');
+    Route::post('/support-chats/{supportChat}/messages', [SupportChatController::class, 'reply'])
+        ->name('frontend.support-chats.reply');
+});
 
 Route::get('/dashboard', [FrontendUserController::class, 'profile'])
     ->middleware(['auth', 'verified'])
@@ -222,6 +235,19 @@ Route::resource('/admin/contacts', ContactMessageController::class)
     ->middleware(['auth:admin', 'permission:manage contacts,admin'])
     ->parameters(['contacts' => 'contact'])
     ->names('admin.contacts');
+
+Route::get('/admin/support-chats', [AdminSupportChatController::class, 'index'])
+    ->middleware(['auth:admin', 'permission:manage contacts,admin'])
+    ->name('admin.support-chats.index');
+Route::get('/admin/support-chats/{supportChat}', [AdminSupportChatController::class, 'show'])
+    ->middleware(['auth:admin', 'permission:manage contacts,admin'])
+    ->name('admin.support-chats.show');
+Route::post('/admin/support-chats/{supportChat}/messages', [AdminSupportChatController::class, 'reply'])
+    ->middleware(['auth:admin', 'permission:manage contacts,admin'])
+    ->name('admin.support-chats.reply');
+Route::patch('/admin/support-chats/{supportChat}/status', [AdminSupportChatController::class, 'updateStatus'])
+    ->middleware(['auth:admin', 'permission:manage contacts,admin'])
+    ->name('admin.support-chats.status');
 
 Route::resource('/admin/custom-pages', CustomPageController::class)
     ->except('show')
