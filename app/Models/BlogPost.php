@@ -56,4 +56,9 @@ class BlogPost extends Model
     {
         return $this->hasMany(BlogComment::class);
     }
+
+    public function getSitemapUrl(): string
+    {
+        return route('frontend.blog.show', $this->slug);
+    }
 }

@@ -93,6 +93,42 @@
                 </a>
               </li>
 
+              <li class="nav-item {{ request()->routeIs('seo.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('seo.*') ? 'active' : '' }}">
+                  <i class="nav-icon bi bi-search-heart-fill"></i>
+                  <p>
+                    SEO Manager
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="{{ route('seo.settings') }}" class="nav-link {{ request()->routeIs('seo.settings') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Settings</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('seo.meta') }}" class="nav-link {{ request()->routeIs('seo.meta*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Meta Tags</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('seo.redirects') }}" class="nav-link {{ request()->routeIs('seo.redirects*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Redirects</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('seo.generator') }}" class="nav-link {{ request()->routeIs('seo.generator*') ? 'active' : '' }}">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>PageForge</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+
               <li class="nav-item">
                 <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                   <i class="nav-icon bi bi-people-fill"></i>

@@ -18,7 +18,6 @@
 <!doctype html>
 <html lang="en" dir="{{ $textDirection }}" data-default-theme="{{ $defaultTheme }}" data-theme="{{ $defaultTheme }}">
 <head>
-  <title>{{ $metaTitle }}</title>
   @include('Frontend.partials.head')
   @if(filled(data_get($frontendSiteInfo, 'favicon')))
     <link rel="icon" href="{{ asset(data_get($frontendSiteInfo, 'favicon')) }}">

@@ -143,4 +143,9 @@ class Property extends Model
     {
         return route('frontend.property.show', ['property' => $this->detailSlug()]);
     }
+
+    public function getSitemapUrl(): string
+    {
+        return $this->detailUrl();
+    }
 }

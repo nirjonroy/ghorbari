@@ -11,6 +11,7 @@
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
+        "nirjon/laravel-seo": "dev-package-release",
         "spatie/laravel-permission": "^5.11"
     },
     "require-dev": {
@@ -60,5 +61,36 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "nirjon-laravel-seo": {
+            "type": "package",
+            "package": {
+                "name": "nirjon/laravel-seo",
+                "version": "dev-package-release",
+                "type": "library",
+                "source": {
+                    "url": "https://github.com/nirjonroy/seo-entiantials.git",
+                    "type": "git",
+                    "reference": "package-release"
+                },
+                "require": {
+                    "php": "^8.0",
+                    "illuminate/support": "^9.0|^10.0|^11.0"
+                },
+                "autoload": {
+                    "psr-4": {
+                        "Nirjon\\LaravelSeo\\": "src/"
+                    }
+                },
+                "extra": {
+                    "laravel": {
+                        "providers": [
+                            "Nirjon\\LaravelSeo\\SEOServiceProvider"
+                        ]
+                    }
+                }
+            }
+        }
+    }
 }

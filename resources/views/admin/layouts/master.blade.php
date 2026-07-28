@@ -68,6 +68,7 @@
       integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4="
       crossorigin="anonymous"
     />
+    @stack('seo_styles')
     @stack('styles')
   </head>
   <!--end::Head-->
@@ -99,6 +100,7 @@
     ></script>
     <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
     <script src="{{ asset('admin/js/adminlte.js') }}"></script>
+    @stack('seo_scripts')
     <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script>
       const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';

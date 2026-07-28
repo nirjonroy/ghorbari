@@ -52,4 +52,9 @@ class CustomPage extends Model
     {
         return url('/'.trim($this->url_path, '/'));
     }
+
+    public function getSitemapUrl(): string
+    {
+        return $this->public_url;
+    }
 }
