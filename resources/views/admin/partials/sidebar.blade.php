@@ -126,6 +126,18 @@
                       <p>PageForge</p>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a href="{{ url('/sitemap.xml') }}" class="nav-link" target="_blank" rel="noopener">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>Main Sitemap</p>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="{{ route('frontend.pageforge-sitemap') }}" class="nav-link" target="_blank" rel="noopener">
+                      <i class="nav-icon bi bi-circle"></i>
+                      <p>PageForge Sitemap</p>
+                    </a>
+                  </li>
                 </ul>
               </li>
 

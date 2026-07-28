@@ -3,6 +3,7 @@
   <!--begin::Head-->
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'AdminLTE v4 | Dashboard')</title>
     <!--begin::Accessibility Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
@@ -70,6 +71,27 @@
     />
     @stack('seo_styles')
     @stack('styles')
+    <style>
+      .app-main .nirjon-seo-tab-content input,
+      .app-main .nirjon-seo-tab-content textarea,
+      .app-main .nirjon-seo-tab-content select,
+      .app-main .nirjon-seo-modal input,
+      .app-main .nirjon-seo-modal textarea,
+      .app-main .nirjon-seo-modal select {
+        background-color: #ffffff !important;
+        color: #111827 !important;
+        border-color: #d1d5db !important;
+        color-scheme: light;
+      }
+
+      .app-main .nirjon-seo-tab-content input::placeholder,
+      .app-main .nirjon-seo-tab-content textarea::placeholder,
+      .app-main .nirjon-seo-modal input::placeholder,
+      .app-main .nirjon-seo-modal textarea::placeholder {
+        color: #6b7280 !important;
+        opacity: 1;
+      }
+    </style>
   </head>
   <!--end::Head-->
   <!--begin::Body-->

@@ -41,6 +41,7 @@ use App\Http\Controllers\Frontend\OpenHouseController;
 use App\Http\Controllers\Frontend\PropertyDirectoryController;
 use App\Http\Controllers\Frontend\RentController;
 use App\Http\Controllers\Frontend\SellController;
+use App\Http\Controllers\Frontend\SitemapController as FrontendSitemapController;
 use App\Http\Controllers\Frontend\SupportChatController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\PropertyController as UserPropertyController;
@@ -111,6 +112,8 @@ Route::post('/favorites/{property}/toggle', [FavoriteController::class, 'toggle'
 Route::post('/property/{property}/tour-request', [AppointmentController::class, 'store'])
     ->middleware(['auth', 'verified'])
     ->name('frontend.property.tour-request');
+Route::get('/pageforge/sitemap.xml', [FrontendSitemapController::class, 'pageForge'])
+    ->name('frontend.pageforge-sitemap');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/support-chats/', [SupportChatController::class, 'index'])

@@ -8,10 +8,12 @@ use App\Models\District;
 use App\Models\Division;
 use App\Models\PropertyType;
 use App\Models\SiteInfo;
+use App\Services\ProjectSitemapService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Nirjon\LaravelSeo\Services\SitemapService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(SitemapService::class, ProjectSitemapService::class);
     }
 
     /**
