@@ -150,7 +150,15 @@ a {
 }
 
 .navbar .btn-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
   min-height: 44px;
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 1;
+  white-space: nowrap;
   border: 0;
   border-radius: 10px;
   background: linear-gradient(135deg, #111827, #202938);

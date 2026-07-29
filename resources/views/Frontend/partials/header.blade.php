@@ -6,7 +6,6 @@
       data_get($frontendSiteInfo, 'logo_width') ? 'width: '.data_get($frontendSiteInfo, 'logo_width').'px' : null,
       data_get($frontendSiteInfo, 'logo_height') ? 'height: '.data_get($frontendSiteInfo, 'logo_height').'px' : null,
   ])->filter()->join('; ');
-  $userRegistrationEnabled = (bool) data_get($frontendSiteInfo, 'enable_user_register', true);
 @endphp
 <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
     <div class="container-fluid px-lg-5">
@@ -88,12 +87,9 @@
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.blog.*') ? 'active' : '' }}" href="{{ route('frontend.blog.index') }}">Blog</a></li>
           <li class="nav-item"><a class="nav-link {{ request()->routeIs('frontend.about.*') ? 'active' : '' }}" href="{{ route('frontend.about.index') }}">About</a></li>
           @guest
-            <li class="nav-item"><a class="nav-link {{ request()->routeIs('login') ? 'active' : '' }}" href="{{ route('login') }}">Sign In</a></li>
-            @if($userRegistrationEnabled)
-              <li class="nav-item ms-lg-2">
-                <a class="btn btn-dark px-4" href="{{ route('register') }}">Sign Up</a>
-              </li>
-            @endif
+            <li class="nav-item ms-lg-2">
+              <a class="btn btn-dark px-4 {{ request()->routeIs('login') ? 'active' : '' }}" href="{{ route('login') }}">Sign In</a>
+            </li>
           @else
             <li class="nav-item ms-lg-2">
               <a class="btn btn-dark px-4" href="{{ route('dashboard') }}">Dashboard</a>
