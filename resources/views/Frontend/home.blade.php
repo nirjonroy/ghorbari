@@ -155,7 +155,7 @@
               <div class="tab-content">
                 <div class="tab-pane fade show active" id="buy-tab-pane" role="tabpanel" tabindex="0">
                   <form class="home-search js-home-search-form" method="GET" action="{{ route('frontend.property.buy-search') }}" data-search-purpose="buy">
-                    <input type="search" name="q" class="form-control js-home-search-input" placeholder="City, Area, Road, Agent, Postcode" aria-label="Search location" list="home-location-options">
+                    <input type="search" name="q" class="form-control js-home-search-input" placeholder="City, Area, Road, Agent, Postcode" aria-label="Search location" autocomplete="off">
                     <button class="btn btn-danger" type="submit" aria-label="Search"><i class="bi bi-search"></i></button>
                     <button class="btn btn-success advanced-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
                       <i class="bi bi-sliders"></i>
@@ -164,7 +164,7 @@
                 </div>
                 <div class="tab-pane fade" id="sell-tab-pane" role="tabpanel" tabindex="0">
                   <form class="home-search js-home-search-form" method="GET" action="{{ route('frontend.sell.index') }}" data-search-purpose="sell">
-                    <input type="search" name="address" class="form-control js-home-search-input" placeholder="Enter your address" aria-label="Search property value" list="home-location-options">
+                    <input type="search" name="address" class="form-control js-home-search-input" placeholder="Enter your address" aria-label="Search property value" autocomplete="off">
                     <button class="btn btn-danger" type="submit" aria-label="Search"><i class="bi bi-house-check"></i></button>
                     <button class="btn btn-success advanced-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
                       <i class="bi bi-sliders"></i>
@@ -173,7 +173,7 @@
                 </div>
                 <div class="tab-pane fade" id="rent-tab-pane" role="tabpanel" tabindex="0">
                   <form class="home-search js-home-search-form" method="GET" action="{{ route('frontend.rent.index') }}" data-search-purpose="rent">
-                    <input type="search" name="q" class="form-control js-home-search-input" placeholder="City, Area, Postcode" aria-label="Search rentals" list="home-location-options">
+                    <input type="search" name="q" class="form-control js-home-search-input" placeholder="City, Area, Postcode" aria-label="Search rentals" autocomplete="off">
                     <button class="btn btn-danger" type="submit" aria-label="Search"><i class="bi bi-search"></i></button>
                     <button class="btn btn-success advanced-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#advancedSearch" aria-expanded="false" aria-controls="advancedSearch">
                       <i class="bi bi-sliders"></i>
@@ -206,7 +206,7 @@
                     </div>
                     <div class="col-md-4">
                       <label for="advancedLocation" class="form-label">Location</label>
-                      <input id="advancedLocation" name="q" type="text" class="form-control js-advanced-location-input" placeholder="City or neighbourhood" list="home-location-options">
+                      <input id="advancedLocation" name="q" type="text" class="form-control js-advanced-location-input" placeholder="City or neighbourhood" autocomplete="off">
                     </div>
                     <div class="col-md-4">
                       <label for="zipCode" class="form-label">Postcode</label>
