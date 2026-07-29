@@ -7,7 +7,7 @@
       data_get($frontendSiteInfo, 'logo_height') ? 'height: '.data_get($frontendSiteInfo, 'logo_height').'px' : null,
   ])->filter()->join('; ');
 @endphp
-<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+<nav class="navbar navbar-expand-lg bg-white border-bottom fixed-top">
     <div class="container-fluid px-lg-5">
       <a class="navbar-brand d-flex align-items-center gap-2" href="{{ route('frontend.home') }}">
         <img src="{{ $frontendLogo }}" alt="{{ data_get($frontendSiteInfo, 'sidebar_lg_header', 'Land Site') }} logo" class="brand-logo" @if($frontendLogoStyle) style="{{ $frontendLogoStyle }}" @endif>

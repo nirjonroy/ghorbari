@@ -16,6 +16,7 @@
   --surface-3: #f7f7f7;
   --nav-bg: rgba(255, 255, 255, .96);
   --card-shadow: 0 8px 22px rgba(17, 24, 39, .055);
+  --frontend-nav-height: 76px;
 }
 
 html[data-theme="dark"] {
@@ -44,6 +45,10 @@ body {
   overflow-x: hidden;
 }
 
+body.frontend-page {
+  padding-top: var(--frontend-nav-height);
+}
+
 html {
   overflow-x: hidden;
 }
@@ -59,6 +64,7 @@ a {
   border-color: var(--line) !important;
   box-shadow: var(--card-shadow);
   backdrop-filter: blur(16px);
+  z-index: 1100;
 }
 
 .navbar .container-fluid {
