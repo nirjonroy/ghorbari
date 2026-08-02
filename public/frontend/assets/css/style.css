@@ -8966,6 +8966,36 @@ html[data-theme="dark"] .verification-stack strong {
   border-bottom: 1px solid #e5e7eb;
 }
 
+.page-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  color: #071226;
+  font-size: .96rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.page-breadcrumb .blog-back-link,
+.page-breadcrumb-current,
+.page-breadcrumb-divider {
+  margin-bottom: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.page-breadcrumb-current {
+  color: #e03445;
+  letter-spacing: .02em;
+  text-transform: none;
+}
+
+.page-breadcrumb-divider {
+  color: #e03445;
+}
+
 .frontend-page-hero h1 {
   max-width: 860px;
   margin: 12px 0 18px;
@@ -8993,7 +9023,7 @@ html[data-theme="dark"] .verification-stack strong {
   min-height: 420px;
   object-fit: cover;
   border-radius: 28px;
-  box-shadow: 0 24px 60px rgba(17, 24, 39, .12);
+  box-shadow: none;
 }
 
 .about-story-section h2 {
@@ -9214,6 +9244,15 @@ html[data-theme="dark"] .contact-info-card span,
 html[data-theme="dark"] .contact-form-panel label,
 html[data-theme="dark"] .contact-map-panel p {
   color: #cbd5e1;
+}
+
+html[data-theme="dark"] .page-breadcrumb {
+  color: #f8fafc;
+}
+
+html[data-theme="dark"] .page-breadcrumb-current,
+html[data-theme="dark"] .page-breadcrumb-divider {
+  color: #f05261;
 }
 
 html[data-theme="dark"] .contact-map-placeholder {
@@ -9528,6 +9567,26 @@ html[data-theme="dark"] .support-chat-form textarea {
   border-color: rgba(255, 255, 255, .14);
   background: #0f172a;
   color: #f8fafc;
+}
+
+.agents-page .agents-section {
+  background: #ffffff !important;
+}
+
+.agents-page .agent-process-section {
+  background:
+    linear-gradient(180deg, #f8fafc 0%, #ffffff 100%) !important;
+  border-top: 1px solid #edf0f5;
+}
+
+html[data-theme="dark"] .agents-page .agents-section {
+  background: #0b1220 !important;
+}
+
+html[data-theme="dark"] .agents-page .agent-process-section {
+  background:
+    linear-gradient(180deg, #101827 0%, #0b1220 100%) !important;
+  border-top-color: rgba(255, 255, 255, .08);
 }
 
 @media (max-width: 575.98px) {

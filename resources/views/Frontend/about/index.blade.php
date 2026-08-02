@@ -27,8 +27,11 @@
 <main data-api-url="{{ $aboutData['api_url'] }}">
   <section class="frontend-page-hero">
     <div class="container">
-      <a href="{{ route('frontend.home') }}" class="blog-back-link"><i class="bi bi-arrow-left"></i> Back To Home</a>
-      <span class="eyebrow">About Us</span>
+      <div class="page-breadcrumb">
+        <a href="{{ route('frontend.home') }}" class="blog-back-link"><i class="bi bi-arrow-left"></i> Back To Home</a>
+        <span class="page-breadcrumb-divider">/</span>
+        <span class="page-breadcrumb-current">About Us</span>
+      </div>
       <h1>{{ $title }}</h1>
       <p>{{ $subtitle }}</p>
     </div>
