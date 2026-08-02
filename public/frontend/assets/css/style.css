@@ -67,8 +67,7 @@ a {
   z-index: 1100;
 }
 
-.navbar .container-fluid {
-  max-width: 1280px;
+.navbar .container {
   min-height: 76px;
 }
 
@@ -652,28 +651,36 @@ html[data-theme="dark"] .verification-stack strong {
   .user-dashboard-page .dashboard-sidebar {
     position: relative;
     top: auto;
+    display: block;
+    overflow: visible;
   }
 
   .user-dashboard-page .dashboard-menu {
-    display: flex;
+    display: grid;
     max-height: none;
-    overflow-x: auto;
+    overflow: visible;
     gap: 8px;
     padding: 4px 0 8px;
   }
 
   .user-dashboard-page .dashboard-menu-label {
-    display: none;
+    display: block;
+    margin: 18px 6px 6px;
+    color: #98a2b3;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .08em;
+    text-transform: uppercase;
   }
 
   .user-dashboard-page .dashboard-menu a {
-    flex: 0 0 auto;
-    min-height: 40px;
-    padding: 0 13px;
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
     background: #f8fafc;
     border: 1px solid #e5e7eb;
-    font-size: .86rem;
-    white-space: nowrap;
+    font-size: .95rem;
+    white-space: normal;
   }
 
   .user-dashboard-page .dashboard-stats {
@@ -682,6 +689,16 @@ html[data-theme="dark"] .verification-stack strong {
 }
 
 @media (max-width: 575.98px) {
+  .user-dashboard-page .dashboard-shell {
+    padding: 14px 10px 38px;
+  }
+
+  .user-dashboard-page .dashboard-sidebar {
+    width: 100%;
+    padding: 12px;
+    border-radius: 22px;
+  }
+
   .user-dashboard-page .dashboard-topbar,
   .user-dashboard-page .dashboard-profile-hero {
     padding: 20px;
@@ -1085,26 +1102,35 @@ html[data-theme="dark"] .verification-stack strong {
   transform: scale(1.04);
 }
 
-.property-media .badge {
+.property-badges {
   position: absolute;
   z-index: 2;
-  top: 14px;
-  left: 14px;
+  top: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(100% - 68px);
+}
+
+.property-media .badge {
   text-transform: uppercase;
   letter-spacing: .04em;
+  padding: .35em .72em;
+  border-radius: 999px;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .photo-count {
-  position: absolute;
-  z-index: 2;
-  top: 14px;
-  left: 128px;
   padding: .35em .65em;
   color: #ffffff;
   background: rgba(17, 24, 39, .82);
   border-radius: 999px;
+  line-height: 1;
   font-size: .76rem;
   font-weight: 800;
+  white-space: nowrap;
 }
 
 .listing-gallery .carousel-control-prev,
@@ -2699,6 +2725,10 @@ html[data-theme="dark"] .verification-stack strong {
 }
 
 @media (max-width: 991.98px) {
+  :root {
+    --frontend-nav-height: 74px;
+  }
+
   .search-panel {
     max-width: 760px;
   }
@@ -2723,7 +2753,7 @@ html[data-theme="dark"] .verification-stack strong {
     min-height: 74px;
   }
 
-  .navbar .container-fluid {
+  .navbar .container {
     min-height: 74px;
   }
 
@@ -6097,8 +6127,8 @@ html[data-theme="dark"] .theme-toggle {
   min-height: 76px;
 }
 
-.detail-page .navbar .container-fluid,
-.search-results-page .navbar .container-fluid {
+.detail-page .navbar .container,
+.search-results-page .navbar .container {
   min-height: 76px;
 }
 
@@ -6123,7 +6153,7 @@ html[data-theme="dark"] .theme-toggle {
   min-height: 64px;
 }
 
-.detail-page .navbar .container-fluid {
+.detail-page .navbar .container {
   min-height: 64px;
 }
 
@@ -6954,7 +6984,7 @@ html[data-theme="dark"] .tour-options button.active {
   z-index: 120;
 }
 
-.search-results-page .navbar .container-fluid {
+.search-results-page .navbar .container {
   min-height: 64px;
 }
 
@@ -7628,8 +7658,8 @@ body.search-results-page .navbar {
   min-height: 76px !important;
 }
 
-body.detail-page .navbar .container-fluid,
-body.search-results-page .navbar .container-fluid {
+body.detail-page .navbar .container,
+body.search-results-page .navbar .container {
   min-height: 76px !important;
 }
 
@@ -8010,23 +8040,7 @@ body {
   }
 }
 
-/* Align navbar content with the main section container width */
-.navbar .container-fluid {
-  width: calc(100% - 32px);
-  max-width: 1140px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-@media (max-width: 767.98px) {
-  .navbar .container-fluid {
-    width: 100%;
-    padding-left: 18px !important;
-    padding-right: 18px !important;
-  }
-}
+/* Navbar content uses the same Bootstrap global container width as sections. */
 
 /* Redfin-like draggable property carousel behavior */
 .early-carousel .owl-stage,
@@ -9477,6 +9491,10 @@ html[data-theme="dark"] .support-chat-form textarea {
 }
 
 @media (max-width: 575.98px) {
+  :root {
+    --frontend-nav-height: 66px;
+  }
+
   .support-chat-widget {
     right: 16px;
     left: 16px;

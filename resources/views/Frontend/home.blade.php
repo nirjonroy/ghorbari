@@ -297,8 +297,10 @@
                     <button class="carousel-control-next" type="button" data-bs-target="#{{ $galleryId }}" data-bs-slide="next" aria-label="Next photo">
                       <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     </button>
-                    <span class="badge bg-dark">Early access</span>
-                    <span class="photo-count">1/{{ $images->count() }}</span>
+                    <div class="property-badges">
+                      <span class="badge bg-dark">Early access</span>
+                      <span class="photo-count">1/{{ $images->count() }}</span>
+                    </div>
                     @include('Frontend.partials.property-action-buttons', ['property' => $property, 'favoriteClass' => 'favorite-btn', 'only' => 'favorite'])
                   </div>
                 </div>
@@ -336,8 +338,10 @@
                 <button class="carousel-control-next" type="button" data-bs-target="#listingGalleryOne" data-bs-slide="next" aria-label="Next photo">
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
-                <span class="badge bg-dark">Early access</span>
-                <span class="photo-count">1/3</span>
+                <div class="property-badges">
+                  <span class="badge bg-dark">Early access</span>
+                  <span class="photo-count">1/3</span>
+                </div>
                 <button class="favorite-btn" aria-label="Save listing"><i class="bi bi-heart"></i></button>
               </div>
             </div>
@@ -375,8 +379,10 @@
                 <button class="carousel-control-next" type="button" data-bs-target="#listingGalleryTwo" data-bs-slide="next" aria-label="Next photo">
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
-                <span class="badge bg-dark">Coming soon</span>
-                <span class="photo-count">1/3</span>
+                <div class="property-badges">
+                  <span class="badge bg-dark">Coming soon</span>
+                  <span class="photo-count">1/3</span>
+                </div>
                 <button class="favorite-btn" aria-label="Save listing"><i class="bi bi-heart"></i></button>
               </div>
             </div>
@@ -414,8 +420,10 @@
                 <button class="carousel-control-next" type="button" data-bs-target="#listingGalleryThree" data-bs-slide="next" aria-label="Next photo">
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
-                <span class="badge bg-dark">Early access</span>
-                <span class="photo-count">1/3</span>
+                <div class="property-badges">
+                  <span class="badge bg-dark">Early access</span>
+                  <span class="photo-count">1/3</span>
+                </div>
                 <button class="favorite-btn" aria-label="Save listing"><i class="bi bi-heart"></i></button>
               </div>
             </div>
@@ -453,8 +461,10 @@
                 <button class="carousel-control-next" type="button" data-bs-target="#listingGalleryFour" data-bs-slide="next" aria-label="Next photo">
                   <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
-                <span class="badge bg-dark">Early access</span>
-                <span class="photo-count">1/3</span>
+                <div class="property-badges">
+                  <span class="badge bg-dark">Early access</span>
+                  <span class="photo-count">1/3</span>
+                </div>
                 <button class="favorite-btn" aria-label="Save listing"><i class="bi bi-heart"></i></button>
               </div>
             </div>
@@ -672,7 +682,7 @@
           </div>
         </div>
         <div class="text-center mt-4">
-          <a href="{{ route('frontend.property.buy-search') }}" class="btn view-all-properties-btn">
+          <a href="{{ route('frontend.rent.index') }}" class="btn view-all-properties-btn js-listings-view-all" data-rent-url="{{ route('frontend.rent.index') }}" data-sale-url="{{ route('frontend.property.buy-search') }}">
             <span>View All Properties</span>
             <i class="bi bi-arrow-right"></i>
           </a>

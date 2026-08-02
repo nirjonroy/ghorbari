@@ -199,15 +199,18 @@ class HomeController extends Controller
             'agent_rating' => $agentRating ? number_format($agentRating, 1) : '0.0',
             'cities' => $cities->map(function (City $city) use ($fallbackImages) {
                 $fallbackImage = $fallbackImages[$city->slug] ?? array_values($fallbackImages)[$city->id % count($fallbackImages)];
+                $cityUrl = $city->district && $city->district->slug === $city->slug
+                    ? route('frontend.property.district', ['district' => $city->district->slug])
+                    : ($city->district
+                        ? route('frontend.property.city', ['district' => $city->district->slug, 'city' => $city->slug])
+                        : route('frontend.property.buy-search', ['q' => $city->name]));
 
                 return [
                     'name' => $city->name,
                     'slug' => $city->slug,
                     'property_count' => (int) ($city->active_properties_count ?? 0),
                     'image' => $city->meta_image ? asset($city->meta_image) : $fallbackImage,
-                    'url' => $city->district
-                        ? route('frontend.property.city', ['district' => $city->district->slug, 'city' => $city->slug])
-                        : route('frontend.property.buy-search', ['q' => $city->name]),
+                    'url' => $cityUrl,
                 ];
             })->values(),
         ];

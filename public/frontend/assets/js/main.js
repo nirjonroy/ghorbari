@@ -198,6 +198,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  var listingsViewAll = document.querySelector(".js-listings-view-all");
+
+  if (listingsViewAll) {
+    var setListingsViewAllUrl = function (targetId) {
+      var rentUrl = listingsViewAll.getAttribute("data-rent-url");
+      var saleUrl = listingsViewAll.getAttribute("data-sale-url");
+
+      listingsViewAll.setAttribute("href", targetId === "saleListings" ? saleUrl : rentUrl);
+    };
+
+    document.querySelectorAll('[data-bs-toggle="tab"][data-bs-target="#rentListings"], [data-bs-toggle="tab"][data-bs-target="#saleListings"]').forEach(function (tab) {
+      tab.addEventListener("shown.bs.tab", function (event) {
+        setListingsViewAllUrl((event.target.getAttribute("data-bs-target") || "").replace("#", ""));
+      });
+    });
+
+    setListingsViewAllUrl(document.querySelector("#rentListings.show.active") ? "rentListings" : "saleListings");
+  }
+
   var calculator = document.getElementById("paymentCalculator");
 
   if (!calculator) {
