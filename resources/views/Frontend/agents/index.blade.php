@@ -124,7 +124,7 @@
           </div>
         @endforelse
 
-        <div class="col-lg-8">
+        <div class="col-12">
           <article class="agent-match-panel">
             <div>
               <span class="eyebrow">Smart Matching</span>
