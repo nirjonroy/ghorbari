@@ -183,7 +183,7 @@
                     <strong>{{ now()->next('Friday')->format('l, F j') }}</strong>
                     <span>3:00 PM - 6:00 PM</span>
                   </div>
-                  <button class="btn btn-danger">Schedule tour</button>
+                  <button class="btn btn-danger" type="button" data-schedule-tour>Schedule tour</button>
                 </div>
               </article>
             @endif

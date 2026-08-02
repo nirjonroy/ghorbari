@@ -896,6 +896,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  document.querySelectorAll("[data-schedule-tour]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var contactCard = document.getElementById("contactAgent");
+      if (!contactCard) {
+        return;
+      }
+
+      var inPersonButton = contactCard.querySelector('[data-tour-option="in_person"]');
+      if (inPersonButton) {
+        inPersonButton.click();
+      }
+
+      contactCard.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      window.setTimeout(function () {
+        var firstInput = contactCard.querySelector('input[name="first_name"], input[name="email"], textarea');
+        if (firstInput) {
+          firstInput.focus({ preventScroll: true });
+        }
+      }, 450);
+    });
+  });
+
   document.querySelectorAll(".js-share-property").forEach(function (button) {
     button.addEventListener("click", function (event) {
       event.preventDefault();
