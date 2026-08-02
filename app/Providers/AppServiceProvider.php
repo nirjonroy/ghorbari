@@ -59,7 +59,13 @@ class AppServiceProvider extends ServiceProvider
 
         $frontendMenuData = [
             'divisions' => Schema::hasTable('divisions')
-                ? Division::query()->select('id', 'name', 'slug')->where('status', true)->orderBy('name')->take(9)->get()
+                ? Division::query()
+                    ->select('id', 'name', 'slug')
+                    ->with(['districts:id,division_id,name,slug'])
+                    ->where('status', true)
+                    ->orderBy('name')
+                    ->take(9)
+                    ->get()
                 : collect(),
             'districts' => Schema::hasTable('districts')
                 ? District::query()->select('id', 'name', 'slug')->where('status', true)->orderBy('name')->take(12)->get()

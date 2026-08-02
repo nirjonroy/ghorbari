@@ -37,8 +37,19 @@
         ->values();
     $postcodeOptions = $menuAreas->pluck('postal_code')->filter()->unique()->values();
     $fallbackDivisions = collect(['Dhaka', 'Chattogram', 'Sylhet', 'Cox\'s Bazar', 'Rajshahi', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh']);
-    $chipLocations = $menuDivisions->pluck('name')->filter()->values();
-    $chipLocations = $chipLocations->isNotEmpty() ? $chipLocations : $fallbackDivisions;
+    $chipLocations = $menuDistricts
+        ->filter(fn ($district) => filled($district->name) && filled($district->slug))
+        ->map(fn ($district) => [
+            'name' => $district->name,
+            'url' => route('frontend.property.district', ['district' => $district->slug]),
+        ])
+        ->values();
+    $chipLocations = $chipLocations->isNotEmpty()
+        ? $chipLocations
+        : $fallbackDivisions->map(fn ($location) => [
+            'name' => $location,
+            'url' => route('frontend.property.buy-search', ['q' => $location]),
+        ]);
     $citySitemapLinks = $menuCities
         ->filter(fn ($city) => $city->district)
         ->map(fn ($city) => [
@@ -64,19 +75,42 @@
             'label' => $district.' District Homes For Sale',
             'url' => route('frontend.property.buy-search', ['q' => $district]),
         ]);
-    $divisionSitemapLinks = ($menuDivisions->isNotEmpty() ? $menuDivisions->pluck('name') : $fallbackDivisions)
-        ->map(fn ($division) => [
+    $divisionSitemapLinks = $menuDivisions
+        ->map(function ($division) use ($menuDistricts) {
+            $district = $menuDistricts->firstWhere('slug', $division->slug) ?: $division->districts->first();
+
+            return [
+                'label' => $division->name.' Division Properties',
+                'url' => $district
+                    ? route('frontend.property.district', ['district' => $district->slug])
+                    : route('frontend.property.buy-search', ['q' => $division->name]),
+            ];
+        })
+        ->values();
+    $divisionSitemapLinks = $divisionSitemapLinks->isNotEmpty()
+        ? $divisionSitemapLinks
+        : $fallbackDivisions->map(fn ($division) => [
             'label' => $division.' Division Properties',
             'url' => route('frontend.property.buy-search', ['q' => $division]),
         ]);
     $rentCityLinks = $menuCities
-        ->pluck('name')
-        ->filter()
-        ->unique()
+        ->filter(fn ($city) => filled($city->name) && filled($city->slug) && $city->district)
+        ->map(fn ($city) => [
+            'label' => $city->name.' Apartments For Rent',
+            'url' => route('frontend.property.purpose-type-city', [
+                'purpose' => 'for-rent',
+                'type' => 'apartment',
+                'district' => $city->district->slug,
+                'city' => $city->slug,
+            ]),
+        ])
         ->values();
     $rentCityLinks = $rentCityLinks->isNotEmpty()
         ? $rentCityLinks
-        : collect(['Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh']);
+        : collect(['Dhaka', 'Chattogram', 'Sylhet', 'Rajshahi', 'Khulna', 'Barishal', 'Rangpur', 'Mymensingh'])->map(fn ($rentCity) => [
+            'label' => $rentCity.' Apartments For Rent',
+            'url' => route('frontend.rent.index', ['q' => $rentCity]),
+        ]);
     $serviceIcon = fn ($field, $fallback) => filled($siteInfo?->{$field})
         ? asset($siteInfo->{$field})
         : asset('frontend/assets/images/icons/'.$fallback);
@@ -988,7 +1022,7 @@
         <h2>Browse The <span>Newest</span> Homes Across Bangladesh</h2>
         <div class="newest-chip-list">
           @foreach($chipLocations as $location)
-            <a href="{{ route('frontend.property.buy-search', ['q' => $location]) }}"><i class="bi bi-geo-alt-fill"></i> {{ $location }}</a>
+            <a href="{{ $location['url'] }}"><i class="bi bi-geo-alt-fill"></i> {{ $location['name'] }}</a>
           @endforeach
         </div>
       </div>
@@ -1039,7 +1073,7 @@
           </div>
           <div class="sitemap-links">
             @foreach($rentCityLinks as $rentCity)
-              <a href="{{ route('frontend.rent.index', ['q' => $rentCity]) }}">{{ $rentCity }} Apartments For Rent</a>
+              <a href="{{ $rentCity['url'] }}">{{ $rentCity['label'] }}</a>
             @endforeach
           </div>
         </div>
