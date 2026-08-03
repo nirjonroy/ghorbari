@@ -111,7 +111,7 @@
                 <div><span><i class="dot service"></i>Service charge</span><strong id="serviceValue">{{ $currencyLabel }} 0</strong></div>
                 <div><span><i class="dot total"></i>Payment amount</span><strong id="loanAmount">{{ $currencyLabel }} 0</strong></div>
               </div>
-              <a href="{{ route('frontend.agents.index') }}" class="btn btn-danger result-cta">Contact agent</a>
+              <a href="{{ route('frontend.agents.index') }}" class="btn btn-danger result-cta">Contact Agent</a>
             </aside>
           </div>
         </div>

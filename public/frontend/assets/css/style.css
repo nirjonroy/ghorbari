@@ -9607,6 +9607,90 @@ html[data-theme="dark"] .agents-page .agent-process-section {
   border-top-color: rgba(255, 255, 255, .08);
 }
 
+body.frontend-page :is(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  label,
+  .btn,
+  button,
+  .nav-link,
+  .dropdown-item,
+  .section-title,
+  .listings-title,
+  .detail-subnav a,
+  .detail-subnav button,
+  .fact-grid strong,
+  .details-list strong,
+  .record-table span,
+  .nearby-list strong,
+  .result-note,
+  .property-card h3,
+  .listing-card h3,
+  .featured-card h3,
+  .blog-card h3
+),
+body.search-results-page :is(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  label,
+  .btn,
+  button,
+  .nav-link,
+  .dropdown-item,
+  .results-heading,
+  .result-card h2,
+  .result-note
+),
+body.detail-page :is(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  label,
+  .btn,
+  button,
+  .nav-link,
+  .dropdown-item,
+  .detail-subnav a,
+  .detail-subnav button,
+  .fact-grid strong,
+  .details-list strong,
+  .record-table span,
+  .nearby-list strong
+),
+body.user-dashboard-page :is(
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  label,
+  .btn,
+  button,
+  .nav-link,
+  .dropdown-item
+) {
+  text-transform: capitalize;
+}
+
+body.frontend-page :is(.text-uppercase, .badge, .property-badge, .detail-eyebrow),
+body.search-results-page :is(.text-uppercase, .badge, .property-badge, .detail-eyebrow),
+body.detail-page :is(.text-uppercase, .badge, .property-badge, .detail-eyebrow),
+body.user-dashboard-page :is(.text-uppercase, .badge, .property-badge, .detail-eyebrow) {
+  text-transform: capitalize !important;
+}
+
 @media (max-width: 575.98px) {
   :root {
     --frontend-nav-height: 66px;

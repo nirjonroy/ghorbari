@@ -146,7 +146,7 @@
                 <p>Furnishing status: {{ $property->furnishing_status }}.</p>
               @endif
               <div class="fact-grid">
-                <div><i class="bi bi-house-door"></i><strong>Property type</strong><span>{{ optional($property->type)->name ?: 'Property' }}</span></div>
+                <div><i class="bi bi-house-door"></i><strong>Property Type</strong><span>{{ optional($property->type)->name ?: 'Property' }}</span></div>
                 <div><i class="bi bi-calendar-check"></i><strong>Status</strong><span>{{ str($property->property_status)->headline() }}</span></div>
                 <div><i class="bi bi-car-front"></i><strong>Parking</strong><span>{{ $property->parking_spaces !== null ? $property->parking_spaces.' spaces' : 'Ask agent' }}</span></div>
                 <div><i class="bi bi-building"></i><strong>Floor</strong><span>{{ $property->floor_no ? $property->floor_no.($property->total_floors ? ' of '.$property->total_floors : '') : 'Ask agent' }}</span></div>
@@ -170,7 +170,7 @@
                   data-chat-recipient="{{ $agentUser?->id }}"
                   data-chat-subject="{{ $property->title }}"
                 >
-                  Contact agent
+                  Contact Agent
                 </button>
               </div>
             </article>
@@ -183,7 +183,7 @@
                     <strong>{{ now()->next('Friday')->format('l, F j') }}</strong>
                     <span>3:00 PM - 6:00 PM</span>
                   </div>
-                  <button class="btn btn-danger" type="button" data-schedule-tour>Schedule tour</button>
+                  <button class="btn btn-danger" type="button" data-schedule-tour>Schedule Tour</button>
                 </div>
               </article>
             @endif
@@ -219,7 +219,7 @@
                 <span><i class="legend tax"></i> Taxes and fees: {{ $currencyLabel }} {{ number_format(($paymentEstimate['taxes'] ?? 0) * $currencyRate) }}</span>
                 <span><i class="legend service"></i> Service charge: {{ $currencyLabel }} {{ number_format(($paymentEstimate['service'] ?? 0) * $currencyRate) }}</span>
               </div>
-              <a href="{{ route('frontend.calculator.index', ['price' => (int) $property->price]) }}" class="btn btn-dark mt-3">Open calculator</a>
+              <a href="{{ route('frontend.calculator.index', ['price' => (int) $property->price]) }}" class="btn btn-dark mt-3">Open Calculator</a>
             </article>
 
             <article class="detail-card" id="propertyDetails">
@@ -240,7 +240,7 @@
             <article class="detail-card">
               <h2>Public Record</h2>
               <div class="record-table">
-                <div><span>Property type</span><strong>{{ optional($property->type)->name ?: 'Property' }}</strong></div>
+                <div><span>Property Type</span><strong>{{ optional($property->type)->name ?: 'Property' }}</strong></div>
                 <div><span>Holding status</span><strong>{{ str($property->property_status)->headline() }}</strong></div>
                 <div><span>Listing type</span><strong>{{ $listingLabel }}</strong></div>
                 <div><span>Published</span><strong>{{ $property->published_at?->format('d M Y') ?: 'Available' }}</strong></div>
