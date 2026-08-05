@@ -946,6 +946,82 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  var hiddenPropertyStorageKey = "landsite_hidden_properties";
+
+  function getHiddenPropertyIds() {
+    try {
+      var stored = window.localStorage.getItem(hiddenPropertyStorageKey);
+      return stored ? JSON.parse(stored).map(String) : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function setHiddenPropertyIds(ids) {
+    try {
+      window.localStorage.setItem(hiddenPropertyStorageKey, JSON.stringify(ids));
+    } catch (error) {}
+  }
+
+  function updateHideButton(button, active) {
+    var icon = button.querySelector("i");
+    var label = button.querySelector("span");
+
+    button.classList.toggle("is-hidden", active);
+    button.setAttribute("aria-pressed", active ? "true" : "false");
+    button.setAttribute("aria-label", active ? "Show listing" : "Hide listing");
+
+    if (icon) {
+      icon.classList.toggle("bi-eye-slash", !active);
+      icon.classList.toggle("bi-eye", active);
+    }
+
+    if (label) {
+      label.textContent = active ? "Hidden" : "Hide";
+    }
+  }
+
+  function applyHiddenProperties() {
+    var hiddenIds = getHiddenPropertyIds();
+
+    document.querySelectorAll("[data-property-card-id]").forEach(function (card) {
+      var id = card.getAttribute("data-property-card-id");
+      card.classList.toggle("is-hidden-property", hiddenIds.indexOf(String(id)) !== -1);
+    });
+
+    document.querySelectorAll(".js-hide-property").forEach(function (button) {
+      var id = button.getAttribute("data-property-id");
+      updateHideButton(button, hiddenIds.indexOf(String(id)) !== -1);
+    });
+  }
+
+  document.querySelectorAll(".js-hide-property").forEach(function (button) {
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var id = button.getAttribute("data-property-id");
+      if (!id) {
+        return;
+      }
+
+      var hiddenIds = getHiddenPropertyIds();
+      var index = hiddenIds.indexOf(String(id));
+      var active = index === -1;
+
+      if (active) {
+        hiddenIds.push(String(id));
+      } else {
+        hiddenIds.splice(index, 1);
+      }
+
+      setHiddenPropertyIds(hiddenIds);
+      applyHiddenProperties();
+    });
+  });
+
+  applyHiddenProperties();
+
   document.querySelectorAll(".js-favorite-property").forEach(function (button) {
     button.addEventListener("click", function (event) {
       event.preventDefault();

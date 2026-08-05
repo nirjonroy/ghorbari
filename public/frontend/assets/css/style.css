@@ -6259,12 +6259,35 @@ html[data-theme="dark"] .theme-toggle {
 .detail-subnav a,
 .detail-subnav button {
   flex: 0 0 auto;
+  min-height: 58px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   color: #111827;
   background: transparent;
   border: 0;
+  padding: 0;
   font-size: 15px;
   font-weight: 600;
+  line-height: 1;
   white-space: nowrap;
+}
+
+.detail-subnav a i,
+.detail-subnav button i {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.detail-subnav a span,
+.detail-subnav button span {
+  line-height: 1;
 }
 
 .detail-subnav a.active {
@@ -6281,8 +6304,17 @@ html[data-theme="dark"] .theme-toggle {
 
 .detail-subnav-actions {
   display: inline-flex;
+  align-items: center;
   gap: 18px;
   margin-left: auto;
+}
+
+.detail-subnav-actions button.is-hidden {
+  color: #e03445;
+}
+
+.is-hidden-property {
+  display: none !important;
 }
 
 .detail-gallery {
@@ -8460,18 +8492,32 @@ html[data-theme="dark"] .rent-type-card a {
 
 html:not([data-theme="dark"]) .rent-hero {
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, .82) 0%, rgba(255, 255, 255, .62) 43%, rgba(247, 247, 247, .08) 100%),
+    linear-gradient(90deg, rgba(5, 12, 24, .78) 0%, rgba(5, 12, 24, .56) 48%, rgba(5, 12, 24, .16) 100%),
     url("../images/property_img_3.jpg") center right / cover no-repeat !important;
 }
 
 html:not([data-theme="dark"]) .rent-hero::after {
-  background: linear-gradient(180deg, rgba(255, 255, 255, .02), rgba(247, 247, 247, .14)) !important;
+  background:
+    linear-gradient(180deg, rgba(5, 12, 24, .08), rgba(5, 12, 24, .26)),
+    radial-gradient(circle at 20% 40%, rgba(0, 0, 0, .24), transparent 42%) !important;
+}
+
+html:not([data-theme="dark"]) .rent-hero p:first-child,
+html:not([data-theme="dark"]) .rent-hero h1,
+html:not([data-theme="dark"]) .rent-hero .page-hero-subtitle {
+  color: #ffffff !important;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, .38);
+}
+
+html:not([data-theme="dark"]) .rent-hero p:first-child {
+  color: #ff4053 !important;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .48);
 }
 
 @media (max-width: 767.98px) {
   html:not([data-theme="dark"]) .rent-hero {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, .84), rgba(255, 255, 255, .62)),
+      linear-gradient(180deg, rgba(5, 12, 24, .74), rgba(5, 12, 24, .56)),
       url("../images/property_img_3.jpg") center / cover no-repeat !important;
   }
 }

@@ -314,7 +314,7 @@
                       $size ? number_format((float) $size).' sqft' : null,
                   ])->filter()->join(' | ');
               @endphp
-              <div class="property-card" role="link" tabindex="0" aria-label="View {{ $property->title }} details">
+              <div class="property-card" data-property-card-id="{{ $property->id }}" role="link" tabindex="0" aria-label="View {{ $property->title }} details">
                 <a href="{{ $property->detailUrl() }}" class="card-link-fill" aria-label="View {{ $property->title }} details"></a>
                 <div class="property-media">
                   <div id="{{ $galleryId }}" class="carousel slide listing-gallery" data-bs-touch="false">

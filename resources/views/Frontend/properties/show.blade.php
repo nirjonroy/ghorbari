@@ -71,7 +71,7 @@
 @endphp
 
 @section('content')
-  <main data-api-url="{{ $page['api_url'] ?? route('api.frontend.property.show', ['property' => $property->detailSlug()]) }}">
+  <main data-api-url="{{ $page['api_url'] ?? route('api.frontend.property.show', ['property' => $property->detailSlug()]) }}" data-property-id="{{ $property->id }}">
     <nav class="detail-subnav" aria-label="Property page navigation">
       <div class="container-fluid px-lg-5">
         <a href="{{ $searchRoute }}"><i class="bi bi-arrow-left"></i> Search</a>
@@ -82,7 +82,16 @@
         <a href="#contactAgent">Contact</a>
         <span class="detail-subnav-actions">
           @include('Frontend.partials.property-action-buttons', ['property' => $property, 'labels' => true, 'only' => 'favorite'])
-          <button type="button"><i class="bi bi-eye-slash"></i> Hide</button>
+          <button
+            type="button"
+            class="js-hide-property"
+            data-property-id="{{ $property->id }}"
+            data-return-url="{{ $searchRoute }}"
+            aria-label="Hide {{ $property->title }}"
+            aria-pressed="false"
+          >
+            <i class="bi bi-eye-slash"></i><span>Hide</span>
+          </button>
           @include('Frontend.partials.property-action-buttons', ['property' => $property, 'labels' => true, 'only' => 'share'])
         </span>
       </div>

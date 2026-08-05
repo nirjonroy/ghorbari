@@ -38,7 +38,6 @@
         <a href="{{ route('frontend.blog.index') }}" class="blog-back-link"><i class="bi bi-arrow-left"></i> Back To Blog</a>
         <span class="article-category">{{ $categoryFor($post) }}</span>
         <h1>{{ $post->title }}</h1>
-        <p>{{ $post->excerpt }}</p>
         <div class="article-meta">
           <span><i class="bi bi-person-circle"></i> {{ $post->author_name }}</span>
           <span><i class="bi bi-calendar3"></i> {{ $dateFor($post) }}</span>
