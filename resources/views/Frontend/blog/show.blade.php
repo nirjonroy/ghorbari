@@ -29,6 +29,9 @@
       ? $item->published_at->format('F d, Y')
       : $item?->created_at?->format('F d, Y');
   $categoryFor = fn ($item) => optional($item?->category)->name ?: 'Real Estate';
+  $categoryUrlFor = fn ($item) => $item?->category?->slug
+      ? route('frontend.blog.index', ['category' => $item->category->slug])
+      : route('frontend.blog.index');
 @endphp
 
 @section('content')
@@ -36,12 +39,12 @@
     <section class="blog-detail-hero">
       <div class="container">
         <a href="{{ route('frontend.blog.index') }}" class="blog-back-link"><i class="bi bi-arrow-left"></i> Back To Blog</a>
-        <span class="article-category">{{ $categoryFor($post) }}</span>
         <h1>{{ $post->title }}</h1>
         <div class="article-meta">
           <span><i class="bi bi-person-circle"></i> {{ $post->author_name }}</span>
           <span><i class="bi bi-calendar3"></i> {{ $dateFor($post) }}</span>
           <span><i class="bi bi-clock"></i> {{ max(1, ceil(str_word_count(strip_tags($post->content)) / 200)) }} min read</span>
+          <a href="{{ $categoryUrlFor($post) }}"><i class="bi bi-folder2-open"></i> {{ $categoryFor($post) }}</a>
         </div>
       </div>
     </section>

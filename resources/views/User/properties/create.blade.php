@@ -214,31 +214,42 @@
             </div>
 
             <div class="col-12">
-              <div class="d-flex align-items-center mb-2">
-                <label class="form-label mb-0">Room and Space Media</label>
-                <button type="button" class="btn btn-sm btn-outline-primary ms-auto" id="add-media-row">
+              <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+                <div>
+                  <label class="form-label mb-1">Room And Space Media</label>
+                  <div class="form-text mt-0">Add one room or space at a time, then drop multiple files for that space.</div>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-primary ms-auto media-add-btn" id="add-media-row">
                   <i class="bi bi-plus-lg"></i> Add Media
                 </button>
               </div>
-              <div id="media-rows" class="d-grid gap-2">
+              <div id="media-rows" class="property-media-uploader">
                 @php
                   $oldSpaceNames = old('media_space_names', ['']);
                 @endphp
                 @foreach($oldSpaceNames as $index => $spaceName)
-                  <div class="row g-2 align-items-end media-row">
-                    <div class="col-md-5">
-                      <label class="form-label" for="media_space_names_{{ $index }}">Room or Space Name</label>
+                  <div class="media-row property-media-upload-card">
+                    <div class="media-space-field">
+                      <label class="form-label" for="media_space_names_{{ $index }}">Room Or Space Name</label>
                       <input id="media_space_names_{{ $index }}" type="text" name="media_space_names[]" class="form-control @error('media_space_names.'.$index) is-invalid @enderror" value="{{ $spaceName }}" placeholder="Bedroom, Kitchen, Drawing Room">
                       @error('media_space_names.'.$index)<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="col-md-6">
+                    <div class="media-drop-field">
                       <label class="form-label" for="media_files_{{ $index }}">Files</label>
-                      <input id="media_files_{{ $index }}" type="file" name="media_files[{{ $index }}][]" class="form-control @error('media_files.'.$index) is-invalid @enderror @error('media_files.'.$index.'.*') is-invalid @enderror" multiple accept=".jpg,.jpeg,.png,.webp,.mp4,.mov,.pdf">
-                      @error('media_files.'.$index)<div class="invalid-feedback">{{ $message }}</div>@enderror
-                      @error('media_files.'.$index.'.*')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                      <label class="media-dropzone @error('media_files.'.$index) is-invalid @enderror @error('media_files.'.$index.'.*') is-invalid @enderror" for="media_files_{{ $index }}">
+                        <input id="media_files_{{ $index }}" type="file" name="media_files[{{ $index }}][]" class="media-dropzone-input" multiple accept=".jpg,.jpeg,.png,.webp,.mp4,.mov,.pdf">
+                        <span class="media-dropzone-icon"><i class="bi bi-cloud-arrow-up"></i></span>
+                        <span class="media-dropzone-copy">
+                          <strong>Drop files here or click to upload</strong>
+                          <small>JPG, PNG, WEBP, MP4, MOV, PDF. Multiple files allowed.</small>
+                        </span>
+                      </label>
+                      <div class="media-preview-list" aria-live="polite"></div>
+                      @error('media_files.'.$index)<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                      @error('media_files.'.$index.'.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                     </div>
-                    <div class="col-md-1">
-                      <button type="button" class="btn btn-outline-danger w-100 remove-media-row" aria-label="Remove media row">
+                    <div class="media-remove-field">
+                      <button type="button" class="btn btn-outline-danger remove-media-row" aria-label="Remove media row">
                         <i class="bi bi-trash"></i>
                       </button>
                     </div>
@@ -297,14 +308,70 @@
           const spaceInput = row.querySelector('input[name="media_space_names[]"]');
           const fileInput = row.querySelector('input[type="file"]');
           const spaceLabel = row.querySelector('label[for^="media_space_names_"]');
-          const fileLabel = row.querySelector('label[for^="media_files_"]');
+          const fileLabel = row.querySelector('.media-drop-field > label.form-label');
+          const dropLabel = row.querySelector('.media-dropzone');
 
           spaceInput.id = 'media_space_names_' + index;
           fileInput.id = 'media_files_' + index;
           fileInput.name = 'media_files[' + index + '][]';
           spaceLabel.setAttribute('for', spaceInput.id);
           fileLabel.setAttribute('for', fileInput.id);
+          dropLabel.setAttribute('for', fileInput.id);
         });
+      }
+
+      function clearPreview(row) {
+        const preview = row.querySelector('.media-preview-list');
+        if (preview) {
+          preview.innerHTML = '';
+        }
+      }
+
+      function renderPreview(input) {
+        const row = input.closest('.media-row');
+        const preview = row.querySelector('.media-preview-list');
+
+        if (!preview) {
+          return;
+        }
+
+        preview.innerHTML = '';
+
+        Array.from(input.files || []).forEach(function (file) {
+          const item = document.createElement('div');
+          item.className = 'media-preview-item';
+
+          if (file.type && file.type.startsWith('image/')) {
+            const image = document.createElement('img');
+            image.src = URL.createObjectURL(file);
+            image.alt = file.name;
+            image.onload = function () {
+              URL.revokeObjectURL(image.src);
+            };
+            item.appendChild(image);
+          } else {
+            const icon = document.createElement('span');
+            icon.className = 'media-preview-file-icon';
+            icon.innerHTML = '<i class="bi bi-file-earmark"></i>';
+            item.appendChild(icon);
+          }
+
+          const name = document.createElement('span');
+          name.textContent = file.name;
+          item.appendChild(name);
+          preview.appendChild(item);
+        });
+      }
+
+      function assignDroppedFiles(input, files) {
+        const transfer = new DataTransfer();
+
+        Array.from(files || []).forEach(function (file) {
+          transfer.items.add(file);
+        });
+
+        input.files = transfer.files;
+        renderPreview(input);
       }
 
       addButton.addEventListener('click', function () {
@@ -313,6 +380,7 @@
 
         nextRow.querySelector('input[name="media_space_names[]"]').value = '';
         nextRow.querySelector('input[type="file"]').value = '';
+        clearPreview(nextRow);
         nextRow.querySelectorAll('.is-invalid').forEach(function (input) {
           input.classList.remove('is-invalid');
         });
@@ -335,11 +403,51 @@
           const row = removeButton.closest('.media-row');
           row.querySelector('input[name="media_space_names[]"]').value = '';
           row.querySelector('input[type="file"]').value = '';
+          clearPreview(row);
           return;
         }
 
         removeButton.closest('.media-row').remove();
         reindexRows();
+      });
+
+      rows.addEventListener('change', function (event) {
+        if (event.target.matches('.media-dropzone-input')) {
+          renderPreview(event.target);
+        }
+      });
+
+      rows.addEventListener('dragover', function (event) {
+        const dropzone = event.target.closest('.media-dropzone');
+
+        if (!dropzone) {
+          return;
+        }
+
+        event.preventDefault();
+        dropzone.classList.add('is-dragover');
+      });
+
+      rows.addEventListener('dragleave', function (event) {
+        const dropzone = event.target.closest('.media-dropzone');
+
+        if (dropzone && !dropzone.contains(event.relatedTarget)) {
+          dropzone.classList.remove('is-dragover');
+        }
+      });
+
+      rows.addEventListener('drop', function (event) {
+        const dropzone = event.target.closest('.media-dropzone');
+
+        if (!dropzone) {
+          return;
+        }
+
+        event.preventDefault();
+        dropzone.classList.remove('is-dragover');
+
+        const input = dropzone.querySelector('.media-dropzone-input');
+        assignDroppedFiles(input, event.dataTransfer.files);
       });
     });
   </script>
